@@ -18,5 +18,9 @@ Installation Instructions - Ubuntu 20.04 with ROS noetic
  $ wget https://raw.githubusercontent.com/ethz-asl/rotors_simulator/master/rotors_hil.rosinstall
  $ wstool merge rotors_hil.rosinstall
  $ wstool update
+ $ git clone git@github.com:orimana2020/Multi_Agent_Drone_ROS_Simulation.git
+ $ cd ~/catkin_ws
+ $ catkin build
+ $ source devel/setup.bash
  ```
 
