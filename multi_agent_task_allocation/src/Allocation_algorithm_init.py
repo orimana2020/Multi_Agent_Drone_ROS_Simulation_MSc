@@ -54,7 +54,7 @@ class Targets(object):
             self.targetpos = np.stack([depth*np.ones([targets_num]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
         elif data_source == 'dataset':
             # self.targetpos = np.load(str(os.getcwd())+'/src/drone_pollination/src/targets_arr.npy')
-            self.targetpos = np.load(str(os.getcwd())+'/src/rotors_simulator/Multi_Agent_Task_allocation/src/targets_arr.npy')
+            self.targetpos = np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src/targets_arr.npy')
         self.targets_num,_ = self.targetpos.shape
 
         self.targetpos_reallocate = self.targetpos.copy()
@@ -101,13 +101,13 @@ class Optim(object):
 
     def get_state_matrix(self, drone_num, init_flag=False):
         if init_flag:
-            return np.load(str(os.getcwd())+'/src/rotors_simulator/Multi_Agent_Task_allocation/src'+'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
+            return np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src'+'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
         else:   
             if self.k > 1:
                 self.k -= 1
             print('k updated:' , self.k)
             if self.k >=2:
-                return np.load(str(os.getcwd())+'/src/rotors_simulator/Multi_Agent_Task_allocation/src'+'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
+                return np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src'+'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
             elif self.k == 1:
                 return np.ones((1,drone_num,1), dtype=int)
     
