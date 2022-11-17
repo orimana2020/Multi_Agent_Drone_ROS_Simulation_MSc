@@ -4,6 +4,7 @@
   <arg name="enable_cameras" default="false"/>
   <arg name="enable_depth" default="false"/>
   <arg name="enable_ground_truth" default="false"/>
+  <arg name='z' default ='0.5'/>
   <param name="robot_description"
     command="$(find xacro)/xacro '$(find rotors_description)/urdf/vi_sensor_base.xacro'
     enable_cameras:=$(arg enable_cameras)
@@ -17,7 +18,7 @@
          -urdf
          -x 0
          -y 0
-         -z 0.5
+         -z $(arg z)
          -model vi_sensor"
    respawn="false" output="screen">
   </node>

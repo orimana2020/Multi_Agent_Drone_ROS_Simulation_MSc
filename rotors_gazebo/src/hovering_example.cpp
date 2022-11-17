@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
   trajectory_msg.header.stamp = ros::Time::now();
 
   // Default desired position and yaw.
-  Eigen::Vector3d desired_position(0.0, 0.0, 1.0);
+  Eigen::Vector3d desired_position(2.0, 2.0, 5.0);
   double desired_yaw = 0.0;
 
   // Overwrite defaults if set as node parameters.
