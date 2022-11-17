@@ -5,6 +5,7 @@
 # python 3.8.10
 
 
+
 # -------- how to run------------>
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_lanch.launch  
 # terminal 2: $ rosrun drone_pollination main_ros_sim.py 
