@@ -24,3 +24,17 @@ Installation Instructions - Ubuntu 20.04 with ROS noetic
  $ source devel/setup.bash
  ```
 
+Running the simulation
+---------------------------------------------------------
+
+ 1. If you don't have ROS workspace yet you can do so by
+
+ ```
+ $ cd ~/catkin_ws
+ $ source devel/setup.bash
+ in terminal_1 run:
+ $ roslaunch rotors_gazebo drone_poll_lanch.launch 
+ in terminal_2 run:
+ $ rosrun drone_pollination main_ros_sim.py
+ 
+ ```
