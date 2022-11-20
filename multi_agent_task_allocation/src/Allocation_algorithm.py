@@ -9,11 +9,12 @@ class Allocation:
         self.drone = Drone(drone_num=drone_num, safety_distance = safety_distance, magazine=magazine)
         self.targets = targets
         self.optim = Optim(self.targets, self.drone, k = k_init)
-        self.state_mat = self.optim.get_state_matrix(self.drone.drone_num, init_flag=True)
+        if drone_num > 1:
+            self.state_mat = self.optim.get_state_matrix(self.drone.drone_num, init_flag=True)
         self.optim.update_kmeans_drone_num(self.drone, self.targets) # update drone_num for safety distance
         if self.drone.drone_num > 1:
             self.optimal_drone2target()
-        
+
     
     def optimal_drone2target(self):
         print('calc optimal drone2agent')

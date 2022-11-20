@@ -19,9 +19,9 @@ from drone_flight_manager import Flight_manager
 plt.ion()
 
 def main():
-    targets = Targets(targets_num=15,data_source='dataset')   # !!! need update - this data should come from camera
+    targets = Targets(targets_num=15,data_source='circle')   # !!! need update - this data should come from camera
     z_span, y_span, x_span = targets.span 
-    drone_num = 3
+    drone_num = 1
     safety_distance_trajectory = 0.5 
     safety_distance_allocation = safety_distance_trajectory * 2
     ta = Allocation(drone_num, targets, safety_distance_allocation , k_init=5, magazine=[10,10,10]) 
