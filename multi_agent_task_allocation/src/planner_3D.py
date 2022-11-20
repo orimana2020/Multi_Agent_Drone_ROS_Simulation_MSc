@@ -18,8 +18,8 @@ class Trajectory(object):
         self.z_lim = z_lim -1 
         self.safety_distance = safety_distance
         self.block_volume = []
-        self.block_volumes_m = []
-        self.paths_m = []
+        self.block_volumes_m = [] # used for visualization only
+        self.paths_m = [] # used for visualization only
         self.smooth_path_m =[]
         
         for _ in range(drone_num):

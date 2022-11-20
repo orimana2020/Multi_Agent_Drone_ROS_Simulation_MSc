@@ -7,7 +7,7 @@
 
 # -------- how to run------------>
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_lanch.launch  
-# terminal 2: $ rosrun drone_pollination main_ros_sim.py 
+# terminal 2: $ rosrun multi_agent_task_allocation main_ros_sim.py 
 
 import rospy
 from planner_3D import Trajectory
