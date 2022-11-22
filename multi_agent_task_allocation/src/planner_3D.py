@@ -311,10 +311,10 @@ class Trajectory(object):
             retreat_dist = 0.7
             intermidiate_m = (min([start_m[0],goal_m[0]]) - retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
             try:
-                segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m)
+                segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, start_m)
                 block_volume1 = self.inflate(path)
-                path1_m = np.vstack((segment1_m, segment2_m, segment3_m))
-                smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment1_m), len3=len(segment3_m))
+                path1_m = np.vstack((segment1_m, segment2_m, segment3_m))[::-1]
+                smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment3_m), len3=len(segment1_m))
                 block_volume1_m = self.convert_idx2meter(self.block_volume[drone_idx])
 
                 segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m)
