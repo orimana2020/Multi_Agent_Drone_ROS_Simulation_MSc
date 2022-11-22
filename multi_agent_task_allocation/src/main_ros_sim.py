@@ -114,7 +114,7 @@ def main():
             fig.ax.axes.clear()
             fig.plot_at_base(drone_num, at_base)
             fig.plot_all_targets()
-            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=1, block_volume=0)
+            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=0, block_volume=1)
             fig.plot_history(ta.optim.history, drone_num, ta.drone.colors)
             fig.show(sleep_time=0.7)
             if np.sum(at_base[:ta.drone.drone_num]) == ta.drone.drone_num :
@@ -154,7 +154,7 @@ def main():
                     fig.plot_no_path_found(start[j], goal[j])  
                     
             is_reached_goal[j] = fc.reached_goal(drone_idx=j) 
-            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=1, block_volume=0)
+            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=0, block_volume=1)
 
 
             if (is_reached_goal[j] == 1) and (path_found[j] == 1):
@@ -218,7 +218,7 @@ def main():
         fig.plot_at_base(drone_num, at_base)
         fig.plot_history(ta.optim.history, drone_num, ta.drone.colors)
         fig.plot_all_targets()    
-        fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=0, block_volume=0)
+        fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=0, block_volume=1)
         fig.show(sleep_time=1)
     fig.plot_at_base(drone_num, at_base)
     fig.plot_all_targets()

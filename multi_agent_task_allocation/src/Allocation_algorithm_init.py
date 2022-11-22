@@ -31,7 +31,7 @@ class Drone(object):
         self.safety_distance = safety_distance
         self.drone_num_changed = 0
         self.colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
-        self.base = [(1.5,0,0.4),(1.5,0.7,0.4),(1.5,-0.7,0.4),(-1,0.2,0.4),(-1,0.2,0.4)] # (x,y,z)
+        self.base = [(1.5,0,1),(1.5,0.7,1),(1.5,-0.7,1),(-1,0.2,1),(-1,0.2,1)] # (x,y,z)
         self.full_magazine = magazine[:]
         self.current_magazine = magazine[:]
         self.start_title = []
@@ -48,7 +48,7 @@ class Targets(object):
         self.targets_num = targets_num
         t = np.linspace(0, 2*np.pi-2*np.pi/targets_num, targets_num)
         radius = 0.7
-        depth = 3 
+        depth = 3.5 
         z_offset = radius + 1
         if data_source == 'circle':
             self.targetpos = np.stack([depth*np.ones([targets_num]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
