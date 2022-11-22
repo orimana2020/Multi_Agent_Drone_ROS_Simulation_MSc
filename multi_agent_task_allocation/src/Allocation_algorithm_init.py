@@ -48,7 +48,7 @@ class Targets(object):
         self.targets_num = targets_num
         t = np.linspace(0, 2*np.pi-2*np.pi/targets_num, targets_num)
         radius = 0.7
-        depth = 2 
+        depth = 3 
         z_offset = radius + 1
         if data_source == 'circle':
             self.targetpos = np.stack([depth*np.ones([targets_num]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)

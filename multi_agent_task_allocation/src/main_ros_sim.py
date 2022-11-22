@@ -19,13 +19,12 @@ from drone_flight_manager import Flight_manager
 plt.ion()
 
 def main():
-    targets = Targets(targets_num=15,data_source='circle')   # !!! need update - this data should come from camera
+    targets = Targets(targets_num=70,data_source='circle')   # !!! need update - this data should come from camera
     z_span, y_span, x_span = targets.span 
-    drone_num = 1
-    safety_distance_trajectory = 0.5 
+    drone_num = 3
+    safety_distance_trajectory = 0.3
     safety_distance_allocation = safety_distance_trajectory * 2
     ta = Allocation(drone_num, targets, safety_distance_allocation , k_init=5, magazine=[10,10,10]) 
-    # env_stat = Env(drone_performace=np.array([100,100,100]), drone_num=ta.drone.drone_num) # !!! need update, data come from ros real env
     path_planner = Trajectory(x_span, y_span ,z_span ,drone_num=ta.drone.drone_num, res=0.1, safety_distance=safety_distance_trajectory)
     fig = get_figure(targets, ta.drone)
     fc = Flight_manager(lin_velocity=2.5, drone_num=drone_num)
@@ -54,7 +53,6 @@ def main():
         print('unvisited = %d' %ta.optim.unvisited_num)
         # ------------------------     update magazine state & allocate new targets -------- #    
         for j in range(ta.drone.drone_num):
-            # not valid at first itr
             if allocation_availability[j] == 1:
                 change_flag = np.zeros(ta.drone.drone_num, dtype=int)
                 change_flag[j] = 1
@@ -116,7 +114,7 @@ def main():
             fig.ax.axes.clear()
             fig.plot_at_base(drone_num, at_base)
             fig.plot_all_targets()
-            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=0, block_volume=1)
+            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=1, block_volume=0)
             fig.plot_history(ta.optim.history, drone_num, ta.drone.colors)
             fig.show(sleep_time=0.7)
             if np.sum(at_base[:ta.drone.drone_num]) == ta.drone.drone_num :
@@ -156,7 +154,7 @@ def main():
                     fig.plot_no_path_found(start[j], goal[j])  
                     
             is_reached_goal[j] = fc.reached_goal(drone_idx=j) 
-            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=0, block_volume=1)
+            fig.plot_trajectory(path_planner,path_found, ta.drone.drone_num,goal_title=ta.drone.goal_title, path_scatter=0, smooth_path_cont=1, smooth_path_scatter=1, block_volume=0)
 
 
             if (is_reached_goal[j] == 1) and (path_found[j] == 1):

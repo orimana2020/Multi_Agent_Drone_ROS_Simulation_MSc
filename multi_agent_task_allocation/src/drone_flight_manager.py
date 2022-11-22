@@ -85,7 +85,7 @@ class Flight_manager(object):
         try:
             self.get_pos(drone_idx)
             dist2goal = ((self.pos.x - self.goal[drone_idx][0])**2 + (self.pos.y - self.goal[drone_idx][1])**2 +(self.pos.z - self.goal[drone_idx][2])**2 )**0.5
-            if dist2goal < 0.3:
+            if dist2goal < 0.1:
                 return 1
             else:
                 return 0
