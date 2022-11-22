@@ -196,13 +196,30 @@ class Trajectory(object):
 
     def get_smooth_path(self, path ,len1 ,len3):
         # s = smoothness, m > k must hold, default k degree is  k=3, m is number of points
-        weights = np.ones(len(path))*10
-        weights[0:len1] = 100
-        weights[len(path)-len3:] = 100
-        tck, _ = interpolate.splprep([path[:,0], path[:,1], path[:,2]],w=weights,s=10)  
-        u_fine = np.linspace(0,1,30) # determine number of points in smooth path 
-        smooth_path = interpolate.splev(u_fine, tck)
-        return np.transpose(np.array(smooth_path))
+        try:
+            weights = np.ones(len(path))*10
+            weights[0:len1] = 100
+            weights[len(path)-len3:] = 100
+            tck, _ = interpolate.splprep([path[:,0], path[:,1], path[:,2]],w=weights,s=10)  
+            u_fine = np.linspace(0,1,30) # determine number of points in smooth path 
+            smooth_path = interpolate.splev(u_fine, tck)
+            return np.transpose(np.array(smooth_path))
+        except: # remove duplicated coordes which result error in interpolation
+            new_path = [path[0]]
+            for i in range(len(path)):
+                a = np.round(np.array(path[i]) / self.res)
+                b = np.round(np.array(new_path[-1]) / self.res)
+                if not (a == b).all():
+                    new_path.append(path[i])
+            path2 = np.array(new_path)
+            weights = np.ones(len(path2))*10
+            weights[0:len1] = 100
+            weights[len(path2)-len3:] = 100
+            tck, _ = interpolate.splprep([path2[:,0], path2[:,1], path2[:,2]],w=weights,s=10)  
+            u_fine = np.linspace(0,1,30) # determine number of points in smooth path 
+            smooth_path = interpolate.splev(u_fine, tck)
+            print('duplicate coords found in path and resolved')
+            return np.transpose(np.array(smooth_path))
 
     def inflate(self, path):
         distance_idx = int(self.safety_distance/self.res)
@@ -236,15 +253,31 @@ class Trajectory(object):
         return coord_m
         
 
-    def get_path(self, start_m, goal_m):
+    def get_path(self, start_m, goal_m, is_forward):
         """
         this function make sure good approach at zero yaw to target and also 0 yaw when return to base
         """
-        start = self.covert_meter2idx(start_m)
-        goal = self.covert_meter2idx(goal_m)
-        break_trajecoty_len = abs(start_m[0] - goal_m[0]) * 0.2
-        intermidiate_1 = self.covert_meter2idx((start_m[0] + break_trajecoty_len, start_m[1], start_m[2]))
-        intermidiate_2 = self.covert_meter2idx((goal_m[0] - break_trajecoty_len, goal_m[1], goal_m[2]))
+        if is_forward:
+            if start_m[0] > goal_m[0]:
+                temp = goal_m
+                goal_m = start_m
+                start_m = temp
+            start = self.covert_meter2idx(start_m)
+            goal = self.covert_meter2idx(goal_m)
+            break_trajecoty_len = abs(start_m[0] - goal_m[0]) * 0.2
+            intermidiate_1 = self.covert_meter2idx((start_m[0] + break_trajecoty_len, start_m[1], start_m[2]))
+            intermidiate_2 = self.covert_meter2idx((goal_m[0] - break_trajecoty_len, goal_m[1], goal_m[2]))
+        else: #backward
+            if start_m[0] < goal_m[0]:
+                temp = goal_m
+                goal_m = start_m
+                start_m = temp
+            start = self.covert_meter2idx(start_m)
+            goal = self.covert_meter2idx(goal_m)
+            break_trajecoty_len = abs(start_m[0] - goal_m[0]) * 0.2
+            intermidiate_1 = self.covert_meter2idx((start_m[0] - break_trajecoty_len, start_m[1], start_m[2]))
+            intermidiate_2 = self.covert_meter2idx((goal_m[0] + break_trajecoty_len, goal_m[1], goal_m[2]))
+
         if self.grid_3d[goal] == 1: # fast sanity check of goal occupancy status
             print('sanity check failed')
             return 0 
@@ -280,44 +313,31 @@ class Trajectory(object):
         self.visited_3d = self.grid_3d.copy()
 
 
-        if (start_title == 'base' and goal_title == 'target'):
-            try:
-                segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, goal_m)
-                self.block_volume[drone_idx] = self.inflate(path)
-                self.paths_m[drone_idx] = np.vstack((segment1_m, segment2_m, segment3_m))
-                self.smooth_path_m[drone_idx] = self.get_smooth_path(path=self.paths_m[drone_idx],len1=len(segment1_m),len3=len(segment3_m))  
-                self.block_volumes_m[drone_idx] = self.convert_idx2meter(self.block_volume[drone_idx])
-                print('Path Found')
-                return 1
-            except:
-                print(' No Path Found! agent = '+str( drone_idx)+' from '+str(start_title)+ ' to '+ str(goal_title)+' start:'+str(start_m)+' goal:'+str(goal_m) + '')
-                return 0
-        
-        elif (start_title == 'target' and goal_title == 'base'):
-            try:
-                segment1_m, segment2_m, segment3_m, path = self.get_path(goal_m, start_m)
-                self.block_volume[drone_idx] = self.inflate(path)
-                self.paths_m[drone_idx] = np.vstack((segment1_m, segment2_m, segment3_m))[::-1]
-                self.smooth_path_m[drone_idx] = self.get_smooth_path(path=self.paths_m[drone_idx],len1=len(segment3_m),len3=len(segment1_m))  
-                self.block_volumes_m[drone_idx] = self.convert_idx2meter(self.block_volume[drone_idx])
-                print('Path Found')
-                return 1
-            except:
-                print(' No Path Found! agent = '+str( drone_idx)+' from '+str(start_title)+ ' to '+ str(goal_title)+' start:'+str(start_m)+' goal:'+str(goal_m) + '')
-                return 0
+        if (start_title == 'base' and goal_title == 'target') or (start_title == 'target' and goal_title == 'base'):
+            # try:
+            if (start_title == 'base' and goal_title == 'target'):
+                segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, goal_m, is_forward=True)
+            elif (start_title == 'target' and goal_title == 'base'):
+                segment1_m, segment2_m, segment3_m, path = self.get_path(goal_m, start_m, is_forward=False)
+            self.block_volume[drone_idx] = self.inflate(path)
+            self.paths_m[drone_idx] = np.vstack((segment1_m, segment2_m, segment3_m))
+            self.smooth_path_m[drone_idx] = self.get_smooth_path(path=self.paths_m[drone_idx],len1=len(segment1_m),len3=len(segment3_m))  
+            self.block_volumes_m[drone_idx] = self.convert_idx2meter(self.block_volume[drone_idx])
+            print('Path Found')
+            return 1
 
 
         elif (start_title == 'target' and goal_title == 'target'):
             retreat_dist = 0.7
             intermidiate_m = (min([start_m[0],goal_m[0]]) - retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
             try:
-                segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, start_m)
+                segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m, is_forward=False)
                 block_volume1 = self.inflate(path)
-                path1_m = np.vstack((segment1_m, segment2_m, segment3_m))[::-1]
-                smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment3_m), len3=len(segment1_m))
+                path1_m = np.vstack((segment1_m, segment2_m, segment3_m))
+                smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment1_m), len3=len(segment3_m))
                 block_volume1_m = self.convert_idx2meter(self.block_volume[drone_idx])
 
-                segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m)
+                segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m, is_forward=True)
                 block_volume2 = self.inflate(path)
                 path2_m = np.vstack((segment1_m, segment2_m, segment3_m))
                 smooth_path_m2 = self.get_smooth_path(path=path2_m, len1=len(segment1_m), len3=len(segment3_m))

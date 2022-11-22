@@ -63,11 +63,11 @@ class Targets(object):
 
     def set_limits(self):
         self.z_min, self.z_max = 0, max(self.targetpos[:,2])
-        self.z_span = (self.z_max - self.z_min) * 1.1
+        self.z_span = (self.z_max - self.z_min) * 1.3
         self.y_min, self.y_max =  min(self.targetpos[:,1]), max(self.targetpos[:,1])
-        self.y_span = (self.y_max - self.y_min) * 1.1
+        self.y_span = (self.y_max - self.y_min) * 1.3
         self.x_min, self.x_max = 0, max(self.targetpos[:,0])
-        self.x_span = (self.x_max - self.x_min) * 1.1        
+        self.x_span = (self.x_max - self.x_min) * 1.3        
             
 
 
@@ -225,7 +225,6 @@ class get_figure(object):
         self.targets = targets
         self.drone = drone
         self.fig = plt.figure(1)
-        # self.ax = self.fig.add_subplot(111)#, projection='3d')
         self.ax =  Axes3D(self.fig)
         self.ax.axes.set_xlim(left=targets.x_min, right=targets.x_max) 
         self.ax.axes.set_ylim(bottom=targets.y_min, top=targets.y_max) 
@@ -268,7 +267,6 @@ class get_figure(object):
         self.ax.set_ylabel('y')
         self.ax.set_zlabel('z')
         self.fig.canvas.flush_events()
-        # time.sleep(sleep_time) % add on in case of python sim, NOT ROS
         
 
     def plot_at_base(self, drone_num, at_base):

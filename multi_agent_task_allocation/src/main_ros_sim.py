@@ -22,7 +22,7 @@ def main():
     targets = Targets(targets_num=70,data_source='circle')   # !!! need update - this data should come from camera
     z_span, y_span, x_span = targets.span 
     drone_num = 3
-    safety_distance_trajectory = 0.3
+    safety_distance_trajectory = 0.4
     safety_distance_allocation = safety_distance_trajectory * 2
     ta = Allocation(drone_num, targets, safety_distance_allocation , k_init=5, magazine=[10,10,10]) 
     path_planner = Trajectory(x_span, y_span ,z_span ,drone_num=ta.drone.drone_num, res=0.1, safety_distance=safety_distance_trajectory)
