@@ -47,12 +47,14 @@ class get_figure(object):
         self.targetpos = params.targetpos
         self.inital_drone_num = params.drone_num
         self.colors = params.colors
-        self.fig = plt.figure(1)
-        self.ax =  Axes3D(self.fig)
+        # self.fig = plt.figure()
+        # self.ax = Axes3D(self.fig)
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(111, projection='3d')
         self.x_min, self.x_max, self.y_min, self.y_max, self.z_min, self.z_max = params.limits
-        self.ax.axes.set_xlim(self.x_min, self.x_max) 
-        self.ax.axes.set_ylim(self.y_min, self.y_max) 
-        self.ax.axes.set_zlim(self.z_min, self.z_max)
+        # self.ax.axes.set_xlim(self.x_min, self.x_max) 
+        # self.ax.axes.set_ylim(self.y_min, self.y_max) 
+        # self.ax.axes.set_zlim(self.z_min, self.z_max)
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
         self.ax.set_zlabel('z')
@@ -94,12 +96,15 @@ class get_figure(object):
 
 
     def show(self):
-        self.ax.axes.set_xlim(self.x_min, self.x_max) 
-        self.ax.axes.set_ylim(self.y_min, self.y_max) 
-        self.ax.axes.set_zlim(self.z_min, self.z_max)
+        # self.ax.axes.set_xlim(self.x_min, self.x_max) 
+        # self.ax.axes.set_ylim(self.y_min, self.y_max) 
+        # self.ax.axes.set_zlim(self.z_min, self.z_max)
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
         self.ax.set_zlabel('z')
+        self.ax.set_xlim3d([self.x_min, self.x_max])
+        self.ax.set_ylim3d([self.y_min, self.y_max])
+        self.ax.set_zlim3d([self.z_min, self.z_max])
         self.fig.canvas.flush_events()
 
     def plot_no_path_found(self, drone):

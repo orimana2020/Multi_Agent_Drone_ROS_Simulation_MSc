@@ -66,7 +66,7 @@ if data_source == 'circle':
     targets_num_gen = 30
     t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)
     radius = 0.6
-    depth = 2.4
+    depth = 3
     z_offset = radius + floor_safety_distance + 0.3
     targetpos = np.stack([depth*np.ones([targets_num_gen]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
 elif data_source == 'dataset':
