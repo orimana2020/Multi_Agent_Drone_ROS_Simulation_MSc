@@ -26,6 +26,7 @@ class Trajectory(object):
         self.paths_m = [[]] * drone_num# used for visualization only
         self.smooth_path_m =[[]] * drone_num
         self.constant_blocking_area = [[]] * drone_num
+        self.constant_blocking_area_m = [[]] * drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         
         for j in range(drone_num):
@@ -38,6 +39,7 @@ class Trajectory(object):
                 next += np.array([0,0,1],dtype=int)
             path.append(mean_intermidiate)
             self.constant_blocking_area[j] = self.inflate(path)
+            self.constant_blocking_area_m[j] = self.convert_idx2meter(self.constant_blocking_area[j])
 
         
     def get_neighbors(self, current):

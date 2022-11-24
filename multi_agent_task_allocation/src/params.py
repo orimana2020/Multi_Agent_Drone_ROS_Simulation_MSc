@@ -82,10 +82,11 @@ sleep_time = 0.3
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ----------------- Plotting
-path_scatter=0
-smooth_path_cont=1
-smooth_path_scatter=0
-block_volume=1
+plot_path_scatter=0
+plot_smooth_path_cont=1
+plot_smooth_path_scatter=0
+plot_block_volume=1
 elvazim = [37, 175]
+plot_constant_blocking_area = 1
 
 

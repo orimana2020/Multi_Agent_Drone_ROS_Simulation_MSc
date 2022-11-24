@@ -55,7 +55,7 @@ def main():
         # --------------------------- KMEANS ------------------------ #            
         while allocation == 'update_kmeans':
             for j in range(ta.drone_num):
-                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j) 
+                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
                 if not (drones[j].at_base):
                     # arrived to target
                     if  (drones[j].goal_title == 'target') and (drones[j].path_found) and (drones[j].is_reached_goal) and (ta.optim.unvisited[ta.optim.current_targets[j]] == True):
@@ -136,7 +136,7 @@ def main():
                     
             
             
-            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j) 
+            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
             if (drones[j].is_reached_goal) and (drones[j].path_found):
                 drones[j].path_found = 0
                 # arrived base
@@ -179,7 +179,7 @@ def main():
     while not all_at_base:
         print('return all drones to base')
         for j in range(ta.drone_num):
-            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j) 
+            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
 
             if not (drones[j].at_base):
                 if (drones[j].current_pos_title == 'target') and not (drones[j].path_found):

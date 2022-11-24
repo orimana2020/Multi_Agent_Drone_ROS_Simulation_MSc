@@ -20,13 +20,11 @@ class Flight_manager(object):
         self.velocities = Twist()    
         self.accelerations = Twist()  
         self.pubs = []
-        self.goal = []
         for drone_idx in range(self.drone_num):
             command_pub = rospy.Publisher('/ardrone%d/command/trajectory' %drone_idx, MultiDOFJointTrajectory, queue_size=10)
             self.pubs.append(command_pub)
             rospy.Subscriber('/ardrone%d/ground_truth/pose' %drone_idx , Pose)
             self.get_pos(drone_idx)
-            self.goal.append([])
         while self.pubs[0].get_num_connections() == 0 and not rospy.is_shutdown():
             print("There is no subscriber available, trying again in 1 second.")
             time.sleep(1)
@@ -68,8 +66,6 @@ class Flight_manager(object):
             point = MultiDOFJointTrajectoryPoint([transforms], [self.velocities], [self.accelerations], rospy.Time(timer))
             self.traj.points.append(point)
         self.pubs[drone_idx].publish(self.traj)
-        self.goal[drone_idx] = waypoints[-1]
-
 
 
     def get_pos(self, drone_idx):
@@ -81,10 +77,10 @@ class Flight_manager(object):
             print('can not subscribe position')
             return None
 
-    def reached_goal(self, drone_idx):
+    def reached_goal(self, drone_idx, goal):
         try:
             self.get_pos(drone_idx)
-            dist2goal = ((self.pos.x - self.goal[drone_idx][0])**2 + (self.pos.y - self.goal[drone_idx][1])**2 +(self.pos.z - self.goal[drone_idx][2])**2 )**0.5
+            dist2goal = ((self.pos.x - goal[0])**2 + (self.pos.y - goal[1])**2 +(self.pos.z - goal[2])**2 )**0.5
             if dist2goal < 0.1:
                 return 1
             else:
@@ -94,8 +90,8 @@ class Flight_manager(object):
 
     def _take_off(self, height, drone_idx):
         self.get_pos(drone_idx)
-        self.goal[drone_idx] = [self.pos.x, self.pos.y, height]
-        waypoints = [self.goal[drone_idx]]
+        goal = [self.pos.x, self.pos.y, height]
+        waypoints = [goal]
         self.publish_traj_command(waypoints, drone_idx)
     
     def take_off_swarm(self, height, drone_num):
