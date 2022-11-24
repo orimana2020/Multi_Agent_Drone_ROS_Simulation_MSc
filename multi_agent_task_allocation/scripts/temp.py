@@ -1,5 +1,7 @@
 import numpy as np
 from scipy import interpolate
+import temp2
+print(temp2.hi)
 
 def get_smooth_path(path,len1,len3):
     # s = smoothness, m > k must hold, default k degree is  k=3, m is number of points

@@ -5,12 +5,12 @@ from geometry_msgs.msg import Transform, Quaternion, Point,Twist, Pose
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 import std_msgs.msg
 import time, math
+import params
 
 class Flight_manager(object):
-
-    def __init__(self, lin_velocity, drone_num):
-        self.linear_velocity_limit = lin_velocity
-        self.drone_num = drone_num
+    def __init__(self):
+        self.linear_velocity_limit = params.linear_velocity
+        self.drone_num = params.drone_num
         self.traj = MultiDOFJointTrajectory()
         self.header = std_msgs.msg.Header()
         self.header.stamp = rospy.Time()
@@ -21,7 +21,7 @@ class Flight_manager(object):
         self.accelerations = Twist()  
         self.pubs = []
         self.goal = []
-        for drone_idx in range(drone_num):
+        for drone_idx in range(self.drone_num):
             command_pub = rospy.Publisher('/ardrone%d/command/trajectory' %drone_idx, MultiDOFJointTrajectory, queue_size=10)
             self.pubs.append(command_pub)
             rospy.Subscriber('/ardrone%d/ground_truth/pose' %drone_idx , Pose)
@@ -72,7 +72,7 @@ class Flight_manager(object):
 
 
 
-    def get_pos(self,drone_idx):
+    def get_pos(self, drone_idx):
         try:
             pose = rospy.wait_for_message('/ardrone%d/ground_truth/pose' %drone_idx , Pose, timeout=3)
             self.pos = pose.position
@@ -92,14 +92,17 @@ class Flight_manager(object):
         except:
             return 0
 
-    def take_off(self, height, drone_idx):
+    def _take_off(self, height, drone_idx):
         self.get_pos(drone_idx)
         self.goal[drone_idx] = [self.pos.x, self.pos.y, height]
         waypoints = [self.goal[drone_idx]]
         self.publish_traj_command(waypoints, drone_idx)
     
-    
-    
+    def take_off_swarm(self, height, drone_num):
+        for drone_idx in range(drone_num):
+            self._take_off(drone_idx=drone_idx, height=height)
+        rospy.sleep(5)
+
 
 
         

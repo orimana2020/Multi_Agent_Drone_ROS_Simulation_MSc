@@ -1,12 +1,6 @@
 import numpy as np
-path = [[1.9 ,       0.7 ,       1.        ],
- [1.8      ,  0.7     ,   1.        ],
- [1.8      ,  0.7      ,  1.        ],
- [1.7      ,  0.7    ,    1.        ],
- [1.6      ,  0.7   ,     1.        ]]
+import matplotlib.pyplot as plt
 
-a = np.array([1.8      ,  0.700002     ,   1.        ]) / 0.1
-b = np.array([1.8      ,  0.7      ,  1.        ]) / 0.1
-a = np.round(a)
-b = np.round(b)
+a = np.array([1,2,3])
+b = (1,2,2)
 print((a==b).all())
