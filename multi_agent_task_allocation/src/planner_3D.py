@@ -29,6 +29,7 @@ class Trajectory(object):
         self.constant_blocking_area_m = [[]] * drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         
+        
         for j in range(drone_num):
             start = self.covert_meter2idx(drones[j].base)
             mean_intermidiate = self.covert_meter2idx(np.array(drones[j].base) + np.array([self.mean_x_targets_position * self.break_trajectory_len_factor, 0,0]) )
@@ -233,8 +234,8 @@ class Trajectory(object):
             print('duplicate coords found in path and resolved')
             return np.transpose(np.array(smooth_path))
 
-    def inflate(self, path):
-        distance_idx = int(self.safety_distance/self.res)
+    def inflate_squre(self, path):
+        distance_idx = round(self.safety_distance/self.res)
         block_volume = []
         for node in path:
             for z in range(node[0]-3,node[0]+3):
@@ -254,6 +255,20 @@ class Trajectory(object):
                             x = 0
 
                         block_volume.append((z,y,x))
+        return np.array(block_volume)
+
+
+    def inflate(self, path):
+        distance_idx = round(self.safety_distance/self.res)
+        dist_power2 = distance_idx**2
+        block_volume = []
+        for node in path:
+            z0, y0, x0 = node
+            for z in range(-distance_idx, distance_idx+1,1):
+                for y in range(-distance_idx, distance_idx+1,1):
+                    if ((y)**2 + (z)**2) <  dist_power2:
+                        if not z+z0 > self.z_lim - 1 and not y+y0 > self.y_lim - 1 and not y+y0 < 0 and not z+z0 < 0:
+                            block_volume.append((z+z0,y+y0,x0))
         return np.array(block_volume)
 
 
@@ -326,7 +341,6 @@ class Trajectory(object):
         for i in range(drone_num):
             if (i != drone_idx):
                 self.grid_3d[self.constant_blocking_area[i][:,0], self.constant_blocking_area[i][:,1], self.constant_blocking_area[i][:,2]] = 1
-                # if (i != drone_idx) and (len(self.block_volume[i]) > 0) and not (drones[i].at_base):
                 if (len(self.block_volume[i]) > 0) and not (drones[i].at_base):
                     self.grid_3d[self.block_volume[i][:,0], self.block_volume[i][:,1], self.block_volume[i][:,2]] = 1
         self.visited_3d = self.grid_3d.copy()
@@ -349,7 +363,7 @@ class Trajectory(object):
 
 
         elif (start_title == 'target' and goal_title == 'target'):
-            intermidiate_m = (min([start_m[0],goal_m[0]]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
+            intermidiate_m = (min([start_m[0], goal_m[0]]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
             try:
                 segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m, is_forward=False)
                 block_volume1 = self.inflate(path)
