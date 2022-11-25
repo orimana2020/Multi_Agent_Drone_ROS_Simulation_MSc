@@ -23,7 +23,7 @@
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg mav_name)0"/>
-      <arg name="y" value="0"/>
+      <arg name="y" value="-0.7"/>
       <arg name="x" value="1.5"/>
     </include>
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
@@ -44,7 +44,7 @@
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg mav_name)1"/>
-      <arg name="y" value="0.7"/>
+      <arg name="y" value="0.0"/>
       <arg name="x" value="1.5"/>
     </include>
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
@@ -64,7 +64,7 @@
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="$(arg mav_name)2"/>
-      <arg name="y" value="-0.7"/>
+      <arg name="y" value="0.7"/>
       <arg name="x" value="1.5"/>
     </include>
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
