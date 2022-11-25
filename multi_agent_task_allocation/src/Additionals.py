@@ -20,12 +20,13 @@ class Env(object):
 def Get_Drones(uris, base, full_magazine, drone_num):
     drones = []
     for i in range(drone_num):
-        drones.append(Drone(uri=uris[i], base=base[i], full_magazine=full_magazine[i]))
+        drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i]))
     return drones
 
 
 class Drone(object):
-    def __init__(self, uri, base, full_magazine):
+    def __init__(self,index, uri, base, full_magazine):
+        self.ind = index
         self.uri = uri
         self.base = base
         self.start_coords = base
