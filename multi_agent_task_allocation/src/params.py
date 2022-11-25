@@ -1,27 +1,8 @@
 import numpy as np
 import os
+import Additionals
+
 mode  = 'sim' # 'cf'
-# ----------- attional functions
-def grid_shape():
-    n = 20
-    z_col = np.linspace(1,2.2,4)
-    y_row = np.linspace(-3,3,5)
-    x = 3.5
-    targets = []
-    for z in z_col:
-        for y in y_row:
-            targets.append([x,y,z])
-    return np.array(targets)   
-
-def get_span():
-    z_min, z_max = 0, max( max(targetpos[:,2]), max(np.array(base)[:,2]))
-    z_span = (z_max - z_min) * 1.3
-    y_min, y_max =  min(min(targetpos[:,1]) , min(np.array(base)[:,1]))  , max(max(targetpos[:,1]), max(np.array(base)[:,1]))
-    y_span = (y_max - y_min) * 1.3
-    x_min, x_max = min(0 , min(np.array(base)[:,0])), max(max(targetpos[:,0]), max(np.array(base)[:,0])) 
-    x_span = (x_max - x_min) * 1.3  
-    return [x_span, y_span, z_span], [x_min, x_max, y_min, y_max, z_min, z_max]
-
 
 # -------------------- CF
 uri1 = 'radio://0/80/2M/E7E7E7E7E1'
@@ -72,11 +53,12 @@ if data_source == 'circle':
 elif data_source == 'dataset':
     targetpos = np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src/targets_arr.npy')
 elif data_source == 'salon':
-    targetpos  = grid_shape()
+    targetpos  = Additionals.grid_shape()
 
 targets_num, _ = targetpos.shape
 mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num
-span, limits = get_span()
+span, limits = Additionals.get_span(targetpos, base)
+
 # --------------------- General
 sleep_time = 0.3
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
@@ -87,6 +69,6 @@ plot_smooth_path_cont=1
 plot_smooth_path_scatter=0
 plot_block_volume=1
 elvazim = [37, 175]
-plot_constant_blocking_area = 1
+plot_constant_blocking_area = 0
 
 

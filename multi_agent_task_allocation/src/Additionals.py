@@ -92,9 +92,6 @@ class get_figure(object):
                 if self.constant_blocking_area:
                     self.ax.scatter3D(path_planner.constant_blocking_area_m[j][:,0], path_planner.constant_blocking_area_m[j][:,1], path_planner.constant_blocking_area_m[j][:,2], s= 10, c='m',alpha=0.01,depthshade=False)
 
-            
-
-
     def show(self):
         # self.ax.axes.set_xlim(self.x_min, self.x_max) 
         # self.ax.axes.set_ylim(self.y_min, self.y_max) 
@@ -117,9 +114,26 @@ class get_figure(object):
                 self.ax.scatter3D(history[j][:,0], history[j][:,1], history[j][:,2], s =50, c=self.colors[j], alpha=1,depthshade=False)
             
         
-        
+# ----------- attional functions
+def grid_shape():
+    n = 20
+    z_col = np.linspace(1,2.2,4)
+    y_row = np.linspace(-3,3,5)
+    x = 3.5
+    targets = []
+    for z in z_col:
+        for y in y_row:
+            targets.append([x,y,z])
+    return np.array(targets)   
 
- 
+def get_span(targetpos, base):
+    z_min, z_max = 0, max( max(targetpos[:,2]), max(np.array(base)[:,2]))
+    z_span = (z_max - z_min) * 1.3
+    y_min, y_max =  min(min(targetpos[:,1]) , min(np.array(base)[:,1]))  , max(max(targetpos[:,1]), max(np.array(base)[:,1]))
+    y_span = (y_max - y_min) * 1.3
+    x_min, x_max = min(0 , min(np.array(base)[:,0])), max(max(targetpos[:,0]), max(np.array(base)[:,0])) 
+    x_span = (x_max - x_min) * 1.3  
+    return [x_span, y_span, z_span], [x_min, x_max, y_min, y_max, z_min, z_max]       
 
 
 

@@ -6,21 +6,28 @@
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_lanch.launch  
 # terminal 2: $ rosrun multi_agent_task_allocation main_ros_sim.py 
 
-import rospy
+
 from planner_3D import Trajectory
 from Allocation_algorithm import Allocation
 import matplotlib.pyplot as plt
 from Additionals import get_figure ,Get_Drones
 import numpy as np
-from drone_flight_manager import Flight_manager
 import params
+
+if params.mode == 'sim':
+    from rotors_flight_manager import Flight_manager
+    import rospy
+    rospy.init_node('send_my_command', anonymous=True)
+    rospy.sleep(3)
+elif params.mode == 'cf':
+    pass
+
 plt.ion()
 
 def main():
     ta = Allocation() 
     fig = get_figure()
     fc = Flight_manager()
-    rate = rospy.Rate(10)
     allocation = None
     drones = Get_Drones(params.uri_list, params.base, params.magazine, ta.drone_num)
     path_planner = Trajectory(ta.drone_num, drones)
@@ -110,7 +117,7 @@ def main():
                     drones[j].is_available = 0
                 ta.update_kmeans()
                 allocation = None  
-            rate.sleep()
+            fc.sleep()
            
         #  --------------------------------    path planning ----------------------------- #
         fig.ax.axes.clear()
@@ -168,7 +175,7 @@ def main():
         fig.plot_all_targets()
         fig.plot_history(ta.optim.history)
         fig.show()
-        rate.sleep()
+        fc.sleep()
 
         print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
     # -------------------------------- Return all drones to base
@@ -205,7 +212,7 @@ def main():
         fig.plot_trajectory(path_planner, drones ,ta.drone_num)
         fig.show()
         all_at_base = True
-        rate.sleep()
+        fc.sleep()
     fig.plot_all_targets()
     fig.plot_history(ta.optim.history)
     fig.show()
@@ -213,8 +220,6 @@ def main():
 
 
 if __name__ == '__main__':
-    rospy.init_node('send_my_command', anonymous=True)
-    rospy.sleep(3)
     main()
     
 

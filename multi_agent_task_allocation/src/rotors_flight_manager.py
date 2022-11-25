@@ -9,6 +9,7 @@ import params
 
 class Flight_manager(object):
     def __init__(self):
+        self.rate = rospy.Rate(params.sleep_time)
         self.linear_velocity_limit = params.linear_velocity
         self.drone_num = params.drone_num
         self.traj = MultiDOFJointTrajectory()
@@ -29,6 +30,8 @@ class Flight_manager(object):
             print("There is no subscriber available, trying again in 1 second.")
             time.sleep(1)
 
+    def sleep(self):
+        self.rate.sleep()
     
     def rotate_inplace(self, angle):
         quaternion = quaternion_from_euler(ai=0, aj=0, ak=angle, axes='sxyz') #roll pictch yaw
