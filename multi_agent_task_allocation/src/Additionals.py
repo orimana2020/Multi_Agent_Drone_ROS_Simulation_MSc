@@ -114,7 +114,7 @@ class get_figure(object):
                 self.ax.scatter3D(history[j][:,0], history[j][:,1], history[j][:,2], s =50, c=self.colors[j], alpha=1,depthshade=False)
             
         
-# ----------- attional functions
+# ----------- addtional functions for params --
 def grid_shape():
     n = 20
     z_col = np.linspace(1,2.2,4)
