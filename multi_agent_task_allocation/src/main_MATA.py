@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 
+
+# -------- how to run sim mode ------------>
 # full simulation works for ros noetic on ubuntu 20.04
 # python 3.8.10
-# -------- how to run------------>
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_lanch.launch  
-# terminal 2: $ rosrun multi_agent_task_allocation main_ros_sim.py 
-
+# terminal 2: $ rosrun multi_agent_task_allocation main_MATA.py
+# ----------------------------------------->
 
 from planner_3D import Trajectory
 from Allocation_algorithm import Allocation

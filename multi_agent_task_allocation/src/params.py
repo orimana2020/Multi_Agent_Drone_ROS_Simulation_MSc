@@ -60,7 +60,8 @@ mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num
 span, limits = Additionals.get_span(targetpos, base)
 
 # --------------------- General
-sleep_time = 0.3
+sleep_time = 0.2
+
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ----------------- Plotting

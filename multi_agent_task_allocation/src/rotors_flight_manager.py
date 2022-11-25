@@ -9,7 +9,7 @@ import params
 
 class Flight_manager(object):
     def __init__(self):
-        self.rate = rospy.Rate(params.sleep_time)
+        self.rate = rospy.Rate(1/params.sleep_time) # [Hz]
         self.linear_velocity_limit = params.linear_velocity
         self.drone_num = params.drone_num
         self.traj = MultiDOFJointTrajectory()
