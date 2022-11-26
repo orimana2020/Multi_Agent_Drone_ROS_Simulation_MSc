@@ -5,27 +5,17 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
 
-class Env(object):
-    def __init__(self, drone_performace, drone_num):
-        self.drone_num = drone_num
-        self.drone_peformace = np.zeros([self.drone_num, 100])
-        for i in range(self.drone_num):
-            self.drone_peformace[i,0:drone_performace[i]] = 1
-    def reached_goal(self, drone_idx, goal=None): 
-        if self.drone_peformace[drone_idx, random.randint(0,99)] == 1:
-            return 1
-        return 0
-
 
 def Get_Drones(uris, base, full_magazine, drone_num):
     drones = []
     for i in range(drone_num):
         drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i]))
+        drones[i].is_active = True
     return drones
 
 
 class Drone(object):
-    def __init__(self,index, uri, base, full_magazine):
+    def __init__(self, index, uri, base, full_magazine):
         self.ind = index
         self.uri = uri
         self.base = base
@@ -37,10 +27,11 @@ class Drone(object):
         self.goal_title = 'target'
         self.current_pos_title = 'base'
         self.current_pos_coords = base
-        self.is_available = 1
+        self.is_available = 0
         self.is_reached_goal = 0
         self.path_found = 0
         self.at_base = 0
+        self.is_active = True
         
                 
 class get_figure(object):
@@ -114,7 +105,7 @@ class get_figure(object):
             if len(history[j]) > 0:
                 self.ax.scatter3D(history[j][:,0], history[j][:,1], history[j][:,2], s =50, c=self.colors[j], alpha=1,depthshade=False)
             
-        
+       
 # ----------- addtional functions for params --
 def grid_shape():
     n = 20
@@ -139,7 +130,16 @@ def get_span(targetpos, base):
 
 
 
-
+class Env(object):
+    def __init__(self, drone_performace, drone_num):
+        self.drone_num = drone_num
+        self.drone_peformace = np.zeros([self.drone_num, 100])
+        for i in range(self.drone_num):
+            self.drone_peformace[i,0:drone_performace[i]] = 1
+    def reached_goal(self, drone_idx, goal=None): 
+        if self.drone_peformace[drone_idx, random.randint(0,99)] == 1:
+            return 1
+        return 0
 
 
     

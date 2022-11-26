@@ -7,11 +7,18 @@ import std_msgs.msg
 import time, math
 import params
 
-class Flight_manager(object):
+
+class Fake(object):
     def __init__(self):
+        pass
+    def is_alive(self):
+        return False
+
+class Flight_manager(object):
+    def __init__(self, drone_num):
         self.rate = rospy.Rate(1/params.sleep_time) # [Hz]
         self.linear_velocity_limit = params.linear_velocity
-        self.drone_num = params.drone_num
+        self.drone_num = drone_num
         self.traj = MultiDOFJointTrajectory()
         self.header = std_msgs.msg.Header()
         self.header.stamp = rospy.Time()
@@ -20,6 +27,7 @@ class Flight_manager(object):
         self.traj.header = self.header  
         self.velocities = Twist()    
         self.accelerations = Twist()  
+        self.open_threads = [Fake()] * self.drone_num
         self.pubs = []
         for drone_idx in range(self.drone_num):
             command_pub = rospy.Publisher('/ardrone%d/command/trajectory' %drone_idx, MultiDOFJointTrajectory, queue_size=10)
@@ -53,15 +61,13 @@ class Flight_manager(object):
         dist = ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5 # m
         return dist / self.linear_velocity_limit # sec
 
-    def publish_traj_command(self, waypoints, drone_idx):
+    def execute_trajectory_mt(self,drone_idx, waypoints):
         self.traj.points = []
         self.header.stamp = rospy.Time()
         timer = 0
-        
         transforms = Transform(translation=Point(waypoints[0][0], waypoints[0][1], waypoints[0][2]))
         point0 = MultiDOFJointTrajectoryPoint([transforms], [self.velocities], [self.accelerations], rospy.Time(timer))
         self.traj.points.append(point0)
-
         for i in range(1, len(waypoints)):
             rotation = self.get_yaw(start=waypoints[i-1], goal=waypoints[i])
             transforms = Transform(translation=Point(waypoints[i][0], waypoints[i][1], waypoints[i][2]), rotation=rotation)
@@ -95,12 +101,24 @@ class Flight_manager(object):
         self.get_pos(drone_idx)
         goal = [self.pos.x, self.pos.y, height]
         waypoints = [goal]
-        self.publish_traj_command(waypoints, drone_idx)
+        self.execute_trajectory_mt(drone_idx, waypoints)
     
-    def take_off_swarm(self, height, drone_num):
-        for drone_idx in range(drone_num):
-            self._take_off(drone_idx=drone_idx, height=height)
+    def take_off_swarm(self):
+        for drone_idx in range(self.drone_num):
+            self._take_off(drone_idx=drone_idx, height=params.take_off_height)
         rospy.sleep(5)
+    
+    def _land(self, drone_idx, base):
+        goal = [base[0], base[1], 0.2]
+        waypoints = [goal]
+        self.execute_trajectory_mt(drone_idx, waypoints)
+    
+    def land(self, drones):
+        for j in range(len(drones)):
+            if drones[j].is_active:
+                self._land(drone_idx=j, base=drones[j].base)
+        rospy.sleep(5)
+
 
 
 

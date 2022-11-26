@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from Additionals import get_figure ,Get_Drones
 import numpy as np
 import params
+plt.ion()
 
 if params.mode == 'sim':
     from rotors_flight_manager import Flight_manager
@@ -21,19 +22,17 @@ if params.mode == 'sim':
     rospy.init_node('send_my_command', anonymous=True)
     rospy.sleep(3)
 elif params.mode == 'cf':
-    pass
-
-plt.ion()
+    from CF_Flight_Manager import Flight_manager
 
 def main():
     ta = Allocation() 
     fig = get_figure()
-    fc = Flight_manager()
-    allocation = None
     drones = Get_Drones(params.uri_list, params.base, params.magazine, ta.drone_num)
-    path_planner = Trajectory(ta.drone_num, drones)
-    fc.take_off_swarm( height=params.take_off_height , drone_num=ta.drone_num)
-    
+    fc = Flight_manager(ta.drone_num)
+    path_planner = Trajectory(drones)
+    fc.take_off_swarm()
+    allocation = None
+
     while ta.optim.unvisited_num > 0:
         print('unvisited = %d' %ta.optim.unvisited_num)
         # ------------------------     update magazine state & allocate new targets -------- #    
@@ -80,16 +79,16 @@ def main():
                         drones[j].is_reached_goal = 0 
 
                     # find path to target
-                    if not (drones[j].path_found) and (drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True):
+                    if not (drones[j].path_found) and (drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) and (not (fc.open_threads[j].is_alive())):
                         drones[j].path_found = path_planner.plan(drones ,drone_idx=j, drone_num=ta.drone_num)
                         if drones[j].path_found:
-                            fc.publish_traj_command(path_planner.smooth_path_m[j], drone_idx=j)
+                            fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                     
                     # find path to base
-                    if not (drones[j].path_found) and  (ta.optim.unvisited[ta.optim.current_targets[j]] == False) :
+                    if not (drones[j].path_found) and  (ta.optim.unvisited[ta.optim.current_targets[j]] == False) and (not (fc.open_threads[j].is_alive())) :
                         drones[j].path_found = path_planner.plan(drones ,drone_idx=j, drone_num=ta.drone_num)
                         if drones[j].path_found:
-                            fc.publish_traj_command(path_planner.smooth_path_m[j], drone_idx=j)
+                            fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                         if not drones[j].path_found:
                             fig.plot_no_path_found(drones[j].start_coords, drones[j].goal_coords)  
 
@@ -123,7 +122,7 @@ def main():
         #  --------------------------------    path planning ----------------------------- #
         fig.ax.axes.clear()
         for j in range(ta.drone_num):
-            if not (drones[j].path_found) and (ta.optim.unvisited_num > 0): #force trying plan to base until is found
+            if not (drones[j].path_found) and (ta.optim.unvisited_num > 0) and (not (fc.open_threads[j].is_alive())): #force trying plan to base until is found
                 drones[j].start_title = drones[j].current_pos_title
                 drones[j].start_coords = drones[j].current_pos_coords
                 if drones[j].current_magazine > 0:
@@ -137,7 +136,7 @@ def main():
                 if drones[j].path_found:
                     drones[j].at_base = 0
                     drones[j].current_pos_title = None
-                    fc.publish_traj_command(path_planner.smooth_path_m[j], drone_idx=j)
+                    fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
 
                 if not drones[j].path_found:
                     fig.plot_no_path_found(drones[j])  
@@ -190,14 +189,14 @@ def main():
             drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
 
             if not (drones[j].at_base):
-                if (drones[j].current_pos_title == 'target') and not (drones[j].path_found):
+                if (drones[j].current_pos_title == 'target') and not (drones[j].path_found) and (not (fc.open_threads[j].is_alive())):
                     drones[j].start_title = drones[j].current_pos_title
                     drones[j].start_coords = drones[j].current_pos_coords
                     drones[j].goal_title = 'base'
                     drones[j].goal_coords = drones[j].base
                     drones[j].path_found = path_planner.plan(drones ,drone_idx=j, drone_num=ta.drone_num)
                     if drones[j].path_found:
-                        fc.publish_traj_command(path_planner.smooth_path_m[j], drone_idx=j)
+                        fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
 
                 if (drones[j].is_reached_goal) and (drones[j].path_found):
                     drones[j].at_base = 1
@@ -214,6 +213,7 @@ def main():
         fig.show()
         all_at_base = True
         fc.sleep()
+    fc.land(drones)
     fig.plot_all_targets()
     fig.plot_history(ta.optim.history)
     fig.show()

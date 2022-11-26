@@ -24,8 +24,8 @@ if mode == 'sim':
     drone_num = 3
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 2.5
-    base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
-    # base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num]
+    # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
+    base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num]
 
 # ------------------ Allocation 
 k_init = 5 
@@ -33,13 +33,14 @@ threshold_factor = 0.8
 # -------------------   safety
 safety_distance_trajectory = 0.4
 safety_distance_allocation = safety_distance_trajectory * 1.2
-floor_safety_distance = 0.5
+floor_safety_distance = 0.8
 
 # ------------------- Trajectory
 resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
-take_off_height = 1
+take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
+offset_dist_target = 0.05 # [m]
 # -------------------- Targets
 
 data_source = 'circle'   
@@ -47,7 +48,7 @@ if data_source == 'circle':
     targets_num_gen = 30
     t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)
     radius = 0.6
-    depth = 3.4
+    depth = 2.4
     z_offset = radius + floor_safety_distance + 0.3
     targetpos = np.stack([depth*np.ones([targets_num_gen]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
 elif data_source == 'dataset':
@@ -61,7 +62,6 @@ span, limits = Additionals.get_span(targetpos, base)
 
 # --------------------- General
 sleep_time = 0.2
-
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ----------------- Plotting

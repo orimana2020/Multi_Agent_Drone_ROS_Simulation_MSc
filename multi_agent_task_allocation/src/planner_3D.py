@@ -6,7 +6,8 @@ import params
 
 
 class Trajectory(object):
-    def __init__(self ,drone_num, drones):
+    def __init__(self, drones):
+        self.drone_num = len(drones)
         self.res = params.resolution
         self.break_trajectory_len_factor = params.break_trajectory_len_factor
         self.minimum_floor_distance = params.floor_safety_distance # meter
@@ -21,16 +22,16 @@ class Trajectory(object):
         self.y_lim = y_lim -1
         self.z_lim = z_lim -1 
         self.safety_distance = params.safety_distance_trajectory
-        self.block_volume = [[]] * drone_num
-        self.block_volumes_m = [[]] * drone_num # used for visualization only
-        self.paths_m = [[]] * drone_num# used for visualization only
-        self.smooth_path_m =[[]] * drone_num
-        self.constant_blocking_area = [[]] * drone_num
-        self.constant_blocking_area_m = [[]] * drone_num
+        self.block_volume = [[]] * self.drone_num
+        self.block_volumes_m = [[]] * self.drone_num # used for visualization only
+        self.paths_m = [[]] * self.drone_num# used for visualization only
+        self.smooth_path_m =[[]] * self.drone_num
+        self.constant_blocking_area = [[]] * self.drone_num
+        self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         
         
-        for j in range(drone_num):
+        for j in range(self.drone_num):
             start = self.covert_meter2idx(drones[j].base)
             mean_intermidiate = self.covert_meter2idx(np.array(drones[j].base) + np.array([self.mean_x_targets_position * self.break_trajectory_len_factor, 0,0]) )
             path = [start]
