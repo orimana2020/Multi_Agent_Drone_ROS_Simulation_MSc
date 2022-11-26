@@ -117,8 +117,14 @@ def main():
                     drones[j].is_reached_goal = 0
                     drones[j].path_found = 0 
                     drones[j].is_available = 0
+                current_drone_num = ta.drone_num
                 ta.update_kmeans()
-                allocation = None  
+                allocation = None 
+                if current_drone_num > ta.drone_num: #land inactive drones
+                    for j in range(current_drone_num-1, ta.drone_num-1,-1):
+                        fc._land(drone_idx=j)
+                        drones[j].is_active = False
+                        print(f'drone {j} is landing')
             fc.sleep()
            
         #  --------------------------------    path planning ----------------------------- #
@@ -143,8 +149,7 @@ def main():
                 if not drones[j].path_found:
                     fig.plot_no_path_found(drones[j])  
                     
-            
-            
+        
             drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
             if (drones[j].is_reached_goal) and (drones[j].path_found):
                 drones[j].path_found = 0
@@ -178,7 +183,6 @@ def main():
         fig.plot_history(ta.optim.history)
         fig.show()
         fc.sleep()
-
         print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
     # -------------------------------- Return all drones to base
     all_at_base = True
@@ -199,12 +203,13 @@ def main():
                     drones[j].path_found = path_planner.plan(drones ,drone_idx=j, drone_num=ta.drone_num)
                     if drones[j].path_found:
                         fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
-
+                        
+                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords)
                 if (drones[j].is_reached_goal) and (drones[j].path_found):
                     drones[j].at_base = 1
                     ta.targetpos_reallocate[ta.optim.current_targets[j],:] = np.inf
                     ta.optim.update_distance_mat(ta.optim.current_targets[j])
-
+        all_at_base = True
         for j in range(ta.drone_num):
             if not drones[j].at_base:
                 all_at_base = False
@@ -213,7 +218,6 @@ def main():
         fig.plot_all_targets()    
         fig.plot_trajectory(path_planner, drones ,ta.drone_num)
         fig.show()
-        all_at_base = True
         fc.sleep()
     fc.land(drones)
     fig.plot_all_targets()

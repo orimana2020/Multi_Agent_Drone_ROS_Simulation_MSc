@@ -22,7 +22,7 @@ if mode == 'cf':
 #-----drone sim
 if mode == 'sim':
     drone_num = 3
-    magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
+    magazine = [15,5,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 2.5
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
     base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num]
@@ -40,7 +40,7 @@ resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
-offset_dist_target = 0.05 # [m]
+offset_dist_target = 0.1 # [m]
 # -------------------- Targets
 
 data_source = 'circle'   
@@ -51,10 +51,13 @@ if data_source == 'circle':
     depth = 2.4
     z_offset = radius + floor_safety_distance + 0.3
     targetpos = np.stack([depth*np.ones([targets_num_gen]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
+    targetpos -= np.array([offset_dist_target, 0 ,0])
 elif data_source == 'dataset':
     targetpos = np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src/targets_arr.npy')
+    targetpos -= np.array([offset_dist_target, 0 ,0])
 elif data_source == 'salon':
-    targetpos  = Additionals.grid_shape()
+    targetpos  = Additionals.grid_shape() 
+    targetpos -= np.array([offset_dist_target, 0 ,0])
 
 targets_num, _ = targetpos.shape
 mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num

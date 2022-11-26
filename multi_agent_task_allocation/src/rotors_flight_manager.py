@@ -2,6 +2,7 @@
 import rospy
 from trajectory_msgs.msg import MultiDOFJointTrajectory, MultiDOFJointTrajectoryPoint
 from geometry_msgs.msg import Transform, Quaternion, Point,Twist, Pose
+from mav_msgs.msg import Actuators
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 import std_msgs.msg
 import time, math
@@ -19,6 +20,7 @@ class Flight_manager(object):
         self.rate = rospy.Rate(1/params.sleep_time) # [Hz]
         self.linear_velocity_limit = params.linear_velocity
         self.drone_num = drone_num
+        self.base = params.base
         self.traj = MultiDOFJointTrajectory()
         self.header = std_msgs.msg.Header()
         self.header.stamp = rospy.Time()
@@ -108,15 +110,15 @@ class Flight_manager(object):
             self._take_off(drone_idx=drone_idx, height=params.take_off_height)
         rospy.sleep(5)
     
-    def _land(self, drone_idx, base):
-        goal = [base[0], base[1], 0.2]
+    def _land(self, drone_idx):
+        goal = [self.base[drone_idx][0], self.base[drone_idx][1], 0.2]
         waypoints = [goal]
         self.execute_trajectory_mt(drone_idx, waypoints)
     
     def land(self, drones):
         for j in range(len(drones)):
             if drones[j].is_active:
-                self._land(drone_idx=j, base=drones[j].base)
+                self._land(drone_idx=j)
         rospy.sleep(5)
 
 

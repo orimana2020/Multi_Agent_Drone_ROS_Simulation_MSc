@@ -1,10 +1,5 @@
-class Fake(object):
-    def __init__(self):
-        pass
-    def is_alive(self):
-        return False
-
-drone_num = 3
-
-open_threads = [Fake()] * drone_num
-print(open_threads[0].is_alive())
+import params
+current_drone_num = 2
+tadrone_num = 4
+for j in range(tadrone_num-1, current_drone_num-1,-1):
+    print(j)
