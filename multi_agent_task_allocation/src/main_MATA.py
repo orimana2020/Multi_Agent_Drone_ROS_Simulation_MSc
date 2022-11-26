@@ -5,6 +5,8 @@
 # full simulation works for ros noetic on ubuntu 20.04
 # python 3.8.10
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_lanch.launch  
+# terminal 1 : $ roslaunch rotors_gazebo drone_poll_circle.launch 
+
 # terminal 2: $ rosrun multi_agent_task_allocation main_MATA.py
 # ----------------------------------------->
 
