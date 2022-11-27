@@ -115,11 +115,14 @@ class Flight_manager(object):
         waypoints = [goal]
         self.execute_trajectory_mt(drone_idx, waypoints)
     
-    def land(self, drones):
-        for j in range(len(drones)):
-            if drones[j].is_active:
-                self._land(drone_idx=j)
-        rospy.sleep(5)
+    def land(self, drone_idx, drones=None):
+        if drone_idx == 'all':
+            for j in range(len(drones)):
+                if drones[j].is_active:
+                    self._land(drone_idx=j)
+        else:
+            self._land(drone_idx)
+        rospy.sleep(1)
 
 
 

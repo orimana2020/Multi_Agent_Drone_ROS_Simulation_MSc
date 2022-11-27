@@ -122,7 +122,7 @@ def main():
                 allocation = None 
                 if current_drone_num > ta.drone_num: #land inactive drones
                     for j in range(current_drone_num-1, ta.drone_num-1,-1):
-                        fc._land(drone_idx=j)
+                        fc.land(drone_idx=j)
                         drones[j].is_active = False
                         print(f'drone {j} is landing')
             fc.sleep()
@@ -219,7 +219,7 @@ def main():
         fig.plot_trajectory(path_planner, drones ,ta.drone_num)
         fig.show()
         fc.sleep()
-    fc.land(drones)
+    fc.land('all', drones)
     fig.plot_all_targets()
     fig.plot_history(ta.optim.history)
     fig.show()

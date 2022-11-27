@@ -28,16 +28,31 @@ class Flight_manager(object):
     def activate_high_level_commander(self, scf):
         scf.cf.param.set_value('commander.enHighLevel', '1')
 
-    def wait_all_threads_killed(self):
-        thread_alive = True
-        while thread_alive:
-            thread_alive = False
-            for thread in self.open_threads:
-                if thread.is_alive():
+    def wait_thread_killed(self, drone_idx):
+        """
+        wait until all thread are killed (drone_idx = 'all')
+        wait until specific thread is killed(e.g. drone_idx = 1)
+        """
+        if drone_idx == 'all':
+            thread_alive = True
+            while thread_alive:
+                thread_alive = False
+                for thread in self.open_threads:
+                    if thread.is_alive():
+                        thread_alive = True
+                time.sleep(1)
+                print('-- waiting until all threads are killed')
+            print('all threads dead') 
+        else:
+            thread_alive = True
+            while thread_alive:
+                thread_alive = False
+                if self.open_threads[drone_idx].is_alive():
                     thread_alive = True
-            time.sleep(1)
-            print('-- waiting until all threads are killed')
-        print('all threads dead')       
+                time.sleep(1)
+                print(f'waiting until thread {drone_idx} is killed')
+            print(f'thread {drone_idx} is killed') 
+
 
     def _take_off(self, scf):
         cf = scf.cf
@@ -49,11 +64,11 @@ class Flight_manager(object):
         threads = self.swarm.parallel_safe(self._take_off)
         for i in range(len(threads)):
             self.open_threads[i] = threads[i]
-        self.wait_all_threads_killed()
+        self.wait_thread_killed('all')
         threads = self.swarm.parallel_safe(self._go_to_base)
         for i in range(len(threads)):
             self.open_threads[i] = threads[i]
-        self.wait_all_threads_killed()
+        self.wait_thread_killed('all')
 
     def _go_to_base(self, scf):
         cf = scf.cf
@@ -89,7 +104,7 @@ class Flight_manager(object):
 
     
     def execute_trajectory_mt(self, drone_idx, waypoints):# send trajectory with multi thread mode
-        thread = self.swarm.daemon_process(self._execute_trajectory, self.uri_dict[drone_idx], waypoints)
+        thread = self.swarm.daemon_process(self._execute_trajectory, self.uri_dict[drone_idx], [waypoints])
         self.open_threads[drone_idx] = thread
     
     def get_position(self, drone_idx):
@@ -110,17 +125,26 @@ class Flight_manager(object):
         except:
             return 0
 
-    def _land(self, scf):
+    def _land(self, scf, drone_idx):
+        self.wait_thread_killed(drone_idx)
         cf = scf.cf
         commander = cf.high_level_commander
         commander.land(0.0, 4.0)
         time.sleep(4)
         commander.stop()
     
-    def land(self, drones): # complete - land only active drones
-        self.wait_all_threads_killed()
-        self.swarm.parallel_safe(self._land)
-        self.swarm.close_links()
+    def land(self, drone_idx, drones=None): 
+        if drone_idx == 'all':
+            for i in range(len(drones)):
+                if drones[i].is_active:
+                    thread = self.swarm.daemon_process(self._land, self.uri_dict[i], [i])
+                    self.open_threads[i] = thread   
+            self.wait_thread_killed(drone_idx)     
+            self.swarm.close_links()
+        else:
+            thread = self.swarm.daemon_process(self._land, self.uri_dict[drone_idx], [drone_idx])
+            self.open_threads[drone_idx] = thread 
+
     
     def sleep(self):
         time.sleep(self.sleep_time)
