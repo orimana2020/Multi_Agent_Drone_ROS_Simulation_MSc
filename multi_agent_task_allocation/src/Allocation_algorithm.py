@@ -27,6 +27,7 @@ class Optim(object):
         self.unvisited = np.ones(targets_num, dtype=bool)
         self.threshold_factor = params.threshold_factor
         self.safety_distance_allocation = params.safety_distance_allocation
+        self.uri_state_mat = params.uri_state_mat
 
         # History
         self.history =[]
@@ -36,13 +37,13 @@ class Optim(object):
 
     def get_state_matrix(self, drone_num, init_flag=False):
         if init_flag:
-            return np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src'+'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
+            return np.load(str(os.getcwd())+ self.uri_state_mat +'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
         else:   
             if self.k > 1:
                 self.k -= 1
             print('k updated:' , self.k)
             if self.k >=2:
-                return np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src'+'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
+                return np.load(str(os.getcwd())+ self.uri_state_mat +'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
             elif self.k == 1:
                 return np.ones((1,drone_num,1), dtype=int)
     

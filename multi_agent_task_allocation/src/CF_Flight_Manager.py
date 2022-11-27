@@ -86,9 +86,10 @@ class Flight_manager(object):
                 time.sleep(duration)
         except:
             print('failed to execute trajectory')
+
     
     def execute_trajectory_mt(self, drone_idx, waypoints):# send trajectory with multi thread mode
-        thread = self.swarm.trajectory_to_drone(self._execute_trajectory, self.uri_dict[drone_idx], waypoints)
+        thread = self.swarm.daemon_process(self._execute_trajectory, self.uri_dict[drone_idx], waypoints)
         self.open_threads[drone_idx] = thread
     
     def get_position(self, drone_idx):
@@ -125,11 +126,5 @@ class Flight_manager(object):
         time.sleep(self.sleep_time)
 
 
-# --------------------------- Examples --------------------------------
 
-# if __name__ == '__main__':
-
-    # end mission
-    # swarm.parallel_safe(land)
-    # swarm.close_links()
 

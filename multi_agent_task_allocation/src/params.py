@@ -30,6 +30,13 @@ if mode == 'sim':
 # ------------------ Allocation 
 k_init = 5 
 threshold_factor = 0.8
+uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
+uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
+if mode == 'sim':
+    uri_state_mat = uri_state_mat_sim
+elif mode == 'cf':
+    uri_state_mat = uri_targetpos_cf
+
 # -------------------   safety
 safety_distance_trajectory = 0.4
 safety_distance_allocation = safety_distance_trajectory * 1.2
@@ -41,7 +48,14 @@ retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
 offset_dist_target = 0.1 # [m]
+
 # -------------------- Targets
+uri_targetpos_sim = '/src/rotors_simulator/multi_agent_task_allocation/src/targets_arr.npy'
+uri_targetpos_cf = '/src/drone_pollination/src/targets_arr.npy'
+if mode == 'sim':
+    target_uri = uri_targetpos_sim
+elif mode == 'cf':
+    target_uri = uri_targetpos_cf
 
 data_source = 'circle'   
 if data_source == 'circle':
@@ -53,7 +67,7 @@ if data_source == 'circle':
     targetpos = np.stack([depth*np.ones([targets_num_gen]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
     targetpos -= np.array([offset_dist_target, 0 ,0])
 elif data_source == 'dataset':
-    targetpos = np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/src/targets_arr.npy')
+    targetpos = np.load(str(os.getcwd()) + target_uri)
     targetpos -= np.array([offset_dist_target, 0 ,0])
 elif data_source == 'salon':
     targetpos  = Additionals.grid_shape() 
@@ -72,7 +86,6 @@ plot_path_scatter=0
 plot_smooth_path_cont=1
 plot_smooth_path_scatter=0
 plot_block_volume=1
-elvazim = [37, 175]
 plot_constant_blocking_area = 0
-
+elvazim = [37, 175]
 
