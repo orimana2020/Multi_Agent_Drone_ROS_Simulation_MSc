@@ -29,6 +29,7 @@ class Trajectory(object):
         self.constant_blocking_area = [[]] * self.drone_num
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
+        self.smooth_points_num = params.points_in_smooth_params
         
         
         for j in range(self.drone_num):
@@ -215,7 +216,7 @@ class Trajectory(object):
             weights[0:len1] = 100
             weights[len(path)-len3:] = 100
             tck, _ = interpolate.splprep([path[:,0], path[:,1], path[:,2]],w=weights,s=10)  
-            u_fine = np.linspace(0,1,30) # determine number of points in smooth path 
+            u_fine = np.linspace(0,1,self.smooth_points_num) # determine number of points in smooth path 
             smooth_path = interpolate.splev(u_fine, tck)
             return np.transpose(np.array(smooth_path))
         except: # remove duplicated coordes which result error in interpolation
@@ -230,7 +231,7 @@ class Trajectory(object):
             weights[0:len1] = 100
             weights[len(path2)-len3:] = 100
             tck, _ = interpolate.splprep([path2[:,0], path2[:,1], path2[:,2]],w=weights,s=10)  
-            u_fine = np.linspace(0,1,30) # determine number of points in smooth path 
+            u_fine = np.linspace(0,1,self.smooth_points_num) # determine number of points in smooth path 
             smooth_path = interpolate.splev(u_fine, tck)
             print('duplicate coords found in path and resolved')
             return np.transpose(np.array(smooth_path))

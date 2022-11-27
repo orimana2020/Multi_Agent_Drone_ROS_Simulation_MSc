@@ -29,6 +29,7 @@ elif params.mode == 'cf':
 def main():
     ta = Allocation() 
     fig = get_figure()
+    print(ta.drone_num)
     drones = Get_Drones(params.uri_list, params.base, params.magazine, ta.drone_num)
     fc = Flight_manager(ta.drone_num)
     path_planner = Trajectory(drones)

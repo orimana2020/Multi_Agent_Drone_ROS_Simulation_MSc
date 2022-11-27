@@ -1,13 +1,12 @@
 import numpy as np
 import math
-targets_num_gen = 30
+targets_num_gen = 25
 t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)
 radius = 0.6
-depth = 2.4
-floor_safety_distance = 0.8
-z_offset = radius + floor_safety_distance + 0.3
+depth = 2
+floor_safety_distance = 0.5
+z_offset = radius + floor_safety_distance + 0.1
 targetpos = np.stack([depth*np.ones([targets_num_gen]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
-
 
 for i in range(len(targetpos)):
     print("<include>")
