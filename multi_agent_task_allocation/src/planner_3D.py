@@ -16,7 +16,9 @@ class Trajectory(object):
         z_span = z_span - self.minimum_floor_distance
         self.grid_3d = np.zeros([round(z_span/self.res), round(y_span/self.res), round(x_span/self.res)], dtype=int) #z y x
         self.grid_3d_shape = self.grid_3d.shape
+        print(f'3d grid shape: {self.grid_3d_shape}')
         self.visited_3d = np.zeros([round(z_span/self.res), round(y_span/self.res), round(x_span/self.res)], dtype=int) #z y x
+        _,_,self.y_offset,_,_,_ = params.limits_idx
         z_lim, y_lim, x_lim = self.grid_3d.shape
         self.x_lim = x_lim -1
         self.y_lim = y_lim -1
@@ -24,7 +26,7 @@ class Trajectory(object):
         self.safety_distance = params.safety_distance_trajectory
         self.block_volume = [[]] * self.drone_num
         self.block_volumes_m = [[]] * self.drone_num # used for visualization only
-        self.paths_m = [[]] * self.drone_num# used for visualization only
+        self.paths_m = [[]] * self.drone_num # used for visualization only
         self.smooth_path_m =[[]] * self.drone_num
         self.constant_blocking_area = [[]] * self.drone_num
         self.constant_blocking_area_m = [[]] * self.drone_num
@@ -275,12 +277,13 @@ class Trajectory(object):
 
 
     def covert_meter2idx(self, coords_meter): # (x,y,z) -> (z,y,x)
-        return (round((coords_meter[2]-self.minimum_floor_distance)/self.res ), round(coords_meter[1]/self.res + self.y_lim/2)  , round(coords_meter[0]/self.res ) ) 
+        # return (round((coords_meter[2]-self.minimum_floor_distance)/self.res ), round(coords_meter[1]/self.res + self.y_lim/2)  , round(coords_meter[0]/self.res ) ) 
+        return (round((coords_meter[2]-self.minimum_floor_distance)/self.res ), round(coords_meter[1]/self.res + (-self.y_offset))  , round(coords_meter[0]/self.res ) ) 
 
     def convert_idx2meter(self, coords_idx): #(z,y,x) -> (x,y,z)
-        coord_m = np.stack(((coords_idx[:,2] ) * self.res, (coords_idx[:,1] - self.y_lim/2) * self.res, coords_idx[:,0] * self.res + self.minimum_floor_distance), axis=-1)
-        return coord_m
-        
+        # coord_m = np.stack(((coords_idx[:,2] ) * self.res, (coords_idx[:,1] - self.y_lim/2) * self.res, coords_idx[:,0] * self.res + self.minimum_floor_distance), axis=-1)
+        return np.stack(((coords_idx[:,2] ) * self.res, (coords_idx[:,1] - (-self.y_offset)) * self.res, coords_idx[:,0] * self.res + self.minimum_floor_distance), axis=-1)        
+
 
     def get_path(self, start_m, goal_m, is_forward):
         """
@@ -306,10 +309,10 @@ class Trajectory(object):
             break_trajecoty_len = abs(start_m[0] - goal_m[0]) * self.break_trajectory_len_factor
             intermidiate_1 = self.covert_meter2idx((start_m[0] - break_trajecoty_len, start_m[1], start_m[2]))
             intermidiate_2 = self.covert_meter2idx((goal_m[0] + break_trajecoty_len, goal_m[1], goal_m[2]))
-
-        if self.grid_3d[goal] == 1: # fast sanity check of goal occupancy status
+        print(f'converted meter to idx, start: {start}, goal: {goal}, ZYX format')
+        if self.grid_3d[goal] == 1 or self.grid_3d[intermidiate_1] == 1 or self.grid_3d[intermidiate_2] == 1: # fast sanity check of goal occupancy status
             print('sanity check failed')
-            return 0 
+            return None 
         try:
             path1 = self.A_star(start, intermidiate_1)
             path1 = path1[:-1]
@@ -338,6 +341,7 @@ class Trajectory(object):
         goal_m = drones[drone_idx].goal_coords
         start_title = drones[drone_idx].start_title
         goal_title = drones[drone_idx].goal_title
+        print(f'drone {drone_idx} start planning, start_title: {start_title}, goal_title: {goal_title}, start: {start_m}, goal: {goal_m}')
         # update grid_3D, exclude current drone block_volume
         self.grid_3d = np.zeros([self.grid_3d_shape[0], self.grid_3d_shape[1], self.grid_3d_shape[2]], dtype=int) #z y x - reset grid_3d
         for i in range(drone_num):
@@ -365,7 +369,7 @@ class Trajectory(object):
 
 
         elif (start_title == 'target' and goal_title == 'target'):
-            intermidiate_m = (min([start_m[0], goal_m[0]]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
+            intermidiate_m = (min(start_m[0], goal_m[0]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
             try:
                 segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m, is_forward=False)
                 block_volume1 = self.inflate(path)

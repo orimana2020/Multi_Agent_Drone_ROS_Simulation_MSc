@@ -1,0 +1,547 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="pollination_world">
+    <include>
+      <uri>model://ground_plane</uri>
+      <!--uri>model://grass_plane</uri-->
+    </include>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+
+
+    <!-- //__________________________start add targets_________________________// -->
+<include>
+  <uri>model://flower2</uri>
+  <name>target0</name>
+  <pose>3.811854703426361 -0.198925614356995 0.847505693435669 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target1</name>
+  <pose>3.9413291144371034 -0.374187941551208 0.196296977996826 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target2</name>
+  <pose>3.880312125682831 -0.35691833019256597 0.173609752655029 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target3</name>
+  <pose>3.9065389323234556 -0.623567585945129 0.9475400352478031 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target4</name>
+  <pose>3.853332622051239 -0.8787138795852659 0.717423534393311 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target5</name>
+  <pose>3.855951926708221 -1.0008076143264801 0.5203785705566409 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target6</name>
+  <pose>3.923054749965668 -1.09487541675568 0.8533997631072999 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target7</name>
+  <pose>3.980927789211273 -1.28488209247589 0.85346474647522 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target8</name>
+  <pose>3.881071412563324 -0.868321042060852 0.637629718780518 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target9</name>
+  <pose>3.9756541228294373 -0.163814749717712 0.8746062469482421 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target10</name>
+  <pose>3.9478764510154725 -0.179800801277161 0.890403757095337 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target11</name>
+  <pose>3.922624576091766 -1.07530163288116 1.5165232086181601 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target12</name>
+  <pose>3.9833188033103943 -1.16993748188019 1.1948593211174 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target13</name>
+  <pose>3.9680015349388125 -1.23565037250519 1.13581125378609 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target14</name>
+  <pose>3.9510947108268737 -1.2056594133377099 1.1623325514793401 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target15</name>
+  <pose>3.9804967856407165 -1.17003841876984 1.37232614994049 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target16</name>
+  <pose>3.9697021651268005 -1.14680481433868 1.36801821708679 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target17</name>
+  <pose>3.989009473323822 -0.843062252998352 0.99578902721405 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target18</name>
+  <pose>3.9246273684501647 -0.9254810380935671 0.955590238571167 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target19</name>
+  <pose>3.974273660182953 -0.63024929523468 1.29217159748077 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target20</name>
+  <pose>3.9480139994621277 -0.6521764993667599 1.30712275028229 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target21</name>
+  <pose>3.9190586733818056 -0.571501240730286 1.24049582242966 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target22</name>
+  <pose>3.972270276546478 -1.03800556659698 1.38818074226379 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target23</name>
+  <pose>3.928138234615326 -1.01814388751984 1.39341772079468 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target24</name>
+  <pose>3.9250788569450377 -0.597917084693909 1.94507493972778 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target25</name>
+  <pose>3.9938568663597107 -0.898326840400696 2.05459264755249 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target26</name>
+  <pose>3.977669198513031 -0.9391159486770629 2.0724974250793498 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target27</name>
+  <pose>3.9392718386650083 -0.8974258852005 2.06510564804077 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target28</name>
+  <pose>3.995604703426361 -0.599854893684387 2.66763029098511 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target29</name>
+  <pose>3.756909663677216 -0.610247025489807 1.8490823554992701 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target30</name>
+  <pose>3.725073618888855 -0.639807190895081 1.88637426376343 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target31</name>
+  <pose>3.817332293987274 -0.312708449363708 1.2013356512785 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target32</name>
+  <pose>3.877674157619476 -0.8038682985305791 1.4933322429656999 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target33</name>
+  <pose>3.9708507323265074 -0.258897976875305 1.26047307372093 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target34</name>
+  <pose>3.886701323986053 -0.450131001472473 1.20439617455006 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target35</name>
+  <pose>3.663096728920937 -0.502863850593567 1.3904647254943798 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target36</name>
+  <pose>3.777468950748444 -0.644111695289612 1.4078600692749001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target37</name>
+  <pose>3.49685909986496 -0.723827481269836 1.39924926757813 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target38</name>
+  <pose>3.9334561610221863 -0.677683110237122 1.3043656682968099 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target39</name>
+  <pose>3.844252021312714 -0.961726269721985 1.61209173202515 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target40</name>
+  <pose>3.932240331172943 0.585692019462585 0.687498550415039 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target41</name>
+  <pose>3.781292488574982 0.503812460899353 0.44389978408813496 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target42</name>
+  <pose>3.953522517681122 0.613882479667664 0.886912651062012 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target43</name>
+  <pose>3.889002559185028 0.663838534355164 0.686715030670166 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target44</name>
+  <pose>3.9214482855796815 0.647487101554871 0.44784559249877903 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target45</name>
+  <pose>3.743596580028534 0.6876015424728389 0.5665639305114749 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target46</name>
+  <pose>3.955040624141693 0.8996556043624879 0.639692707061768 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target47</name>
+  <pose>3.862798459529877 1.01609027385712 1.5392929649353 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target48</name>
+  <pose>3.818658177852631 1.0608224058151199 1.53423749923706 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target49</name>
+  <pose>3.785798623561859 1.01756724834442 1.3244892692565902 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target50</name>
+  <pose>3.685101091861725 1.02055194377899 1.2535019659996 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target51</name>
+  <pose>3.630629891455173 0.96619975566864 1.25469722986221 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target52</name>
+  <pose>3.9221586966514588 0.6249181699752809 1.63211572647095 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target53</name>
+  <pose>3.862258508205414 0.6574630308151249 1.25024144053459 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target54</name>
+  <pose>3.826616370677948 0.6400485181808471 1.24093549132347 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target55</name>
+  <pose>3.792501480579376 0.622141642570496 1.2851143932342501 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target56</name>
+  <pose>3.863497016429901 0.408685622215271 0.981791563034058 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target57</name>
+  <pose>3.9990121817588804 0.950092959403992 1.9337940406799299 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target58</name>
+  <pose>3.9338003325462343 0.988164896965027 1.97382204055786 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target59</name>
+  <pose>3.985540044307709 0.9882994413375851 1.7744047546386699 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target60</name>
+  <pose>3.9554673647880554 1.05911799907684 1.84132247924805 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target61</name>
+  <pose>3.939495942592621 1.00139060497284 1.88347131729126 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target62</name>
+  <pose>3.9984483122825623 -0.11968624830246 1.29387466669083 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target63</name>
+  <pose>3.9557813811302185 -0.162163786888123 1.32973291873932 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target64</name>
+  <pose>3.81953072309494 0.406051573753357 1.4201963233947799 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target65</name>
+  <pose>3.716168134212494 1.01035132884979 1.57354825973511 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target66</name>
+  <pose>3.721227786540985 1.05619479656219 1.5735789108276401 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target67</name>
+  <pose>3.712605893611908 1.16418574810028 1.56365213394165 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target68</name>
+  <pose>3.668428925871849 0.854355082511902 1.5826831626892102 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target69</name>
+  <pose>3.627075338363647 0.861380724906921 1.5898114204406701 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target70</name>
+  <pose>3.690891919136047 0.748510088920593 1.6129704856872602 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target71</name>
+  <pose>3.458744971752167 0.746881709098816 1.7885507774353 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target72</name>
+  <pose>3.864740550518036 0.554875311851501 1.66205564498901 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target73</name>
+  <pose>3.838068339824677 0.6417714643478389 1.7987294006347698 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target74</name>
+  <pose>3.99961728811264 0.6665740156173711 1.80426927566528 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target75</name>
+  <pose>3.878666598796844 0.610954966545105 1.7800895690918 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target76</name>
+  <pose>3.839006011486053 0.487346873283386 1.4928670406341602 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target77</name>
+  <pose>3.729092423915863 0.5452121686935419 1.24912249445915 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target78</name>
+  <pose>3.707833082675934 0.57956889629364 1.26595729351044 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target79</name>
+  <pose>3.645601866692305 0.566067328453064 1.2925151324272202 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target80</name>
+  <pose>3.6634892141819 0.0272116661071777 1.7993401145935102 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target81</name>
+  <pose>3.6847550415992743 -0.205706753730774 1.5709303092956501 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target82</name>
+  <pose>3.680170730352402 -0.178555407524109 1.56810359954834 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target83</name>
+  <pose>3.711236965656281 -0.228201713562012 1.63527437210083 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target84</name>
+  <pose>3.855256192684174 -0.13777222156524702 1.61879768371582 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target85</name>
+  <pose>3.883131062984467 -0.156049227714539 1.6769769859313999 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target86</name>
+  <pose>3.814289510250092 -0.153531913757324 1.70363296508789 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target87</name>
+  <pose>3.684362267255783 0.18776662349700898 1.40535863876343 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target88</name>
+  <pose>3.62980298101902 0.052233409881591794 1.41258234977722 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target89</name>
+  <pose>3.784711329936981 -0.018907387256622298 1.7987143325805701 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target90</name>
+  <pose>3.605062243938446 0.154462828636169 1.5323743915557901 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target91</name>
+  <pose>3.53879004240036 -0.341863331794739 1.2975000166893 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target92</name>
+  <pose>3.541293098926544 -0.0869888764619827 1.54004382133484 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target93</name>
+  <pose>3.578660814762115 0.0010814905166626 1.64215154647827 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target94</name>
+  <pose>3.9106799483299257 -0.0872258001565933 1.12296447455883 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target95</name>
+  <pose>3.662348991036415 0.0245999813079834 1.3328786182403602 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target96</name>
+  <pose>3.648974304795265 0.23689166545867898 1.44344213485718 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target97</name>
+  <pose>3.712797849178314 0.0324357271194458 1.20001668989658 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target98</name>
+  <pose>3.610163980722427 -0.338471894264221 1.24241765856743 0 -1.57 0</pose>
+</include>
+  <!-- //_________________________finish add target_______________________________// -->
+
+    <scene>
+      <shadows>false</shadows>
+    </scene>
+  
+    <!-- Only one ROS interface plugin is required per world, as any other plugin can connect a Gazebo
+         topic to a ROS topic (or vise versa). -->
+    <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so"/>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>47.3667</latitude_deg>
+      <longitude_deg>8.5500</longitude_deg>
+      <elevation>500.0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <physics type='ode'>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>700</iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>100</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+  </world>
+</sdf>

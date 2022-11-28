@@ -29,7 +29,6 @@ elif params.mode == 'cf':
 def main():
     ta = Allocation() 
     fig = get_figure()
-    print(ta.drone_num)
     drones = Get_Drones(params.uri_list, params.base, params.magazine, ta.drone_num)
     fc = Flight_manager(ta.drone_num)
     path_planner = Trajectory(drones)
@@ -45,6 +44,7 @@ def main():
                 change_flag[j] = 1
                 allocation = ta.allocate(change_flag)
                 if allocation == 'update_kmeans':
+                    print('kmeans mode started')
                     break
         
         if allocation == 'update_kmeans':
@@ -62,13 +62,16 @@ def main():
                         drones[j].goal_title = 'target'
                         drones[j].goal_coords = tuple(ta.targetpos[ta.optim.current_targets[j],:])
 
-        # --------------------------- KMEANS ------------------------ #            
+        # --------------------------- KMEANS ------------------------ #      
         while allocation == 'update_kmeans':
             for j in range(ta.drone_num):
+                print(f'checkpoint  0 drone {j}')
                 drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
                 if not (drones[j].at_base):
+                    print(f'drone {j} not at_base')
                     # arrived to target
                     if  (drones[j].goal_title == 'target') and (drones[j].path_found) and (drones[j].is_reached_goal) and (ta.optim.unvisited[ta.optim.current_targets[j]] == True):
+                        print(f'drone {j} arrived to target')
                         drones[j].path_found = 0
                         ta.optim.unvisited_num -= 1
                         ta.optim.unvisited[ta.optim.current_targets[j]] = False
@@ -81,23 +84,28 @@ def main():
                         drones[j].goal_coords = drones[j].base
                         drones[j].is_reached_goal = 0 
 
+                    print('checkpoint 1')
                     # find path to target
                     if not (drones[j].path_found) and (drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) and (not (fc.open_threads[j].is_alive())):
+                        print(f'drone {j} try find path to target')
                         drones[j].path_found = path_planner.plan(drones ,drone_idx=j, drone_num=ta.drone_num)
                         if drones[j].path_found:
                             fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                     
+                    print('checkpoint 2')
                     # find path to base
                     if not (drones[j].path_found) and  (ta.optim.unvisited[ta.optim.current_targets[j]] == False) and (not (fc.open_threads[j].is_alive())) :
+                        print(f'drone {j} try find path to base')
                         drones[j].path_found = path_planner.plan(drones ,drone_idx=j, drone_num=ta.drone_num)
                         if drones[j].path_found:
                             fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                         if not drones[j].path_found:
-                            fig.plot_no_path_found(drones[j].start_coords, drones[j].goal_coords)  
-
+                            fig.plot_no_path_found(drones[j])  
+                    
+                    print('checkpoint 3')
                     if ((drones[j].path_found) and (drones[j].goal_title == 'base') and (drones[j].is_reached_goal)):
                         drones[j].at_base = 1
-                        
+            print('checkpoint 4')            
             fig.ax.axes.clear()
             fig.plot_all_targets()
             fig.plot_trajectory(path_planner, drones ,ta.drone_num)
@@ -108,8 +116,10 @@ def main():
             for j in range(ta.drone_num):
                 if not drones[j].at_base:
                     k_means_permit = False
+            print(f'kmeans permit {k_means_permit}')
             if k_means_permit :
                 for j in range(ta.drone_num):
+                    print(f'drone {j} at_base: {drones[j].at_base}')
                     drones[j].current_magazine = drones[j].full_magazine
                     drones[j].start_title = 'base'
                     drones[j].goal_title = 'target'
@@ -120,6 +130,7 @@ def main():
                     drones[j].is_available = 0
                 current_drone_num = ta.drone_num
                 ta.update_kmeans()
+                print('kmeans updated')
                 allocation = None 
                 if current_drone_num > ta.drone_num: #land inactive drones
                     for j in range(current_drone_num-1, ta.drone_num-1,-1):
@@ -179,7 +190,7 @@ def main():
             else:
                 drones[j].is_available = 0
 
-            fig.plot_trajectory(path_planner, drones ,ta.drone_num)            
+            fig.plot_trajectory(path_planner, drones ,ta.drone_num)  
         fig.plot_all_targets()
         fig.plot_history(ta.optim.history)
         fig.show()

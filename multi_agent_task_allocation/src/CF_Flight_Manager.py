@@ -3,7 +3,7 @@ import cflib.crtp
 import numpy as np
 from cflib.crazyflie.swarm import CachedCfFactory
 from cflib.crazyflie.swarm import Swarm
-from cflib.Ori_CF.fly_CF.Trajectory import Generate_Trajectory, upload_trajectory
+from cflib.Ori_CF.multi_agent_task_allocation.src.CF_Trajectory import Generate_Trajectory, upload_trajectory
 import params
 
 class Flight_manager(object):

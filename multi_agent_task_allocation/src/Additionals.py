@@ -16,7 +16,7 @@ def Get_Drones(uris, base, full_magazine, drone_num):
 
 class Drone(object):
     def __init__(self, index, uri, base, full_magazine):
-        self.ind = index
+        self.idx = index
         self.uri = uri
         self.base = base
         self.start_coords = base
@@ -105,9 +105,6 @@ class get_figure(object):
             if len(history[j]) > 0:
                 self.ax.scatter3D(history[j][:,0], history[j][:,1], history[j][:,2], s =50, c=self.colors[j], alpha=1,depthshade=False)
             
-       
-
-
 
 class Env(object):
     def __init__(self, drone_performace, drone_num):
