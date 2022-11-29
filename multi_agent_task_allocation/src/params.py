@@ -43,7 +43,7 @@ if mode == 'cf':
 #-----drone sim
 if mode == 'sim':
     drone_num = 3
-    magazine = [15,5,3,3,3,3,3,3,3][:drone_num]
+    magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 2.5
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
     base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num]
@@ -62,10 +62,10 @@ elif mode == 'cf':
 # -------------------   safety
 safety_distance_trajectory = 0.4
 safety_distance_allocation = safety_distance_trajectory * 1.2
-floor_safety_distance = 0
+floor_safety_distance = 0.5
 
 # ------------------- Trajectory
-resolution = 0.1 #[m]
+resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
@@ -83,7 +83,7 @@ if mode == 'sim':
 elif mode == 'cf':
     target_uri = uri_targetpos_cf
 
-data_source = 'dataset'   
+data_source = 'circle'   
 if data_source == 'circle':
     targets_num_gen = 25
     t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)
