@@ -23,14 +23,14 @@ def get_span(targetpos, base, resolution):
     ,  [round(x_min/resolution), round(x_max/resolution), round(y_min/resolution), round(y_max/resolution), round(z_min/resolution), round(z_max/resolution)]     
 # ------------------------------------------------------------------------------ #
 
-mode  = 'sim' # 'cf'
+mode  = 'cf' # 'cf'
 
 # -------------------- CF
 uri1 = 'radio://0/80/2M/E7E7E7E7E1'
 uri2 = 'radio://0/80/2M/E7E7E7E7E2'
 uri3 = 'radio://0/80/2M/E7E7E7E7E3'
 uri4 = 'radio://0/80/2M/E7E7E7E7E4'
-uri_list = [uri3] # index 0- most right drone 
+uri_list = [uri1, uri2, uri3] # index 0- most right drone 
 
 # --------------------- Drones 
 # ------drone CF
@@ -46,7 +46,7 @@ if mode == 'sim':
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 2.5
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
-    base = [(0,0.3,1), (0,0.9,1), (0,1.5,1)][:drone_num]
+    base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num]
     uri_list = [[0]] * drone_num
 
 # ------------------ Allocation 
@@ -65,7 +65,7 @@ safety_distance_allocation = safety_distance_trajectory * 1.2
 floor_safety_distance = 0.5
 
 # ------------------- Trajectory
-resolution = 0.1 #[m]
+resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
@@ -109,11 +109,10 @@ sleep_time = 0.3
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ----------------- Plotting
-plot_path_scatter = 0
-plot_smooth_path_cont = 1
-plot_smooth_path_scatter = 0
-plot_block_volume = 1
+plot_path_scatter=0
+plot_smooth_path_cont=1
+plot_smooth_path_scatter=0
+plot_block_volume=1
 plot_constant_blocking_area = 1
-plot_block_volume_floor_m = 1
 elvazim = [37, 175]
 

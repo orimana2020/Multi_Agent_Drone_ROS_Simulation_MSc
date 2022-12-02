@@ -58,6 +58,7 @@ class get_figure(object):
         self.smooth_path_scatter = params.plot_smooth_path_scatter
         self.block_volume = params.plot_block_volume
         self.constant_blocking_area = params.plot_constant_blocking_area
+        self.plot_block_volume_floor_m = params.plot_block_volume_floor_m
     
     def plot_all_targets(self):
         self.ax.scatter3D(self.targetpos[:,0], self.targetpos[:,1], self.targetpos[:,2], s= 10, c='k',alpha=1, depthshade=False)
@@ -83,7 +84,8 @@ class get_figure(object):
                     self.ax.scatter3D(path_planner.block_volumes_m[j][:,0], path_planner.block_volumes_m[j][:,1], path_planner.block_volumes_m[j][:,2], s= 10, c='g',alpha=0.01,depthshade=False)
                 if self.constant_blocking_area:
                     self.ax.scatter3D(path_planner.constant_blocking_area_m[j][:,0], path_planner.constant_blocking_area_m[j][:,1], path_planner.constant_blocking_area_m[j][:,2], s= 10, c='m',alpha=0.01,depthshade=False)
-
+                if self.plot_block_volume_floor_m:
+                    self.ax.plot(path_planner.block_volume_floor_m[:,0],path_planner.block_volume_floor_m[:,1], path_planner.block_volume_floor_m[:,2], c='grey', linewidth=4)
     def show(self):
         # self.ax.axes.set_xlim(self.x_min, self.x_max) 
         # self.ax.axes.set_ylim(self.y_min, self.y_max) 
