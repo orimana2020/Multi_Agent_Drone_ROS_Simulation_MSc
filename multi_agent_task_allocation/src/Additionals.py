@@ -108,6 +108,28 @@ class get_figure(object):
                 self.ax.scatter3D(history[j][:,0], history[j][:,1], history[j][:,2], s =50, c=self.colors[j], alpha=1,depthshade=False)
             
 
+def generate_fake_error_mapping(): 
+    x_min,x_max,y_min,y_max,z_min,z_max = params.limits_idx
+    y_max = round(y_max - y_min) 
+    y_min = 0
+    res = params.resolution
+    worst_accuracy = 0.5 / res
+    best_accuracy = 0.05 / res
+    error_arr = np.zeros([z_max-z_min,y_max-y_min, x_max-x_min], dtype=int)
+    y_middle = round((y_min+y_max)/2)
+    for x in range(x_max):
+        for y in range(y_max):
+            for z in range(z_max):
+                dist_x = x
+                total_dist_score_x = (dist_x / x_max) 
+                total_dist_score_y = (np.exp(abs(y-y_middle)/y_middle) - 1) / (np.exp(1) - 1)
+                total_dist_score = (total_dist_score_x + total_dist_score_y) / 2
+                error_arr[z,y,x] = round(total_dist_score * (worst_accuracy - best_accuracy) + best_accuracy)
+    print(f'error arr shape: {error_arr.shape}')
+    return error_arr
+
+
+
 class Env(object):
     def __init__(self, drone_performace, drone_num):
         self.drone_num = drone_num

@@ -14,13 +14,20 @@ def grid_shape():
 
 def get_span(targetpos, base, resolution):
     z_min, z_max = 0, max( max(targetpos[:,2]), max(np.array(base)[:,2]))
-    z_span = (z_max - z_min) * 1.3
+    z_max = z_max + 0.2 #[m]
+    z_span = (z_max - z_min) 
     y_min, y_max =  min(min(targetpos[:,1]) , min(np.array(base)[:,1]))  , max(max(targetpos[:,1]), max(np.array(base)[:,1]))
-    y_span = (y_max - y_min) * 1.3
-    x_min, x_max = min(0 , min(np.array(base)[:,0])), max(max(targetpos[:,0]), max(np.array(base)[:,0])) 
-    x_span = (x_max - x_min) * 1.3  
-    return [x_span, y_span, z_span], [x_min, x_max, y_min, y_max, z_min, z_max] \
-    ,  [round(x_min/resolution), round(x_max/resolution), round(y_min/resolution), round(y_max/resolution), round(z_min/resolution), round(z_max/resolution)]     
+    y_min  -= 0.5
+    y_max += 0.5
+    y_span = (y_max - y_min) 
+    x_min, x_max = 0, max(max(targetpos[:,0]), max(np.array(base)[:,0])) 
+    x_max += 0.1
+    x_span = (x_max - x_min) 
+    span_m = [x_span, y_span, z_span]
+    min_max_m = [x_min, x_max, y_min, y_max, z_min, z_max]
+    min_max_idx = [round(x_min/resolution), round(x_max/resolution), round(y_min/resolution), round(y_max/resolution), round(z_min/resolution), round(z_max/resolution)]     
+    return span_m, min_max_m, min_max_idx
+
 # ------------------------------------------------------------------------------ #
 
 mode  = 'sim' # 'cf'
@@ -46,7 +53,7 @@ if mode == 'sim':
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 2.5
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
-    base = [(0,0.3,1), (0,0.9,1), (0,1.5,1)][:drone_num]
+    base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
 
 # ------------------ Allocation 
@@ -65,7 +72,7 @@ safety_distance_allocation = safety_distance_trajectory * 1.2
 floor_safety_distance = 0.5
 
 # ------------------- Trajectory
-resolution = 0.1 #[m]
+resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
@@ -114,6 +121,6 @@ plot_smooth_path_cont = 1
 plot_smooth_path_scatter = 0
 plot_block_volume = 1
 plot_constant_blocking_area = 1
-plot_block_volume_floor_m = 1
+plot_block_volume_floor_m = 0
 elvazim = [37, 175]
 

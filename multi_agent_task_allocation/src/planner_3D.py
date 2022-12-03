@@ -3,6 +3,8 @@
 import numpy as np
 from scipy import interpolate
 import params
+import Additionals
+
 
 
 class Trajectory(object):
@@ -35,6 +37,7 @@ class Trajectory(object):
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         self.smooth_points_num = params.points_in_smooth_params
+        self.error_arr = Additionals.generate_fake_error_mapping()
         # generate floor block volume to visualize
         floor = []
         z_floor, y_floor, x_floor = self.grid_3d_initial[:minimum_floor_idx].shape
@@ -288,14 +291,14 @@ class Trajectory(object):
 
 
     def inflate(self, path): # adaptive circle
-        distance_idx = round(self.safety_distance/self.res)
-        dist_power2 = distance_idx**2
         block_volume = []
         for node in path:
             z0, y0, x0 = node
+            distance_idx = self.error_arr[z0, y0, x0]
+            dist_power2 = distance_idx**2
             for z in range(-distance_idx, distance_idx+1,1):
                 for y in range(-distance_idx, distance_idx+1,1):
-                    if ((y)**2 + (z)**2) <  dist_power2:
+                    if ((y)**2 + (z)**2) < dist_power2:
                         if not z+z0 > self.z_lim - 1 and not y+y0 > self.y_lim - 1 and not y+y0 < 0 and not z+z0 < 0:
                             block_volume.append((z+z0,y+y0,x0))
         return np.array(block_volume)
