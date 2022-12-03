@@ -54,7 +54,6 @@ class Optim(object):
         # set columns of current targets to inf so they will not be selected again
         for i in range(drone_num):
             temp_distance_matrix[:, self.current_targets[i]] = np.Inf
-        
         # find k nearest targets
         knn = np.zeros([self.k, drone_num], dtype=int)
         for i in range(drone_num):
@@ -84,7 +83,6 @@ class Optim(object):
                 travel_dist = 0
                 for j in range(drone_num):
                     travel_dist += self.distance_mat[self.current_targets[j], best_comb[j]]
-
             elif next_diff == min_diff:
                 travel_dist2 = 0
                 for j in range(drone_num):
@@ -93,7 +91,6 @@ class Optim(object):
                     best_comb = next_comb
                     min_dist = min(dist)
                     travel_dist = travel_dist2
-        
         return best_comb, min_dist       
    
 

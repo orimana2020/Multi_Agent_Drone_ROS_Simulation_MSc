@@ -5,14 +5,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
 
-
 def Get_Drones(uris, base, full_magazine, drone_num):
     drones = []
     for i in range(drone_num):
         drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i]))
         drones[i].is_active = True
     return drones
-
 
 class Drone(object):
     def __init__(self, index, uri, base, full_magazine):
@@ -39,14 +37,9 @@ class get_figure(object):
         self.targetpos = params.targetpos
         self.inital_drone_num = params.drone_num
         self.colors = params.colors
-        # self.fig = plt.figure()
-        # self.ax = Axes3D(self.fig)
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111, projection='3d')
         self.x_min, self.x_max, self.y_min, self.y_max, self.z_min, self.z_max = params.limits
-        # self.ax.axes.set_xlim(self.x_min, self.x_max) 
-        # self.ax.axes.set_ylim(self.y_min, self.y_max) 
-        # self.ax.axes.set_zlim(self.z_min, self.z_max)
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
         self.ax.set_zlabel('z')
@@ -87,9 +80,6 @@ class get_figure(object):
                 if self.plot_block_volume_floor_m:
                     self.ax.plot(path_planner.block_volume_floor_m[:,0],path_planner.block_volume_floor_m[:,1], path_planner.block_volume_floor_m[:,2], c='grey', linewidth=4)
     def show(self):
-        # self.ax.axes.set_xlim(self.x_min, self.x_max) 
-        # self.ax.axes.set_ylim(self.y_min, self.y_max) 
-        # self.ax.axes.set_zlim(self.z_min, self.z_max)
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
         self.ax.set_zlabel('z')
@@ -127,7 +117,6 @@ def generate_fake_error_mapping():
                 error_arr[z,y,x] = round(total_dist_score * (worst_accuracy - best_accuracy) + best_accuracy)
     print(f'error arr shape: {error_arr.shape}')
     return error_arr
-
 
 
 class Env(object):

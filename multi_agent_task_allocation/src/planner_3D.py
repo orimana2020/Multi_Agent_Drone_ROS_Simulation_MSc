@@ -12,10 +12,9 @@ class Trajectory(object):
         self.drone_num = len(drones)
         self.res = params.resolution
         self.break_trajectory_len_factor = params.break_trajectory_len_factor
-        self.minimum_floor_distance = params.floor_safety_distance # meter
+        self.minimum_floor_distance = params.floor_safety_distance # [m]
         self.retreat_dist = params.retreat_range
         x_span, y_span, z_span = params.span
-        # z_span = z_span - self.minimum_floor_distance
         self.grid_3d = np.zeros([round(z_span/self.res), round(y_span/self.res), round(x_span/self.res)], dtype=int) #z y x
         minimum_floor_idx = round(self.minimum_floor_distance / self.res) + 1 # minimum floor 
         self.grid_3d[:minimum_floor_idx] = 1
@@ -46,7 +45,6 @@ class Trajectory(object):
                 for x in range(x_floor):
                     floor.append([z,y,x])
         self.block_volume_floor_m = self.convert_idx2meter(np.array(floor))
-        
         
         for j in range(self.drone_num):
             start = self.covert_meter2idx(drones[j].base)
@@ -305,20 +303,13 @@ class Trajectory(object):
 
 
     def covert_meter2idx(self, coords_meter): # (x,y,z) -> (z,y,x)
-        # return (round((coords_meter[2]-self.minimum_floor_distance)/self.res ), round(coords_meter[1]/self.res + self.y_lim/2)  , round(coords_meter[0]/self.res ) ) 
-        # return (round((coords_meter[2]-self.minimum_floor_distance)/self.res ), round(coords_meter[1]/self.res + (-self.y_offset))  , round(coords_meter[0]/self.res ) ) 
         return (round(coords_meter[2]/self.res ), round(coords_meter[1]/self.res + (-self.y_offset))  , round(coords_meter[0]/self.res ) ) 
 
-    def convert_idx2meter(self, coords_idx): #(z,y,x) -> (x,y,z)
-        # coord_m = np.stack(((coords_idx[:,2] ) * self.res, (coords_idx[:,1] - self.y_lim/2) * self.res, coords_idx[:,0] * self.res + self.minimum_floor_distance), axis=-1)
-        # return np.stack(((coords_idx[:,2] ) * self.res, (coords_idx[:,1] - (-self.y_offset)) * self.res, coords_idx[:,0] * self.res + self.minimum_floor_distance), axis=-1)        
+    def convert_idx2meter(self, coords_idx): #(z,y,x) -> (x,y,z)       
         return np.stack(((coords_idx[:,2]) * self.res, (coords_idx[:,1] - (-self.y_offset)) * self.res, coords_idx[:,0] * self.res), axis=-1)        
 
 
     def get_path(self, start_m, goal_m, is_forward):
-        """
-        this function make sure good approach at zero yaw to target and also 0 yaw when return to base
-        """
         if is_forward:
             if start_m[0] > goal_m[0]:
                 temp = goal_m

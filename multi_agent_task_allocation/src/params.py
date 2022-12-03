@@ -14,14 +14,14 @@ def grid_shape():
 
 def get_span(targetpos, base, resolution):
     z_min, z_max = 0, max( max(targetpos[:,2]), max(np.array(base)[:,2]))
-    z_max = z_max + 0.2 #[m]
+    z_max = z_max + 0.2 # add offset for c_space
     z_span = (z_max - z_min) 
     y_min, y_max =  min(min(targetpos[:,1]) , min(np.array(base)[:,1]))  , max(max(targetpos[:,1]), max(np.array(base)[:,1]))
-    y_min  -= 0.5
-    y_max += 0.5
+    y_min  -= 0.5 # add offset for c_space
+    y_max += 0.5 # add offset for c_space
     y_span = (y_max - y_min) 
     x_min, x_max = 0, max(max(targetpos[:,0]), max(np.array(base)[:,0])) 
-    x_max += 0.1
+    x_max += 0.1 # add offset for c_space
     x_span = (x_max - x_min) 
     span_m = [x_span, y_span, z_span]
     min_max_m = [x_min, x_max, y_min, y_max, z_min, z_max]
@@ -67,9 +67,9 @@ elif mode == 'cf':
     uri_state_mat = uri_targetpos_cf
 
 # -------------------   safety
-safety_distance_trajectory = 0.4
-safety_distance_allocation = safety_distance_trajectory * 1.2
-floor_safety_distance = 0.5
+safety_distance_trajectory = 0.4 # update error map experiment
+safety_distance_allocation = safety_distance_trajectory * 1.2 # update error map experiment
+floor_safety_distance = 0.5 
 
 # ------------------- Trajectory
 resolution = 0.05 #[m]
@@ -104,7 +104,7 @@ elif data_source == 'salon':
     targetpos  = grid_shape() 
   
   
-targetpos -= np.array([offset_x_dist_target, 0 ,0]) #########################
+targetpos -= np.array([offset_x_dist_target, 0 ,0]) 
 targets_num, _ = targetpos.shape
 mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num
 span, limits, limits_idx = get_span(targetpos, base, resolution)
