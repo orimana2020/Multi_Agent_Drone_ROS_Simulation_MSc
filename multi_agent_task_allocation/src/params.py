@@ -53,6 +53,7 @@ if mode == 'sim':
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 2.5
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
+    
     base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
 

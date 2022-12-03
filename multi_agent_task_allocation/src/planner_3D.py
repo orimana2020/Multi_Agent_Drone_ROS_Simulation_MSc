@@ -364,7 +364,6 @@ class Trajectory(object):
         goal_title = drones[drone_idx].goal_title
         print(f'drone {drone_idx} start planning, start_title: {start_title}, goal_title: {goal_title}, start: {start_m}, goal: {goal_m}')
         # update grid_3D, exclude current drone block_volume
-        # self.grid_3d = np.zeros([self.grid_3d_shape[0], self.grid_3d_shape[1], self.grid_3d_shape[2]], dtype=int) #z y x - reset grid_3d
         self.grid_3d = self.grid_3d_initial.copy()
         for i in range(drone_num):
             if (i != drone_idx):
@@ -398,7 +397,7 @@ class Trajectory(object):
                 path1_m = np.vstack((segment1_m, segment2_m, segment3_m))
                 smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment1_m), len3=len(segment3_m))
                 block_volume1_m = self.convert_idx2meter(block_volume1)
-
+                    
                 segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m, is_forward=True)
                 block_volume2 = self.inflate(path)
                 path2_m = np.vstack((segment1_m, segment2_m, segment3_m))

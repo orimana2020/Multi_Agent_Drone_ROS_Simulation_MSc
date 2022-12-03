@@ -36,7 +36,7 @@ def main():
     allocation = None
 
     while ta.optim.unvisited_num > 0:
-        print('unvisited = %d' %ta.optim.unvisited_num)
+        print(f'unvisited targets = {ta.optim.unvisited_num}')
         # ------------------------     update magazine state & allocate new targets -------- #    
         for j in range(ta.drone_num):
             if drones[j].is_available:
