@@ -78,6 +78,21 @@ class Flight_manager(object):
         x,y,z = self.base[self.reversed_uri_dict[scf.cf.link_uri]]
         commander.go_to(x, y, z, yaw=0, duration_s=3)
         time.sleep(3)
+    
+
+    
+    def _go_to(self, scf, goal, drone_idx):
+        cf = scf.cf
+        commander = cf.high_level_commander 
+        x,y,z = goal
+        commander.go_to(x, y, z, yaw=0, duration_s=0.5)
+        time.sleep(0.5)
+
+
+    def go_to(self, drone_idx, goal):
+        thread = self.swarm.daemon_process(self._go_to, self.uri_dict[drone_idx], [goal, drone_idx])
+        self.open_threads[drone_idx] = thread
+
 
     def _execute_trajectory(self, scf, waypoints, drone_idx): 
         cf = scf.cf
@@ -111,6 +126,8 @@ class Flight_manager(object):
     def get_position(self, drone_idx):
         scf = self.swarm._cfs[self.uri_dict[drone_idx]]
         self.swarm.get_single_cf_estimated_position(scf)
+        return self.swarm._positions[self.uri_dict[drone_idx]]
+
 
         
     def reached_goal(self, drone_idx, goal):

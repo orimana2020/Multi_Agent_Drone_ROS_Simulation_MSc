@@ -78,7 +78,7 @@ retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.2
 offset_x_dist_target = 0.1 # [m]
-dist_to_goal = 0.2
+dist_to_goal = 0.1
 segments_num = 15 # max = 30
 points_in_smooth_params = segments_num + 1
 

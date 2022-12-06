@@ -21,6 +21,7 @@ class Flight_manager(object):
         self.linear_velocity_limit = params.linear_velocity
         self.drone_num = drone_num
         self.base = params.base
+        self.max_dist2goal = params.dist_to_goal
         self.traj = MultiDOFJointTrajectory()
         self.header = std_msgs.msg.Header()
         self.header.stamp = rospy.Time()
@@ -35,7 +36,7 @@ class Flight_manager(object):
             command_pub = rospy.Publisher('/ardrone%d/command/trajectory' %drone_idx, MultiDOFJointTrajectory, queue_size=10)
             self.pubs.append(command_pub)
             rospy.Subscriber('/ardrone%d/ground_truth/pose' %drone_idx , Pose)
-            self.get_pos(drone_idx)
+            self.get_position(drone_idx)
         
         while self.pubs[0].get_num_connections() == 0 and not rospy.is_shutdown():
             print("There is no subscriber available, trying again in 1 second.")
@@ -88,7 +89,7 @@ class Flight_manager(object):
         self.pubs[drone_idx].publish(self.traj)
 
 
-    def get_pos(self, drone_idx):
+    def get_position(self, drone_idx):
         try:
             pose = rospy.wait_for_message('/ardrone%d/ground_truth/pose' %drone_idx , Pose, timeout=3)
             self.pos = pose.position
@@ -98,11 +99,11 @@ class Flight_manager(object):
             print('can not subscribe position')
             return None
 
-    def reached_goal(self, drone_idx, goal, tolerance=0.1):
+    def reached_goal(self, drone_idx, goal):
         try:
-            self.get_pos(drone_idx)
+            self.get_position(drone_idx)
             dist2goal = ((self.pos.x - goal[0])**2 + (self.pos.y - goal[1])**2 +(self.pos.z - goal[2])**2 )**0.5
-            if dist2goal < tolerance:
+            if dist2goal < self.max_dist2goal:
                 return 1
             else:
                 return 0
@@ -110,7 +111,7 @@ class Flight_manager(object):
             return 0
 
     def _take_off(self, height, drone_idx):
-        self.get_pos(drone_idx)
+        self.get_position(drone_idx)
         goal = [self.pos.x, self.pos.y, height]
         waypoints = [goal]
         self.execute_trajectory_mt(drone_idx, waypoints)
@@ -134,7 +135,7 @@ class Flight_manager(object):
             self._land(drone_idx)
         rospy.sleep(1)
     
-    def _go_to(self, drone_idx, goal):
+    def go_to(self, drone_idx, goal):
         pose = Pose()
         pose.position.x = goal[0]
         pose.position.y = goal[1]
