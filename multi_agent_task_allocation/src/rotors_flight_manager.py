@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 import rospy
 from trajectory_msgs.msg import MultiDOFJointTrajectory, MultiDOFJointTrajectoryPoint
-from geometry_msgs.msg import Transform, Quaternion, Point,Twist, Pose
+from geometry_msgs.msg import Transform, Quaternion, Point,Twist, Pose, PoseStamped
 from mav_msgs.msg import Actuators
 from tf.transformations import quaternion_from_euler, euler_from_quaternion
 import std_msgs.msg
@@ -36,9 +36,18 @@ class Flight_manager(object):
             self.pubs.append(command_pub)
             rospy.Subscriber('/ardrone%d/ground_truth/pose' %drone_idx , Pose)
             self.get_pos(drone_idx)
+        
         while self.pubs[0].get_num_connections() == 0 and not rospy.is_shutdown():
             print("There is no subscriber available, trying again in 1 second.")
             time.sleep(1)
+
+        self.pose = PoseStamped()
+        self.pose.header = self.header
+        self.pubs_pose = []
+        for drone_idx in range(self.drone_num):
+            command_pub = rospy.Publisher('/ardrone%d/command/pose' %drone_idx, PoseStamped, queue_size=10)
+            self.pubs_pose.append(command_pub)
+     
 
     def sleep(self):
         self.rate.sleep()
@@ -84,15 +93,16 @@ class Flight_manager(object):
             pose = rospy.wait_for_message('/ardrone%d/ground_truth/pose' %drone_idx , Pose, timeout=3)
             self.pos = pose.position
             _,_,self.current_yaw = euler_from_quaternion([pose.orientation.x,pose.orientation.y,pose.orientation.z,pose.orientation.w])
+            return [self.pos.x, self.pos.y, self.pos.z]
         except:
             print('can not subscribe position')
             return None
 
-    def reached_goal(self, drone_idx, goal):
+    def reached_goal(self, drone_idx, goal, tolerance=0.1):
         try:
             self.get_pos(drone_idx)
             dist2goal = ((self.pos.x - goal[0])**2 + (self.pos.y - goal[1])**2 +(self.pos.z - goal[2])**2 )**0.5
-            if dist2goal < 0.1:
+            if dist2goal < tolerance:
                 return 1
             else:
                 return 0
@@ -123,6 +133,23 @@ class Flight_manager(object):
         else:
             self._land(drone_idx)
         rospy.sleep(1)
+    
+    def _go_to(self, drone_idx, goal):
+        pose = Pose()
+        pose.position.x = goal[0]
+        pose.position.y = goal[1]
+        pose.position.z = goal[2]
+        pose.orientation.x = 0
+        pose.orientation.y = 0
+        pose.orientation.z = 0
+        pose.orientation.w = 1
+        self.pose.pose = pose
+        self.pubs_pose[drone_idx].publish(self.pose)
+        
+
+
+
+
 
 
 

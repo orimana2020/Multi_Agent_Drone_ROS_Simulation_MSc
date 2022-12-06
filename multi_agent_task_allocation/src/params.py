@@ -113,7 +113,7 @@ print(limits_idx)
 
 
 # --------------------- General
-sleep_time = 0.3
+sleep_time = 0.05
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ----------------- Plotting

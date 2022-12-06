@@ -28,7 +28,6 @@ if mode == 'debug':
     uri_l = [uri_1]
 
 
-
 drone_pos = []
 for uri in uris:
     drone_pos.append([])
