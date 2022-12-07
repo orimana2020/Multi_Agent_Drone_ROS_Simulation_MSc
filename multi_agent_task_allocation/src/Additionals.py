@@ -5,31 +5,36 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
 
-def Get_Drones(uris, base, full_magazine, drone_num):
+def Get_Drones(uris, base, full_magazine, ta):
     drones = []
-    for i in range(drone_num):
-        drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i]))
-        drones[i].is_active = True
+    for i in range(ta.drone_num):
+        drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i], ta=ta))
     return drones
 
 class Drone(object):
-    def __init__(self, index, uri, base, full_magazine):
+    def __init__(self, index, uri, base, full_magazine, ta):
         self.idx = index
         self.uri = uri
         self.base = base
         self.start_coords = base
-        self.goal_coords = None
+        self.goal_coords = tuple(ta.targetpos[ta.optim.current_targets[self.idx],:])
         self.full_magazine = full_magazine
         self.current_magazine = full_magazine
         self.start_title = 'base'
         self.goal_title = 'target'
-        self.current_pos_title = 'base'
-        self.current_pos_coords = base
         self.is_available = 0
         self.is_reached_goal = 0
         self.path_found = 0
         self.at_base = 0
         self.is_active = True
+        self.battery = None
+        self.path_idx = None
+        self.path_m = None
+        self.current_target = None
+        self.block_volume_idx = None
+        self.block_volume_base = None
+        self.block_volume_m = None
+    
         
                 
 class get_figure(object):
