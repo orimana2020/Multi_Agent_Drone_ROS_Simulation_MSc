@@ -21,7 +21,8 @@ class Flight_manager(object):
         self.linear_velocity_limit = params.linear_velocity
         self.drone_num = drone_num
         self.base = params.base
-        self.max_dist2goal = params.dist_to_goal
+        self.max_dist2base = params.dist_to_base
+        self.max_dist2target = params.dist_to_target
         self.traj = MultiDOFJointTrajectory()
         self.header = std_msgs.msg.Header()
         self.header.stamp = rospy.Time()
@@ -99,11 +100,11 @@ class Flight_manager(object):
             print('can not subscribe position')
             return None
 
-    def reached_goal(self, drone_idx, goal):
+    def reached_goal(self, drone_idx, goal, title='target'):
         try:
             self.get_position(drone_idx)
             dist2goal = ((self.pos.x - goal[0])**2 + (self.pos.y - goal[1])**2 +(self.pos.z - goal[2])**2 )**0.5
-            if dist2goal < self.max_dist2goal:
+            if dist2goal < self.max_dist2target:
                 return 1
             else:
                 return 0
@@ -148,7 +149,8 @@ class Flight_manager(object):
         self.pubs_pose[drone_idx].publish(self.pose)
         
 
-
+    def get_battery(self, drone_idx):
+        return 4
 
 
 

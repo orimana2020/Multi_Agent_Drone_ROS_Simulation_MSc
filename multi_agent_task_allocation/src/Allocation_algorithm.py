@@ -46,8 +46,6 @@ class Optim(object):
                 return np.load(str(os.getcwd())+ self.uri_state_mat +'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
             elif self.k == 1:
                 return np.ones((1,drone_num,1), dtype=int)
-    
-
 
     def get_knn(self, is_changed, drone_num):
         temp_distance_matrix = self.distance_mat.copy()
@@ -92,13 +90,10 @@ class Optim(object):
                     min_dist = min(dist)
                     travel_dist = travel_dist2
         return best_comb, min_dist       
-   
-
 
     def get_1_min(self, targets, test_pnt): #get k-smallest indeces (distance from kmeans centers to targets)
         diff = np.linalg.norm(targets - test_pnt, ord=2, axis=1)   
         return np.argmin(diff)  
-    
 
     def update_history(self, target_idx, drone_idx, targetpos):
         self.history[drone_idx] = np.vstack((self.history[drone_idx], targetpos[target_idx,:]))
@@ -106,7 +101,6 @@ class Optim(object):
     def update_distance_mat(self, target_idx):
         self.distance_mat[:, target_idx] = np.inf
 
-    
     def  update_kmeans_drone_num(self, drone_num, targetpos, targetpos_reallocate):
         print('kmeans updated')
         first_itr = 1
@@ -144,7 +138,6 @@ class Optim(object):
                 print('drones number updated: ', drone_num)
         return drone_num, drone_num_changed
 
-
     def get_knn_last_drone(self):
         temp_distance_matrix = self.distance_mat.copy()
         # set columns of current targets to inf so they will not be selected again
@@ -169,7 +162,6 @@ class Allocation:
         if self.drone_num > 1:
             self.optimal_drone2target()
         
-
     def optimal_drone2target(self):
         print('calc optimal drone2agent')
         options = list(permutations(range(self.drone_num))) 
@@ -191,7 +183,6 @@ class Allocation:
                 min_dist = current_dist
                 best_comb = comb
         self.optim.current_targets = self.optim.current_targets[best_comb]
-    
 
     def update_kmeans(self):
         print('-------kmeans mode-------')
@@ -206,7 +197,6 @@ class Allocation:
             self.optim.current_targets = np.zeros(1, dtype=int) 
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()   
 
-
     def allocate(self, allocate_to):
         if self.drone_num > 1:
             self.optim.min_dist_step.append(self.optim.min_dist_candidate)
@@ -219,7 +209,7 @@ class Allocation:
 
             # FIND KNN
             knn = self.optim.get_knn(allocate_to, self.drone_num)
-
+            
             # search best combination 
             best_comb_candidate, self.optim.min_dist_candidate = self.optim.search_best_combination( self.drone_num, self.state_mat, knn)
     

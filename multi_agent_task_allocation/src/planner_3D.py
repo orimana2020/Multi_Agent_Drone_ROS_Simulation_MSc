@@ -36,6 +36,7 @@ class Trajectory(object):
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         self.smooth_points_num = params.points_in_smooth_params
+        # self.downwash_half_volume_idx = params.downwash_half_volume / self.res
         self.error_arr = Additionals.generate_fake_error_mapping()
         # generate floor block volume to visualize
         floor = []
@@ -269,7 +270,6 @@ class Trajectory(object):
                             x = self.x_lim -1
                         if x < 0:
                             x = 0
-
                         block_volume.append((z,y,x))
         return np.array(block_volume)
 
@@ -330,7 +330,6 @@ class Trajectory(object):
             break_trajecoty_len = abs(start_m[0] - goal_m[0]) * self.break_trajectory_len_factor
             intermidiate_1 = self.covert_meter2idx((start_m[0] - break_trajecoty_len, start_m[1], start_m[2]))
             intermidiate_2 = self.covert_meter2idx((goal_m[0] + break_trajecoty_len, goal_m[1], goal_m[2]))
-        print(f'converted meter to idx, start: {start}, goal: {goal}, ZYX format')
         if self.grid_3d[goal] == 1 or self.grid_3d[intermidiate_1] == 1 or self.grid_3d[intermidiate_2] == 1: # fast sanity check of goal occupancy status
             print('sanity check failed')
             return None 

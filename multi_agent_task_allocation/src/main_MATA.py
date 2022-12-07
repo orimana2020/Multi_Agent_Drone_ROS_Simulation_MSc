@@ -1,12 +1,7 @@
 #! /usr/bin/env python3
-
-
+# full simulation works for ros noetic on ubuntu 20.04 , python 3.8.10
 # -------- how to run sim mode ------------>
-# full simulation works for ros noetic on ubuntu 20.04
-# python 3.8.10
-# terminal 1 : $ roslaunch rotors_gazebo drone_poll_lanch.launch  
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_circle.launch 
-
 # terminal 2: $ rosrun multi_agent_task_allocation main_MATA.py
 # ----------------------------------------->
 
@@ -66,7 +61,7 @@ def main():
         while allocation == 'update_kmeans':
             for j in range(ta.drone_num):
                 print(f'checkpoint  0 drone {j}')
-                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
+                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords, title=drones[j].goal_title) 
                 if not (drones[j].at_base):
                     print(f'drone {j} not at_base')
                     # arrived to target
@@ -162,7 +157,7 @@ def main():
                     fig.plot_no_path_found(drones[j])  
                     
         
-            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
+            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords, title=drones[j].goal_title) 
             if (drones[j].is_reached_goal) and (drones[j].path_found):
                 drones[j].path_found = 0
                 # arrived base
@@ -204,7 +199,7 @@ def main():
     while not all_at_base:
         print('return all drones to base')
         for j in range(ta.drone_num):
-            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords) 
+            drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords, title=drones[j].goal_title) 
 
             if not (drones[j].at_base):
                 if (drones[j].current_pos_title == 'target') and not (drones[j].path_found) and (not (fc.open_threads[j].is_alive())):
@@ -216,7 +211,7 @@ def main():
                     if drones[j].path_found:
                         fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                         
-                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords)
+                drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = drones[j].goal_coords, title=drones[j].goal_title)
                 if (drones[j].is_reached_goal) and (drones[j].path_found):
                     drones[j].at_base = 1
                     ta.targetpos_reallocate[ta.optim.current_targets[j],:] = np.inf
