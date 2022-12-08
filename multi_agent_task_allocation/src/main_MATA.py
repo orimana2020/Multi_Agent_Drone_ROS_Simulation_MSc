@@ -99,7 +99,6 @@ def main():
                         fc.land(drone_idx=j)
                         dm.drones[j].is_active = False
                         print(f'drone {j} is landing')
-            
            
         #  -------------------------------- PATH PLANNING ------------------------------------------ #
         fig.ax.axes.clear()
@@ -133,7 +132,6 @@ def main():
                 dm.drones[j].at_base = 1
             dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = dm.drones[j].goal_coords, title=dm.drones[j].goal_title)       
         all_at_base = dm.is_all_at_base(ta.drone_num)
-        
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
     fc.land('all', dm.drones)
