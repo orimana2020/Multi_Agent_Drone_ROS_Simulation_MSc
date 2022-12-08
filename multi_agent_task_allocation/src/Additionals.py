@@ -28,6 +28,7 @@ class Drone_Manager(object):
         self.drones[j].current_magazine -= 1
         self.drones[j].path_found = 0
         self.drones[j].is_reached_goal = 0
+        self.drones[j].at_base = 0
         ta.optim.unvisited_num -= 1
         ta.optim.unvisited[ta.optim.current_targets[j]] = False
         ta.optim.update_history(ta.optim.current_targets[j], j, ta.targetpos) 
@@ -53,28 +54,31 @@ class Drone_Manager(object):
         self.drones[j].start_coords = tuple(fc.get_position(j))
         self.drones[j].is_reached_goal = 0 
         self.drones[j].current_magazine -= 1
-        self.drones[j].goal_title = 'base'
-        self.drones[j].goal_coords = self.drones[j].base
-        self.drones[j].at_base = 0   
+        self.drones[j].at_base = 0 
+        if self.drones[j].current_magazine > 0:
+            self.drones[j].is_available = 1
+            self.drones[j].goal_title = 'target'
+            self.drones[j].goal_coords = None
+        else:
+            self.drones[j].goal_title = 'base'
+            self.drones[j].goal_coords = self.drones[j].base
+            self.drones[j].is_available = 0
 
-    def kmeans_change_goal2base(self, j):
-        self.drones[j].goal_coords = self.drones[j].base
-        self.drones[j].goal_title = 'base'
-        self.drones[j].is_reached_goal = 0
-    
+
     def kmeans_permit(self, j, fc):
-        self.drones[j].start_title = 'base'
-        self.drones[j].start_coords = tuple(fc.get_position(j))
-        self.drones[j].current_magazine = self.drones[j].full_magazine
-        self.drones[j].goal_title = 'target'
-        self.drones[j].is_reached_goal = 0
-        self.drones[j].path_found = 0 
-        self.drones[j].is_available = 0
+        if self.drones[j].at_base:
+            self.drones[j].start_title = 'base'
+            self.drones[j].start_coords = tuple(fc.get_position(j))
+            self.drones[j].current_magazine = self.drones[j].full_magazine
+            self.drones[j].goal_title = 'target'
+            self.drones[j].is_reached_goal = 0
+            self.drones[j].path_found = 0 
+            self.drones[j].is_available = 0
     
     def is_kmeas_permit(self, ta):
         k_means_permit = True
         for j in range(ta.drone_num):
-            if (not self.drones[j].at_base ) or (ta.optim.unvisited[ta.optim.current_targets[j]] == True) :
+            if (not self.drones[j].is_available) :
                 k_means_permit = False
         return k_means_permit
 
@@ -93,6 +97,7 @@ class Drone_Manager(object):
             if not self.drones[j].at_base:
                 all_at_base = False
         return all_at_base
+    
 
 
 class Drone(object):

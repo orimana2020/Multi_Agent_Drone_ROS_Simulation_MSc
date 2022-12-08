@@ -162,14 +162,17 @@ class Allocation:
         if self.drone_num > 1:
             self.optimal_drone2target()
         
-    def optimal_drone2target(self):
+    def optimal_drone2target(self, dm=None):
         print('calc optimal drone2agent')
         options = list(permutations(range(self.drone_num))) 
         distance_mat = np.zeros([self.drone_num, self.drone_num])
         for i in range(self.drone_num):  # i = target pos
             tar1 = self.targetpos[self.optim.current_targets[i],:]
             for j in range(self.drone_num): # j = drone base
-                tar2 = np.array(self.base[j])
+                if dm != None:
+                    tar2 = np.array(dm.drones[j].start_coords)
+                else:
+                    tar2 = np.array(self.base[j])
                 distance_mat[i,j] = np.linalg.norm(tar1 - tar2, ord=2)
         min_dist = np.inf
         for comb in options:
@@ -184,7 +187,7 @@ class Allocation:
                 best_comb = comb
         self.optim.current_targets = self.optim.current_targets[best_comb]
 
-    def update_kmeans(self):
+    def update_kmeans(self, dm=None):
         print('-------kmeans mode-------')
         while (self.optim.unvisited_num < self.drone_num) and (self.drone_num > 1):
             self.drone_num -= 1
@@ -192,7 +195,7 @@ class Allocation:
         if self.drone_num > 1:
             self.drone_num, self.drone_num_changed = self.optim.update_kmeans_drone_num(self.drone_num, self.targetpos, self.targetpos_reallocate) 
             if self.drone_num > 1:
-                self.optimal_drone2target()   
+                self.optimal_drone2target(dm)   
         if self.drone_num == 1:
             self.optim.current_targets = np.zeros(1, dtype=int) 
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()   
