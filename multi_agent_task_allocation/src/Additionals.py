@@ -71,6 +71,13 @@ class Drone_Manager(object):
         self.drones[j].path_found = 0 
         self.drones[j].is_available = 0
     
+    def is_kmeas_permit(self, ta):
+        k_means_permit = True
+        for j in range(ta.drone_num):
+            if (not self.drones[j].at_base ) or (ta.optim.unvisited[ta.optim.current_targets[j]] == True) :
+                k_means_permit = False
+        return k_means_permit
+
     def return_base(self, j, path_planner, fc, ta):
         self.drones[j].start_coords = tuple(fc.get_position(j))
         self.drones[j].goal_title = 'base'
@@ -87,9 +94,6 @@ class Drone_Manager(object):
                 all_at_base = False
         return all_at_base
 
-
-
-             
 
 class Drone(object):
     def __init__(self, index, uri, base, full_magazine, ta):

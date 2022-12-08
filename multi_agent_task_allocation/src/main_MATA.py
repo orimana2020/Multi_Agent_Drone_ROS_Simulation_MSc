@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
 # full simulation works for ros noetic on ubuntu 20.04 , python 3.8.10
-# -------- how to run sim mode ------------>
+# ------------------------ how to run  -----------------------
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_circle.launch 
 # terminal 2: $ rosrun multi_agent_task_allocation main_MATA.py
-# ----------------------------------------->
+# -------------------------------------------------------------
 
 from planner_3D import Trajectory
 from Allocation_algorithm import Allocation
@@ -48,18 +48,18 @@ def main():
         while allocation == 'update_kmeans':
             k_means_permit = False
             while not k_means_permit:
-                k_means_permit = True
-                for j in range(ta.drone_num):
-                    if (not dm.drones[j].at_base ) or (ta.optim.unvisited[ta.optim.current_targets[j]] == True) :
-                        k_means_permit = False
+                k_means_permit = dm.is_kmeas_permit(ta)
                 print(f'kmeans permit {k_means_permit}')
                 for j in range(ta.drone_num):
+                    # drone at base, and available
                     if (dm.drones[j].goal_coords == None) and (dm.drones[j].start_title == 'base'):
                         continue
+                    # drone at target and available
                     elif (dm.drones[j].goal_coords == None) and dm.drones[j].start_title == 'target':
                         dm.kmeans_change_goal2base(j)
                     else:
                         dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title) 
+                    
                     # find path to unvisited target
                     if (not (dm.drones[j].path_found)) and (dm.drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) and (not (fc.open_threads[j].is_alive())):
                         dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
