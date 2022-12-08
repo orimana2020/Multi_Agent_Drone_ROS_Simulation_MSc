@@ -21,22 +21,22 @@ def get_span(targetpos, base, resolution):
 
 mode  = 'sim' # 'cf' / 'sim'
 
-# -------------------- CF
+# -------------------- CF -----------------------#
 uri1 = 'radio://0/80/2M/E7E7E7E7E1'
 uri2 = 'radio://0/80/2M/E7E7E7E7E2'
 uri3 = 'radio://0/80/2M/E7E7E7E7E3'
 uri4 = 'radio://0/80/2M/E7E7E7E7E4'
 uri_list = [uri1, uri4] # index 0- most right drone 
 
-# --------------------- Drones 
-# ------drone CF
+# --------------------- Drones --------------------#
+# -----------Drone CF
 if mode == 'cf':
     drone_num = len(uri_list)
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
     linear_velocity = 1.5
     base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num]# (x,y,z)   -> right to left order
 
-#-----drone sim
+#-----------Drone Sim
 if mode == 'sim':
     drone_num = 3
     magazine = [5,4,3,3,3,3,3,3,3][:drone_num]
@@ -45,7 +45,7 @@ if mode == 'sim':
     base = [(0,-0.6,1), (0,0,1), (0,0.6,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
 
-# ------------------ Allocation 
+# ------------------ Allocation --------------------#
 k_init = 5 
 threshold_factor = 0.8
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
@@ -90,7 +90,7 @@ if mode == 'sim':
 elif mode == 'cf':
     target_uri = uri_targetpos_cf
 
-data_source = 'circle'   
+data_source = 'dataset'   
 if data_source == 'circle':
     targets_num_gen = 25
     t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)
@@ -101,14 +101,12 @@ if data_source == 'circle':
 elif data_source == 'dataset':
     targetpos = np.load(str(os.getcwd()) + target_uri)
 
-  
-  
-targetpos -= np.array([offset_x_dist_target, 0 ,0]) 
+targetpos_offset = targetpos - np.array([offset_x_dist_target, 0 ,0]) 
+targetpos = np.array([target for target in targetpos if target[2] > floor_safety_distance + resolution * 2])
 targets_num, _ = targetpos.shape
 mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num
 span, limits, limits_idx = get_span(targetpos, base, resolution)
 print(limits_idx)
-
 
 # --------------------- General
 sleep_time = 0.2
