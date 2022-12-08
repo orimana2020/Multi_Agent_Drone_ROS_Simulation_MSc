@@ -1,6 +1,15 @@
 import time
 
-title = 'targets'
+class experi(object):
+    def __init__(self):
+        self.x = 5
 
-x = 0.2 if title == 'target' else 0.1
-print(x)
+
+def change(cls):
+    cls.x = 3
+    
+
+exp = experi()
+change(exp)
+
+print(exp.x)

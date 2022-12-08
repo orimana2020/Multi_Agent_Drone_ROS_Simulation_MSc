@@ -5,11 +5,91 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
 
-def Get_Drones(uris, base, full_magazine, ta):
-    drones = []
-    for i in range(ta.drone_num):
-        drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i], ta=ta))
-    return drones
+class Drone_Manager(object):
+    def __init__(self, uris, base, full_magazine, ta):
+        self.drones = []
+        for i in range(ta.drone_num):
+            self.drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i], ta=ta))
+    
+    def arrived_base(self,j, fc):
+        self.drones[j].start_title = 'base'
+        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].goal_title = 'target'
+        self.drones[j].goal_coords = None
+        self.drones[j].current_magazine = self.drones[j].full_magazine
+        self.drones[j].at_base = 1
+        self.drones[j].is_available = 1
+        self.drones[j].path_found = 0
+        self.drones[j].is_reached_goal = 0
+
+    def arrived_target(self, j, ta, fc):
+        self.drones[j].start_title = 'target'
+        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].current_magazine -= 1
+        self.drones[j].path_found = 0
+        self.drones[j].is_reached_goal = 0
+        ta.optim.unvisited_num -= 1
+        ta.optim.unvisited[ta.optim.current_targets[j]] = False
+        ta.optim.update_history(ta.optim.current_targets[j], j, ta.targetpos) 
+        ta.targetpos_reallocate[ta.optim.current_targets[j],:] = np.inf
+        ta.optim.update_distance_mat(ta.optim.current_targets[j])
+        if self.drones[j].current_magazine > 0:
+            self.drones[j].is_available = 1
+            self.drones[j].goal_title = 'target'
+            self.drones[j].goal_coords = None
+        else:
+            self.drones[j].is_available = 0   
+            self.drones[j].goal_title = 'base'
+            self.drones[j].goal_coords = self.drones[j].base
+
+    def kmean_arrived_target(self,j, fc, ta):
+        ta.optim.unvisited_num -= 1
+        ta.optim.unvisited[ta.optim.current_targets[j]] = False
+        ta.optim.update_history(ta.optim.current_targets[j], j, ta.targetpos) 
+        ta.targetpos_reallocate[ta.optim.current_targets[j], :] = np.inf
+        ta.optim.update_distance_mat(ta.optim.current_targets[j])
+        self.drones[j].path_found = 0
+        self.drones[j].start_title = 'target' 
+        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].is_reached_goal = 0 
+        self.drones[j].current_magazine -= 1
+        self.drones[j].goal_title = 'base'
+        self.drones[j].goal_coords = self.drones[j].base
+        self.drones[j].at_base = 0   
+
+    def kmeans_change_goal2base(self, j):
+        self.drones[j].goal_coords = self.drones[j].base
+        self.drones[j].goal_title = 'base'
+        self.drones[j].is_reached_goal = 0
+    
+    def kmeans_permit(self, j, fc):
+        self.drones[j].start_title = 'base'
+        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].current_magazine = self.drones[j].full_magazine
+        self.drones[j].goal_title = 'target'
+        self.drones[j].is_reached_goal = 0
+        self.drones[j].path_found = 0 
+        self.drones[j].is_available = 0
+    
+    def return_base(self, j, path_planner, fc, ta):
+        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].goal_title = 'base'
+        self.drones[j].goal_coords = self.drones[j].base
+        self.drones[j].path_found = path_planner.plan(self.drones ,drone_idx=j, drone_num=ta.drone_num)
+        if self.drones[j].path_found:
+            fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                
+    
+    def is_all_at_base(self, drone_num):
+        all_at_base = True
+        for j in range(drone_num):
+            if not self.drones[j].at_base:
+                all_at_base = False
+        return all_at_base
+
+
+
+             
 
 class Drone(object):
     def __init__(self, index, uri, base, full_magazine, ta):
@@ -102,6 +182,14 @@ class get_figure(object):
             if len(history[j]) > 0:
                 self.ax.scatter3D(history[j][:,0], history[j][:,1], history[j][:,2], s =50, c=self.colors[j], alpha=1,depthshade=False)
             
+    def plot1(self, path_planner, dm, ta):
+        self.ax.axes.clear()
+        self.plot_all_targets()
+        self.plot_trajectory(path_planner, dm.drones ,ta.drone_num)
+        self.plot_history(ta.optim.history)
+        self.show()
+
+
 
 def generate_fake_error_mapping(): 
     x_min,x_max,y_min,y_max,z_min,z_max = params.limits_idx
