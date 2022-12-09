@@ -48,6 +48,9 @@ if mode == 'sim':
 # ------------------ Allocation --------------------#
 k_init = 5 
 threshold_factor = 0.8
+downwash_aware = True
+downwash_distance = np.array([0.2, 0.2, 1]) # [m]
+
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
 if mode == 'sim':
@@ -72,9 +75,6 @@ offset_x_dist_target = 0.1 # [m]
 segments_num = 15 # max = 30
 points_in_smooth_params = segments_num + 1
 
-downwash_half_volume = np.array([0.2, 0.2, 1]) # [m]
-account_for_downwash = 1
-
 if mode == 'sim':
     dist_to_target = 0.05
     dist_to_base = 0.1
@@ -90,7 +90,7 @@ if mode == 'sim':
 elif mode == 'cf':
     target_uri = uri_targetpos_cf
 
-data_source = 'dataset'   
+data_source = 'circle'   
 if data_source == 'circle':
     targets_num_gen = 25
     t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)

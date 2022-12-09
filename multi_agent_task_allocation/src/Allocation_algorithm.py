@@ -161,6 +161,8 @@ class Allocation:
         self.base = params.base
         if self.drone_num > 1:
             self.optimal_drone2target()
+        self.downwash_aware = params.downwash_aware
+        self.downwash_distance = params.downwash_distance
         
     def optimal_drone2target(self, dm=None):
         print('calc optimal drone2agent')
