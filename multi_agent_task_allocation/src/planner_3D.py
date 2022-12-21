@@ -361,7 +361,7 @@ class Trajectory(object):
         goal_m = drones[drone_idx].goal_coords
         start_title = drones[drone_idx].start_title
         goal_title = drones[drone_idx].goal_title
-        print(f'drone {drone_idx} start planning, start_title: {start_title}, goal_title: {goal_title}, start: {start_m}, goal: {goal_m}')
+        # print(f'drone {drone_idx} start planning, start_title: {start_title}, goal_title: {goal_title}, start: {start_m}, goal: {goal_m}')
         # update grid_3D, exclude current drone block_volume
         self.grid_3d = self.grid_3d_initial.copy()
         for i in range(drone_num):

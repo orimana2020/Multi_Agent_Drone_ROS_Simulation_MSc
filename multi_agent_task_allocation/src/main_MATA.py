@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from Additionals import get_figure , Drone_Manager
 import numpy as np
 import params
+import time
 plt.ion()
 
 if params.mode == 'sim':
@@ -31,7 +32,7 @@ def main():
     allocation = None
 
     while ta.optim.unvisited_num > 0:
-        # ------------------------Allocate targets -------- #   
+        # ------------------------Target Allocation-------------------------- #   
         print(f'unvisited targets = {ta.optim.unvisited_num}') 
         for j in range(ta.drone_num):
             if dm.drones[j].is_available:
@@ -91,7 +92,9 @@ def main():
                     dm.drones[j].is_available = 0
                 print('kmeans updated')
                 allocation = None 
-                if current_drone_num > ta.drone_num: #land inactive drones
+
+                #land inactive drones
+                if current_drone_num > ta.drone_num: 
                     return2base = True
                     while return2base:
                         for j in range(current_drone_num-1, ta.drone_num-1,-1):

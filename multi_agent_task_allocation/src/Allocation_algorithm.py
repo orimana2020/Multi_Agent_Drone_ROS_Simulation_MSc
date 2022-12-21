@@ -4,6 +4,7 @@ from itertools import permutations
 import os
 from sklearn.cluster import KMeans
 from itertools import combinations
+import itertools
 import params
 
 class Optim(object):
@@ -20,6 +21,23 @@ class Optim(object):
                 if i == j:
                     self.distance_mat[i,j] = np.Inf
         
+        self.distance_mat_dy = np.zeros([targets_num, targets_num])
+        for i in range(targets_num):
+            tar1_y = targetpos[i,1]
+            for j in range(targets_num):
+                tar2_y = targetpos[j,1]
+                self.distance_mat_dy[i,j] = abs(tar1_y - tar2_y)
+                if i == j:
+                    self.distance_mat_dy[i,j] = np.Inf
+        self.distance_mat_dz = np.zeros([targets_num, targets_num])
+        for i in range(targets_num):
+            tar1_z = targetpos[i,2]
+            for j in range(targets_num):
+                tar2_z = targetpos[j,2]
+                self.distance_mat_dz[i,j] = abs(tar1_z - tar2_z)
+                if i == j:
+                    self.distance_mat_dz[i,j] = np.Inf
+        
         self.distance_mat_nochange = self.distance_mat.copy()
         self.unvisited_num = targets_num
         self.current_targets = np.zeros(drone_num, dtype=int)
@@ -28,6 +46,8 @@ class Optim(object):
         self.threshold_factor = params.threshold_factor
         self.safety_distance_allocation = params.safety_distance_allocation
         self.uri_state_mat = params.uri_state_mat
+        self.downwash_aware = params.avoid_downwash
+        self.downwash_distance = params.downwash_distance
 
         # History
         self.history =[]
@@ -69,7 +89,6 @@ class Optim(object):
             next_comb = np.sum(knn * state_mat[:,:,i], axis=0)
             dist = np.zeros(self.combs_size)
             for j in range(self.combs_size):
-                # dist[j] = self.distance_mat[next_comb[self.combs[j][0]], next_comb[self.combs[j][1]]]
                 dist[j] = self.distance_mat_nochange[next_comb[self.combs[j][0]], next_comb[self.combs[j][1]]]
             next_diff = np.linalg.norm(self.initial_dist_vec - dist, ord=2)
             if next_diff < 0.001: # added due to numerical error caused skipped optimal allocation
@@ -121,7 +140,6 @@ class Optim(object):
             # calc initial dist vec
             self.combs = list(combinations(list(range(drone_num)), 2))
             self.combs_size = len(self.combs)
-    
             self.initial_dist_vec = np.zeros(self.combs_size)
             for k in range(self.combs_size):
                 i,j = self.combs[k]
@@ -137,6 +155,7 @@ class Optim(object):
                 drone_num_changed = 1
                 print('drones number updated: ', drone_num)
         return drone_num, drone_num_changed
+
 
     def get_knn_last_drone(self):
         temp_distance_matrix = self.distance_mat.copy()
@@ -161,7 +180,7 @@ class Allocation:
         self.base = params.base
         if self.drone_num > 1:
             self.optimal_drone2target()
-        self.downwash_aware = params.downwash_aware
+        self.downwash_aware = params.avoid_downwash
         self.downwash_distance = params.downwash_distance
         
     def optimal_drone2target(self, dm=None):

@@ -26,7 +26,7 @@ uri1 = 'radio://0/80/2M/E7E7E7E7E1'
 uri2 = 'radio://0/80/2M/E7E7E7E7E2'
 uri3 = 'radio://0/80/2M/E7E7E7E7E3'
 uri4 = 'radio://0/80/2M/E7E7E7E7E4'
-uri_list = [uri1, uri4] # index 0- most right drone 
+uri_list = [uri2,uri3] # index 0- most right drone 
 
 # --------------------- Drones --------------------#
 # -----------Drone CF
@@ -48,7 +48,7 @@ if mode == 'sim':
 # ------------------ Allocation --------------------#
 k_init = 5 
 threshold_factor = 0.8
-downwash_aware = True
+avoid_downwash = True
 downwash_distance = np.array([0.2, 0.2, 1]) # [m]
 
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
@@ -92,7 +92,7 @@ elif mode == 'cf':
 
 data_source = 'circle'   
 if data_source == 'circle':
-    targets_num_gen = 25
+    targets_num_gen = 35
     t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen)
     radius = 0.6
     depth = 2
