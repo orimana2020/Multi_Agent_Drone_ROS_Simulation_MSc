@@ -48,8 +48,6 @@ if mode == 'sim':
 # ------------------ Allocation --------------------#
 k_init = 5 
 threshold_factor = 0.8
-avoid_downwash = True
-downwash_distance = np.array([0.2, 0.2, 1]) # [m]
 
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
@@ -61,6 +59,8 @@ elif mode == 'cf':
 # -------------------   safety
 safety_distance_trajectory = 0.4 # update error map experiment
 safety_distance_allocation = safety_distance_trajectory * 1.2 # update error map experiment
+downwash_aware = True
+downwash_distance = np.array([0.3, 0.3, 1.5]) # [m] , also distance to avoid flowdeck disturbance
 floor_safety_distance = 0.5 
 min_battery_voltage = 3.2 
 check_battery_interval_time = 7 #[sec]

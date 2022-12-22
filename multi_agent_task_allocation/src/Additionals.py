@@ -114,7 +114,7 @@ class Drone(object):
         self.is_available = 0
         self.is_reached_goal = 0
         self.path_found = 0
-        self.at_base = 0
+        self.at_base = 1
         self.is_active = True
         self.battery = None
         self.path_idx = None

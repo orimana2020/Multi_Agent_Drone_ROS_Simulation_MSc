@@ -62,7 +62,16 @@ def main():
                         if (not (dm.drones[j].path_found)) and (dm.drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) and (not (fc.open_threads[j].is_alive())):
                             dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
                             if dm.drones[j].path_found:
+                                dm.drones[j].at_base = 0
                                 fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                            else:
+                                if dm.drones[j].at_base:
+                                    dm.drones[j].is_available = 1
+                                    print('kmeans - cant reach target, stay at base')
+                                else:
+                                    dm.drones[j].goal_title == 'base'
+                                    dm.drones[j].goal_coords = dm.drones[j].base
+                                    print('kmeans - cant reach target, returning to base')
 
                         # arrived to target
                         elif  (dm.drones[j].goal_title == 'target') and (dm.drones[j].is_reached_goal) :
@@ -122,6 +131,11 @@ def main():
                 if dm.drones[j].path_found:
                     dm.drones[j].at_base = 0
                     fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                else:
+                    if not dm.drones[j].at_base:
+                        dm.drones[j].goal_title == 'base'
+                        dm.drones[j].goal_coords = dm.drones[j].base
+                        print('cant reach target, returning to base')
     
             # ------------------ UPDATE DRONES STATUS -------------------------------------------#
             else:

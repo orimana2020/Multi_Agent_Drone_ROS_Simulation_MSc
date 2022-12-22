@@ -36,8 +36,8 @@ class Trajectory(object):
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         self.smooth_points_num = params.points_in_smooth_params
-        # self.downwash_half_volume_idx = params.downwash_half_volume / self.res
         self.error_arr = Additionals.generate_fake_error_mapping()
+        self.dw_dist_idx = np.int8(np.round(params.downwash_distance / self.res))
         # generate floor block volume to visualize
         floor = []
         z_floor, y_floor, x_floor = self.grid_3d_initial[:minimum_floor_idx].shape
@@ -56,7 +56,7 @@ class Trajectory(object):
                 path.append((next[0],next[1],next[2]))
                 next += np.array([0,0,1],dtype=int)
             path.append(mean_intermidiate)
-            self.constant_blocking_area[j] = self.inflate(path)
+            self.constant_blocking_area[j] = self.inflate(path, goal_title=None)
             self.constant_blocking_area_m[j] = self.convert_idx2meter(self.constant_blocking_area[j])
 
         
@@ -251,44 +251,44 @@ class Trajectory(object):
             print('duplicate coords found in path and resolved')
             return np.transpose(np.array(smooth_path))
 
-    def inflate_squre(self, path):
-        distance_idx = round(self.safety_distance/self.res)
-        block_volume = []
-        for node in path:
-            for z in range(node[0]-3,node[0]+3):
-                if z > self.z_lim - 1:
-                    z = self.z_lim -1
-                if z < 0:
-                    z = 0
-                for y in range(node[1]-distance_idx,node[1]+distance_idx):
-                    if y > self.y_lim - 1:
-                        y = self.y_lim -1
-                    if y < 0:
-                        y = 0
-                    for x in range(node[2]-distance_idx, node[2]+ distance_idx):
-                        if x > self.x_lim - 1:
-                            x = self.x_lim -1
-                        if x < 0:
-                            x = 0
-                        block_volume.append((z,y,x))
-        return np.array(block_volume)
+    # def inflate_squre(self, path):
+    #     distance_idx = round(self.safety_distance/self.res)
+    #     block_volume = []
+    #     for node in path:
+    #         for z in range(node[0]-3,node[0]+3):
+    #             if z > self.z_lim - 1:
+    #                 z = self.z_lim -1
+    #             if z < 0:
+    #                 z = 0
+    #             for y in range(node[1]-distance_idx,node[1]+distance_idx):
+    #                 if y > self.y_lim - 1:
+    #                     y = self.y_lim -1
+    #                 if y < 0:
+    #                     y = 0
+    #                 for x in range(node[2]-distance_idx, node[2]+ distance_idx):
+    #                     if x > self.x_lim - 1:
+    #                         x = self.x_lim -1
+    #                     if x < 0:
+    #                         x = 0
+    #                     block_volume.append((z,y,x))
+    #     return np.array(block_volume)
 
 
-    def inflate_circle(self, path):
-        distance_idx = round(self.safety_distance/self.res)
-        dist_power2 = distance_idx**2
-        block_volume = []
-        for node in path:
-            z0, y0, x0 = node
-            for z in range(-distance_idx, distance_idx+1,1):
-                for y in range(-distance_idx, distance_idx+1,1):
-                    if ((y)**2 + (z)**2) <  dist_power2:
-                        if not z+z0 > self.z_lim - 1 and not y+y0 > self.y_lim - 1 and not y+y0 < 0 and not z+z0 < 0:
-                            block_volume.append((z+z0,y+y0,x0))
-        return np.array(block_volume)
+    # def inflate_circle(self, path):
+    #     distance_idx = round(self.safety_distance/self.res)
+    #     dist_power2 = distance_idx**2
+    #     block_volume = []
+    #     for node in path:
+    #         z0, y0, x0 = node
+    #         for z in range(-distance_idx, distance_idx+1,1):
+    #             for y in range(-distance_idx, distance_idx+1,1):
+    #                 if ((y)**2 + (z)**2) <  dist_power2:
+    #                     if not z+z0 > self.z_lim - 1 and not y+y0 > self.y_lim - 1 and not y+y0 < 0 and not z+z0 < 0:
+    #                         block_volume.append((z+z0,y+y0,x0))
+    #     return np.array(block_volume)
 
 
-    def inflate(self, path): # adaptive circle
+    def inflate(self, path, goal_title): # adaptive circle
         block_volume = []
         for node in path:
             z0, y0, x0 = node
@@ -299,6 +299,18 @@ class Trajectory(object):
                     if ((y)**2 + (z)**2) < dist_power2:
                         if not z+z0 > self.z_lim - 1 and not y+y0 > self.y_lim - 1 and not y+y0 < 0 and not z+z0 < 0:
                             block_volume.append((z+z0,y+y0,x0))
+        
+        # add downwash safety distance around the target
+        if goal_title == 'target':
+            goal_z, goal_y, goal_x = path[-1,:]
+            for z in range(goal_z - self.dw_dist_idx[2], goal_z + self.dw_dist_idx[2] + 1):
+                if 0 <= z < self.grid_3d_shape[0]:
+                    for y in range(goal_y - self.dw_dist_idx[1], goal_y + self.dw_dist_idx[1] + 1):
+                        if 0 <= y < self.grid_3d_shape[1]:
+                            for x in range(goal_x - self.dw_dist_idx[0], goal_x + self.dw_dist_idx[0] + 1):
+                                if 0 <= x < self.grid_3d_shape[2]:
+                                    block_volume.append((z,y,x))
+
         return np.array(block_volume)
 
 
@@ -377,7 +389,7 @@ class Trajectory(object):
                     segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, goal_m, is_forward=True)
                 elif (start_title == 'target' and goal_title == 'base'):
                     segment1_m, segment2_m, segment3_m, path = self.get_path(goal_m, start_m, is_forward=False)
-                self.block_volume[drone_idx] = self.inflate(path)
+                self.block_volume[drone_idx] = self.inflate(path, goal_title)
                 self.paths_m[drone_idx] = np.vstack((segment1_m, segment2_m, segment3_m))
                 self.smooth_path_m[drone_idx] = self.get_smooth_path(path=self.paths_m[drone_idx],len1=len(segment1_m),len3=len(segment3_m))  
                 self.block_volumes_m[drone_idx] = self.convert_idx2meter(self.block_volume[drone_idx])
@@ -392,13 +404,13 @@ class Trajectory(object):
             intermidiate_m = (min(start_m[0], goal_m[0]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
             try:
                 segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m, is_forward=False)
-                block_volume1 = self.inflate(path)
+                block_volume1 = self.inflate(path, goal_title=None) #because we don't want to add inflation at intermidiate point
                 path1_m = np.vstack((segment1_m, segment2_m, segment3_m))
                 smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment1_m), len3=len(segment3_m))
                 block_volume1_m = self.convert_idx2meter(block_volume1)
                     
                 segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m, is_forward=True)
-                block_volume2 = self.inflate(path)
+                block_volume2 = self.inflate(path, goal_title)
                 path2_m = np.vstack((segment1_m, segment2_m, segment3_m))
                 smooth_path_m2 = self.get_smooth_path(path=path2_m, len1=len(segment1_m), len3=len(segment3_m))
                 block_volume2_m = self.convert_idx2meter(block_volume2)
