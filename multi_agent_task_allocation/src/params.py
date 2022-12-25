@@ -26,7 +26,7 @@ uri1 = 'radio://0/80/2M/E7E7E7E7E1'
 uri2 = 'radio://0/80/2M/E7E7E7E7E2'
 uri3 = 'radio://0/80/2M/E7E7E7E7E3'
 uri4 = 'radio://0/80/2M/E7E7E7E7E4'
-uri_list = [uri2,uri3] # index 0- most right drone 
+uri_list = [uri4] # index 0- most right drone 
 
 # --------------------- Drones --------------------#
 # -----------Drone CF
@@ -59,7 +59,7 @@ elif mode == 'cf':
 # -------------------   safety
 safety_distance_trajectory = 0.4 # update error map experiment
 safety_distance_allocation = safety_distance_trajectory * 1.2 # update error map experiment
-downwash_aware = True
+downwash_aware = False
 downwash_distance = np.array([0.3, 0.3, 1.5]) # [m] , also distance to avoid flowdeck disturbance
 floor_safety_distance = 0.5 
 min_battery_voltage = 3.2 

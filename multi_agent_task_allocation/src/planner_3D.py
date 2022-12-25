@@ -38,6 +38,7 @@ class Trajectory(object):
         self.smooth_points_num = params.points_in_smooth_params
         self.error_arr = Additionals.generate_fake_error_mapping()
         self.dw_dist_idx = np.int8(np.round(params.downwash_distance / self.res))
+        self.downwash_aware = params.downwash_aware
         # generate floor block volume to visualize
         floor = []
         z_floor, y_floor, x_floor = self.grid_3d_initial[:minimum_floor_idx].shape
@@ -301,16 +302,16 @@ class Trajectory(object):
                             block_volume.append((z+z0,y+y0,x0))
         
         # add downwash safety distance around the target
-        if goal_title == 'target':
-            goal_z, goal_y, goal_x = path[-1,:]
-            for z in range(goal_z - self.dw_dist_idx[2], goal_z + self.dw_dist_idx[2] + 1):
-                if 0 <= z < self.grid_3d_shape[0]:
-                    for y in range(goal_y - self.dw_dist_idx[1], goal_y + self.dw_dist_idx[1] + 1):
-                        if 0 <= y < self.grid_3d_shape[1]:
-                            for x in range(goal_x - self.dw_dist_idx[0], goal_x + self.dw_dist_idx[0] + 1):
-                                if 0 <= x < self.grid_3d_shape[2]:
-                                    block_volume.append((z,y,x))
-
+        if self.downwash_aware:
+            if goal_title == 'target':
+                goal_z, goal_y, goal_x = path[-1,:]
+                for z in range(goal_z - self.dw_dist_idx[2], goal_z + self.dw_dist_idx[2] + 1):
+                    if 0 <= z < self.grid_3d_shape[0]:
+                        for y in range(goal_y - self.dw_dist_idx[1], goal_y + self.dw_dist_idx[1] + 1):
+                            if 0 <= y < self.grid_3d_shape[1]:
+                                for x in range(goal_x - self.dw_dist_idx[0], goal_x + self.dw_dist_idx[0] + 1):
+                                    if 0 <= x < self.grid_3d_shape[2]:
+                                        block_volume.append((z,y,x))
         return np.array(block_volume)
 
 

@@ -178,7 +178,7 @@ resolution = 0.15
 
 # box config params:
 samples_num_exp1 = 81
-fix_values_exp1 = np.array([0.062,0.051,0.035])*0.5
+fix_values_exp1 = np.array([0.062,0.051,0.035])*0.5 *0
 nodes1 = np.array([[1.00	,1.30	,0.23],[1.12	,1.40,	2.23],[1.06	,-1.14	,0.18],[1.13	,-1.32	,2.17],[-0.98	,-1.15	,0.16],[-0.84,	-1.28,	2.17],[-0.94	,1.36,	0.21],[-0.78	,1.44	,2.23]])
 optimal_lps_dir = 'cflib/Ori_CF/multi_agent_task_allocation/posinioning_measurements_experiment/results/optimal_config/LPS_optimal/lps_static_pos_optimal_config_'
 optimal_vicon_dir = 'cflib/Ori_CF/multi_agent_task_allocation/posinioning_measurements_experiment/results/optimal_config/vicon_optimal/vicon_optimal_config_'
@@ -186,7 +186,7 @@ title_exp1 = 'box configuration'
 
 # extended params
 samples_num_exp2 = 87
-fix_values_exp2 = np.array([0.062,0.051,0.035])*0.75
+fix_values_exp2 = np.array([0.062,0.051,0.035])*0.75 * 0
 nodes2 =  np.array([[1.00	,1.30	,0.23],[1.12	,1.40,	2.23],[1.06	,-1.14	,0.18],[1.13	,-1.32	,2.17],[-1,	-1.14	,0.12],[-2.31	,-1.30	,2.17],[-0.96,	1.38	,0.18],[-2.33	,1.45	,2.22]])
 extended_lps_dir = 'cflib/Ori_CF/multi_agent_task_allocation/posinioning_measurements_experiment/results/extended_config/LPS_extended/lps_static_pos_changed_config_'
 extended_vicon_dir =  'cflib/Ori_CF/multi_agent_task_allocation/posinioning_measurements_experiment/results/extended_config/vicon_extended/vicon_changed_config_'

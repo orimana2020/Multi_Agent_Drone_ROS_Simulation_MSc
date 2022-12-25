@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import numpy as np
 import params
+import time
 
 if params.mode == 'sim':
     from rotors_flight_manager import Flight_manager
@@ -10,7 +11,7 @@ if params.mode == 'sim':
 elif params.mode == 'cf':
     from CF_Flight_Manager import Flight_manager
 
-samples_num = 300
+samples_num = 100
 # np.save('current_measure',np.array(61,dtype=int))
 current_measure = np.load('current_measure.npy')
 def main():
@@ -21,6 +22,7 @@ def main():
         current_pos = fc.get_position(drone_idx=0)
         print(current_pos)
         pos_data.append(current_pos)
+        time.sleep(0.02)
         if i%10 == 0:
             print(i)
     fc.swarm.close_links()
