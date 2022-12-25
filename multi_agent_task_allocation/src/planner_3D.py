@@ -347,15 +347,19 @@ class Trajectory(object):
             print('sanity check failed')
             return None 
         try:
+            print('segment 1 - start')
             path1 = self.A_star(start, intermidiate_1)
             path1 = path1[:-1]
             self.visited_3d = self.grid_3d.copy()
+            print('segment 2 - start')
             path2 = self.A_star(intermidiate_1, intermidiate_2)
             path2 = path2[:-1]
             self.visited_3d = self.grid_3d.copy()
+            print('segment 3 - start')
             path3 = self.A_star(intermidiate_2, goal)
             self.visited_3d = self.grid_3d.copy()
             path = np.vstack((path1, path2, path3))
+            print('segment convert - start')
             # -------- convert idx 2 meter
             segment1_m = self.convert_idx2meter(path1)
             segment2_m = self.convert_idx2meter(path2)

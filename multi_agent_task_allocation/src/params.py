@@ -59,8 +59,8 @@ elif mode == 'cf':
 # -------------------   safety
 safety_distance_trajectory = 0.4 # update error map experiment
 safety_distance_allocation = safety_distance_trajectory * 1.2 # update error map experiment
-downwash_aware = False
-downwash_distance = np.array([0.3, 0.3, 1.5]) # [m] , also distance to avoid flowdeck disturbance
+downwash_aware = True
+downwash_distance = np.array([0.2, 0.3, 1.5]) # [m] , also distance to avoid flowdeck disturbance
 floor_safety_distance = 0.5 
 min_battery_voltage = 3.2 
 check_battery_interval_time = 7 #[sec]

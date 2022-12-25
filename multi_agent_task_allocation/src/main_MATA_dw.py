@@ -132,7 +132,7 @@ def main():
                     fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                 else:
                     if not dm.drones[j].at_base:
-                        dm.drones[j].goal_title == 'base'
+                        dm.drones[j].goal_title = 'base'
                         dm.drones[j].goal_coords = dm.drones[j].base
                         print('cant reach target, returning to base')
     
@@ -147,7 +147,8 @@ def main():
         
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
-        print('^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        print('----------------------------------------------------')
+
     # -------------------------------- Return all drones to base ------------------------#
     all_at_base = dm.is_all_at_base(ta.drone_num)
     print('return all drones to base')
