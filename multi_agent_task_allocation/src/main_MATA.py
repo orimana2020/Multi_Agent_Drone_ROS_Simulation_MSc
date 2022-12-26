@@ -14,6 +14,9 @@ import params
 import time
 plt.ion()
 
+if params.downwash_aware:
+    raise Exception("downwash aware must be False")
+
 if params.mode == 'sim':
     from rotors_flight_manager import Flight_manager
     import rospy

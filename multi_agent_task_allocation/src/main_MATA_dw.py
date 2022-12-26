@@ -2,7 +2,8 @@
 # full simulation works for ros noetic on ubuntu 20.04 , python 3.8.10
 # ------------------------ how to run  -----------------------
 # terminal 1 : $ roslaunch rotors_gazebo drone_poll_circle.launch 
-# terminal 2: $ rosrun multi_agent_task_allocation main_MATA.py
+# terminal 2: $ rosrun multi_agent_task_allocation main_MATA_dw.py
+
 # -------------------------------------------------------------
 
 from planner_3D import Trajectory
@@ -13,6 +14,9 @@ import numpy as np
 import params
 import time
 plt.ion()
+
+if not params.downwash_aware:
+    raise Exception("downwash aware must be True")
 
 if params.mode == 'sim':
     from rotors_flight_manager import Flight_manager
