@@ -36,7 +36,9 @@ class Trajectory(object):
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         self.smooth_points_num = params.points_in_smooth_params
-        self.error_arr = Additionals.generate_fake_error_mapping()
+        # self.error_arr = Additionals.generate_fake_error_mapping()
+        self.error_arr = params.error_arr #[x,y,z], resolution =0.05
+        self.error_arr_max = np.max(self.error_arr)
         self.dw_dist_idx = np.int8(np.round(params.downwash_distance / self.res))
         self.downwash_aware = params.downwash_aware
         # generate floor block volume to visualize
@@ -293,7 +295,10 @@ class Trajectory(object):
         block_volume = []
         for node in path:
             z0, y0, x0 = node
-            distance_idx = self.error_arr[z0, y0, x0]
+            try:
+                distance_idx = self.error_arr[x0, y0, y0]
+            except:
+                distance_idx = self.error_arr_max
             dist_power2 = distance_idx**2
             for z in range(-distance_idx, distance_idx+1,1):
                 for y in range(-distance_idx, distance_idx+1,1):
