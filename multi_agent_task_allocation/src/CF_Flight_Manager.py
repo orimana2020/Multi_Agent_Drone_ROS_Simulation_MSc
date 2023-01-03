@@ -27,6 +27,7 @@ class Flight_manager(object):
         self.smooth_points_num = params.points_in_smooth_params
         self.max_dist2target = params.dist_to_target
         self.max_dist2base = params.dist_to_base
+        self.velocity = params.linear_velocity
        
     def activate_high_level_commander(self, scf):
         scf.cf.param.set_value('commander.enHighLevel', '1')
@@ -43,12 +44,12 @@ class Flight_manager(object):
                 for thread in self.open_threads:
                     if thread.is_alive():
                         thread_alive = True
-                time.sleep(1)
+                time.sleep(0.1)
                 print('-- waiting until all threads are killed')
             print('all threads dead') 
         else:
             while self.open_threads[drone_idx].is_alive():
-                time.sleep(1)
+                time.sleep(0.1)
                 print(f'waiting until thread {drone_idx} is killed')
             print(f'thread {drone_idx} is killed') 
 
@@ -57,7 +58,7 @@ class Flight_manager(object):
         cf = scf.cf
         commander = cf.high_level_commander
         commander.takeoff(params.take_off_height, 2.0)
-        time.sleep(3.0) 
+        time.sleep(2.0) 
     
     def take_off_swarm(self):
         self.mission_start_time = time.time()
@@ -91,12 +92,12 @@ class Flight_manager(object):
         self.open_threads[drone_idx] = thread
 
 
-    def _execute_trajectory(self, scf, waypoints, drone_idx): 
+    def _execute_trajectory(self, scf, waypoints): 
         cf = scf.cf
         commander = cf.high_level_commander 
         if len(waypoints) > self.smooth_points_num:
-            waypoints1 = waypoints[:self.smooth_points_num]
-            waypoints2 = waypoints[self.smooth_points_num:]
+            waypoints1 = waypoints[:self.smooth_points_num] # target to retreat
+            waypoints2 = waypoints[self.smooth_points_num:] # retreat to target
             wp_list = [waypoints1, waypoints2]
         else:
             wp_list = [waypoints]
@@ -106,7 +107,7 @@ class Flight_manager(object):
                 commander.go_to(x, y, z, yaw=0, duration_s=0.2)
                 time.sleep(0.2)
                 trajectory_id = 1
-                traj = Generate_Trajectory(waypoints, velocity=1, plotting=0, force_zero_yaw=False, is_smoothen=True)
+                traj = Generate_Trajectory(waypoints, velocity=self.velocity, plotting=0, force_zero_yaw=False, is_smoothen=True)
                 traj_coef = traj.poly_coef
                 duration = upload_trajectory(cf, trajectory_id ,traj_coef)
                 commander.start_trajectory(trajectory_id, 1.0, False)

@@ -282,16 +282,12 @@ class Segment:
         s = scale
         l_s = 1 - s
         p = unscaled_points
-
         result = [None] * 8
-
         result[0] = p[0]
         result[1] = l_s * p[0] + s * p[1]
         result[2] = l_s ** 2 * p[0] + 2 * l_s * s * p[1] + s ** 2 * p[2]
-        result[3] = l_s ** 3 * p[0] + 3 * l_s ** 2 * s * p[
-            1] + 3 * l_s * s ** 2 * p[2] + s ** 3 * p[3]
-        result[4] = l_s ** 3 * p[7] + 3 * l_s ** 2 * s * p[
-            6] + 3 * l_s * s ** 2 * p[5] + s ** 3 * p[4]
+        result[3] = l_s ** 3 * p[0] + 3 * l_s ** 2 * s * p[1] + 3 * l_s * s ** 2 * p[2] + s ** 3 * p[3]
+        result[4] = l_s ** 3 * p[7] + 3 * l_s ** 2 * s * p[6] + 3 * l_s * s ** 2 * p[5] + s ** 3 * p[4]
         result[5] = l_s ** 2 * p[7] + 2 * l_s * s * p[6] + s ** 2 * p[5]
         result[6] = l_s * p[7] + s * p[6]
         result[7] = p[7]
@@ -443,10 +439,10 @@ class Uploader:
     def upload(self, trajectory_mem):
         print('Uploading data')
         trajectory_mem.write_data(self._upload_done, write_failed_cb=self._upload_failed)
-
+        start_time = time.time()
         while not self._is_done:
             time.sleep(0.2)
-
+        print(f'trajecoty uploaded time {time.time() - start_time } seconds')
         return self._success
         
     def _upload_done(self, mem, addr):

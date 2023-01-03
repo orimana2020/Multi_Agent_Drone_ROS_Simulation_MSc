@@ -60,7 +60,6 @@ def main():
                         continue
                     else:
                         dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title) 
-                    
                         # find path to unvisited target
                         if (not (dm.drones[j].path_found)) and (dm.drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) and (not (fc.open_threads[j].is_alive())):
                             dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
@@ -72,7 +71,7 @@ def main():
                                     dm.drones[j].is_available = 1
                                     print('kmeans - cant reach target, stay at base')
                                 else:
-                                    dm.drones[j].goal_title == 'base'
+                                    dm.drones[j].goal_title = 'base'
                                     dm.drones[j].goal_coords = dm.drones[j].base
                                     print('kmeans - cant reach target, returning to base')
 
@@ -107,6 +106,7 @@ def main():
 
                 #land inactive drones
                 if current_drone_num > ta.drone_num: 
+                    print('return to base inactive drones')
                     return2base = True
                     while return2base:
                         for j in range(current_drone_num-1, ta.drone_num-1,-1):
@@ -114,14 +114,16 @@ def main():
                                 dm.return_base(j, path_planner, fc, ta)
                             elif (dm.drones[j].is_reached_goal):
                                 dm.drones[j].at_base = 1
-                            dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = dm.drones[j].goal_coords, title=dm.drones[j].goal_title)    
+                            dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title)    
                         return2base = False
                         for j in range(current_drone_num-1, ta.drone_num-1,-1):
                             if not dm.drones[j].is_reached_goal:
                                 return2base = True
+                                print(f'drone {j} is not at goal, is_reach_goal {dm.drones[j].is_reached_goal}, goal titile {dm.drones[j].goal_title}, goal_Coords : {dm.drones[j].goal_coords} ')
+                        print(f'finished return to base {not (return2base)}')
                         fc.sleep()
 
-                    for j in range(current_drone_num-1, ta.drone_num-1,-1):
+                    for j in range(current_drone_num-1, ta.drone_num-1, -1):
                         fc.land(drone_idx=j)
                         dm.drones[j].is_active = False
                         print(f'drone {j} is landing')
