@@ -4,6 +4,7 @@ import random
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
+import logging
 
 class Drone_Manager(object):
     def __init__(self, uris, base, full_magazine, ta):
@@ -115,6 +116,7 @@ class Drone(object):
         self.is_reached_goal = 0
         self.path_found = 0
         self.at_base = 1
+        self.timer = 0
         self.is_active = True
         self.battery = None
         self.path_idx = None
@@ -123,9 +125,7 @@ class Drone(object):
         self.block_volume_idx = None
         self.block_volume_base = None
         self.block_volume_m = None
-    
-        
-                
+                 
 class get_figure(object):
     def __init__(self):
         self.targetpos = params.targetpos
@@ -199,6 +199,21 @@ class get_figure(object):
         self.show()
 
 
+class Logger(object):
+    def __init__(self, file_name):
+        logging.basicConfig(level=logging.DEBUG, filename=file_name, filemode='w',
+                    format="%(asctime)s - %(levelname)s - %(message)s")
+        self.logger = logging.getLogger(file_name)
+        handler = logging.FileHandler(file_name)
+        formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        self.logger.setLevel(logging.DEBUG)
+    
+    def log(self, msg):
+        self.logger.debug(msg)
+        print(msg)
+
 
 def generate_fake_error_mapping(): 
     x_min,x_max,y_min,y_max,z_min,z_max = params.limits_idx
@@ -219,7 +234,6 @@ def generate_fake_error_mapping():
                 error_arr[z,y,x] = round(total_dist_score * (worst_accuracy - best_accuracy) + best_accuracy)
     print(f'error arr shape: {error_arr.shape}')
     return error_arr
-
 
 class Env(object):
     def __init__(self, drone_performace, drone_num):

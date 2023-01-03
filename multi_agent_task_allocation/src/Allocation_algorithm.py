@@ -7,7 +7,7 @@ from itertools import combinations
 import params
 
 class Optim(object):
-    def __init__(self, targets_num, targetpos):
+    def __init__(self, targets_num, targetpos, logger):
         drone_num = params.drone_num
         self.k = params.k_init
         # calc distance matrix
@@ -19,7 +19,7 @@ class Optim(object):
                 self.distance_mat[i,j] = np.linalg.norm(tar1 - tar2, ord=2)
                 if i == j:
                     self.distance_mat[i,j] = np.Inf
-        
+        self.logger = logger
         self.distance_mat_nochange = self.distance_mat.copy()
         self.unvisited_num = targets_num
         self.current_targets = np.zeros(drone_num, dtype=int)
@@ -41,7 +41,8 @@ class Optim(object):
         else:   
             if self.k > 1:
                 self.k -= 1
-            print('k updated:' , self.k)
+            self.logger.log(f'k updated : {self.k}')
+            # print('k updated:' , self.k)
             if self.k >=2:
                 return np.load(str(os.getcwd())+ self.uri_state_mat +'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
             elif self.k == 1:
@@ -101,7 +102,7 @@ class Optim(object):
         self.distance_mat[:, target_idx] = np.inf
 
     def  update_kmeans_drone_num(self, drone_num, targetpos, targetpos_reallocate):
-        print('kmeans updated')
+        self.logger.log('kmeans updated')
         first_itr = 1
         self.min_dist_candidate = self.safety_distance_allocation
         drone_num_changed = 0
@@ -127,13 +128,13 @@ class Optim(object):
 
             self.min_dist_candidate = min(self.initial_dist_vec)
             self.threshold_dist = self.threshold_factor * self.min_dist_candidate
-            print('min_dist_org = ', self.min_dist_candidate)
-            print('threshold dist = ', self.threshold_dist)
+            self.logger.log(f'min_dist_org = {round(self.min_dist_candidate, 2)}')
+            self.logger.log(f'threshold dist = {round(self.threshold_dist, 2)}')
 
             if (self.min_dist_candidate < self.safety_distance_allocation ) and (drone_num > 1) :
                 drone_num -= 1
                 drone_num_changed = 1
-                print('drones number updated: ', drone_num)
+                self.logger.log(f'drones number updated: {drone_num}' )
         return drone_num, drone_num_changed
 
 
@@ -147,24 +148,24 @@ class Optim(object):
 
 
 class Allocation:
-    def __init__(self):
+    def __init__(self, logger):
+        self.logger = logger
         self.drone_num = params.drone_num
         self.drone_num_changed = 0
         self.targetpos = params.targetpos
         self.targets_num = params.targets_num
         self.targetpos_reallocate = self.targetpos.copy()
-        self.optim = Optim(self.targets_num, self.targetpos)
+        self.optim = Optim(self.targets_num, self.targetpos, logger)
         if self.drone_num > 1:
             self.state_mat = self.optim.get_state_matrix(self.drone_num, init_flag=True)
         self.drone_num, self.drone_num_changed = self.optim.update_kmeans_drone_num(self.drone_num, self.targetpos, self.targetpos_reallocate) # update drone_num for safety distance
         self.base = params.base
         if self.drone_num > 1:
             self.optimal_drone2target()
-        
 
         
     def optimal_drone2target(self, dm=None):
-        print('calc optimal drone2agent')
+        self.logger.log('calculate optimal drone2agent')
         options = list(permutations(range(self.drone_num))) 
         distance_mat = np.zeros([self.drone_num, self.drone_num])
         for i in range(self.drone_num):  # i = target pos
@@ -189,10 +190,10 @@ class Allocation:
         self.optim.current_targets = self.optim.current_targets[best_comb]
 
     def update_kmeans(self, dm=None):
-        print('-------kmeans mode-------')
+        self.logger.log('-------kmeans mode-------')
         while (self.optim.unvisited_num < self.drone_num) and (self.drone_num > 1):
             self.drone_num -= 1
-        print('drone number updated:', self.drone_num)
+        self.logger.log(f'drone number updated: {self.drone_num}')
         if self.drone_num > 1:
             self.drone_num, self.drone_num_changed = self.optim.update_kmeans_drone_num(self.drone_num, self.targetpos, self.targetpos_reallocate) 
             if self.drone_num > 1:
