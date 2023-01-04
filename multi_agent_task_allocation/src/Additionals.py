@@ -137,6 +137,7 @@ class get_figure(object):
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
         self.ax.set_zlabel('z')
+        self.frame_counter = 0
         # self.ax.view_init(elev=0, azim=90)
         elev, azim = params.elvazim
         self.ax.view_init(elev=elev, azim=azim)

@@ -28,7 +28,7 @@ elif params.mode == 'cf':
 
 def main():
     start_time = time.time()
-    logger = Logger('logger_test_1')
+    logger = Logger('task_logger')
     ta = Allocation(logger) # compute fisrt targets allocation in init
     fig = get_figure()
     dm = Drone_Manager(params.uri_list, params.base, params.magazine, ta)
@@ -76,6 +76,7 @@ def main():
                             if dm.drones[j].path_found:
                                 dm.drones[j].at_base = 0
                                 fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                                logger.log(f'executing trajectory drone {j}')
                             else:
                                 if dm.drones[j].at_base:
                                     dm.drones[j].is_available = 1
@@ -88,6 +89,7 @@ def main():
                         # arrived to target
                         elif  (dm.drones[j].goal_title == 'target') and (dm.drones[j].is_reached_goal) :
                             dm.kmean_arrived_target(j, fc, ta)
+                            logger.log(f'drone {j} arrived to target')
                             
                         # find path to base 
                         elif (not (dm.drones[j].path_found)) and dm.drones[j].goal_title == 'base'  and (not (fc.open_threads[j].is_alive())) :
@@ -99,6 +101,7 @@ def main():
                         elif ((dm.drones[j].goal_title == 'base') and (dm.drones[j].is_reached_goal)):
                             dm.drones[j].at_base = 1
                             dm.drones[j].is_available = 1
+                            logger.log(f'drone {j} arrived to base')
 
                 fig.plot1(path_planner, dm, ta)
                 fc.sleep()
@@ -112,6 +115,7 @@ def main():
                     dm.drones[j].goal_coords = tuple(ta.targetpos[ta.optim.current_targets[j],:])
                     dm.drones[j].is_available = 0
                 logger.log(f'kmeans updated, current drone num: {ta.drone_num}')
+                logger.log(f'current targets: {ta.optim.current_targets}')
                 allocation = None 
 
                 #land inactive drones
