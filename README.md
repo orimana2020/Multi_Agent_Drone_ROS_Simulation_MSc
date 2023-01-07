@@ -24,10 +24,23 @@ Installation Instructions - Ubuntu 20.04 with ROS noetic
  $ source devel/setup.bash
  ```
 
+(optional) Setting GPU
+---------------------------------------------------------
+Make sure to use nvidia 
+ ```
+glxinfo | grep OpenGL
+ ```
+If not: -
+ ```
+sudo systemctl enable gpu-manager
+sudo prime-select nvidia
+```
+If still not showing nvidia - reboot
+
+
+
 Running the simulation
 ---------------------------------------------------------
-
- 1. If you don't have ROS workspace yet you can do so by
 
  ```
  $ cd ~/catkin_ws
