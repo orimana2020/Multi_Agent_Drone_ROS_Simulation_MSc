@@ -116,15 +116,16 @@ class Drone(object):
         self.is_reached_goal = 0
         self.path_found = 0
         self.at_base = 1
-        self.timer = 0
         self.is_active = True
         self.battery = None
-        self.path_idx = None
-        self.path_m = None
-        self.current_target = None
-        self.block_volume_idx = None
-        self.block_volume_base = None
-        self.block_volume_m = None
+        self.timer = 0
+        self.time_at_base = 0
+        self.time_to_target = 0
+        self.time_to_base = 0
+        self.time_at_target = 0
+        self.visited_targets_idx = []
+        self.visited_targets_num = 0
+
                  
 class get_figure(object):
     def __init__(self):
