@@ -10,11 +10,13 @@ def get_span(targetpos, base, resolution):
     y_max += 0.5 # add offset for c_space
     y_span = (y_max - y_min) 
     x_min, x_max = 0, max(max(targetpos[:,0]), max(np.array(base)[:,0])) 
-    x_max += 0.1 # add offset for c_space
+    x_max += 0.3 # add offset for c_space
     x_span = (x_max - x_min) 
     span_m = [x_span, y_span, z_span]
     min_max_m = [x_min, x_max, y_min, y_max, z_min, z_max]
     min_max_idx = [round(x_min/resolution), round(x_max/resolution), round(y_min/resolution), round(y_max/resolution), round(z_min/resolution), round(z_max/resolution)]     
+    print(min_max_m)
+    print(min_max_idx)
     return span_m, min_max_m, min_max_idx
 
 # ------------------------------------------------------------------------------ #
@@ -26,14 +28,14 @@ uri1 = 'radio://0/80/2M/E7E7E7E7E1'
 uri2 = 'radio://0/80/2M/E7E7E7E7E2'
 uri3 = 'radio://0/80/2M/E7E7E7E7E3'
 uri4 = 'radio://0/80/2M/E7E7E7E7E4'
-uri_list = [uri2,uri3,uri4] # index 0- most right drone 
+uri_list = [uri1,uri3] # index 0- most right drone 
 
 # --------------------- Drones --------------------#
 # -----------Drone CF
 if mode == 'cf':
     drone_num = len(uri_list)
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
-    linear_velocity = 1.5
+    linear_velocity = 1
     drone_size_m = 0.15 # [m]
     base = [(0.3,-0.6,1), (0.3,0,1), (0.3,0.6,1),(0.3,0.9,1)][:drone_num]# (x,y,z)   -> right to left order
 
@@ -41,7 +43,7 @@ if mode == 'cf':
 if mode == 'sim':
     drone_num = 3
     magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
-    linear_velocity = 2.5
+    linear_velocity = 1
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
     base = [(0.3,-0.7,1), (0.3,0,1), (0.3,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
@@ -61,7 +63,7 @@ elif mode == 'cf':
 # -------------------   safety
 safety_distance_trajectory = 0.4 # update error map experiment
 safety_distance_allocation = safety_distance_trajectory * 1.2 # update error map experiment
-downwash_aware = True
+DOWNWASH_AWARE = True
 floor_safety_distance = 0.5 
 min_battery_voltage = 3.2 
 check_battery_interval_time = 7 #[sec]
@@ -70,19 +72,20 @@ check_battery_interval_time = 7 #[sec]
 resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
-break_trajectory_len_factor = 0.2
-offset_x_dist_target = 0.3 # [m]
-segments_num = 15 # max = 30
+break_trajectory_len_factor = 0.15
+offset_x_dist_target = 0.5 # [m]
+segments_num = 8 # max = 30
 points_in_smooth_params = segments_num + 1
-error_arr_raw = np.load(str(os.getcwd())+ uri_state_mat + '/positioning_error_arr/error_arr_box_config.npy')
-error_arr = np.int8(np.ceil(error_arr_raw / resolution)) + np.int8(drone_size_m / resolution)
+LPS_positioning_error_m = np.load(str(os.getcwd())+ uri_state_mat + '/positioning_error_arr/error_arr_box_config.npy')
+LPS_n_safety_vol = np.int8(np.ceil(LPS_positioning_error_m / resolution)) + np.int8(drone_size_m / resolution)
+SIMULATE_LPS_ERROR = True
 
 
 if mode == 'sim':
     dist_to_target = 0.05
     dist_to_base = 0.1
 elif mode == 'cf':
-    dist_to_target = 0.04
+    dist_to_target = 0.05
     dist_to_base = 0.1
 
 # -------------------- Targets

@@ -44,12 +44,12 @@ class Flight_manager(object):
                 for thread in self.open_threads:
                     if thread.is_alive():
                         thread_alive = True
-                time.sleep(0.1)
-                print('-- waiting until all threads are killed')
+                time.sleep(0.05)
+                # print('-- waiting until all threads are killed')
             print('all threads dead') 
         else:
             while self.open_threads[drone_idx].is_alive():
-                time.sleep(0.1)
+                time.sleep(0.05)
                 print(f'waiting until thread {drone_idx} is killed')
             print(f'thread {drone_idx} is killed') 
 
@@ -61,7 +61,6 @@ class Flight_manager(object):
         time.sleep(2.0) 
     
     def take_off_swarm(self):
-        self.mission_start_time = time.time()
         threads = self.swarm.parallel_safe(self._take_off)
         for i in range(len(threads)):
             self.open_threads[i] = threads[i]
@@ -75,16 +74,15 @@ class Flight_manager(object):
         cf = scf.cf
         commander = cf.high_level_commander
         x,y,z = self.base[self.reversed_uri_dict[scf.cf.link_uri]]
-        commander.go_to(x, y, z, yaw=0, duration_s=3)
-        time.sleep(3)
+        commander.go_to(x, y, z, yaw=0, duration_s=2)
+        time.sleep(2)
     
     
     def _go_to(self, scf, goal, drone_idx):
         cf = scf.cf
         commander = cf.high_level_commander 
         x,y,z = goal
-        commander.go_to(x, y, z, yaw=0, duration_s=0.2)
-        time.sleep(0.2)
+        commander.go_to(x, y, z, yaw=0, duration_s=0.1)
 
 
     def go_to(self, drone_idx, goal):
@@ -92,26 +90,27 @@ class Flight_manager(object):
         self.open_threads[drone_idx] = thread
 
 
-    def _execute_trajectory(self, scf, waypoints): 
+    def _execute_trajectory(self, scf, waypoints, drone_idx): 
         cf = scf.cf
         commander = cf.high_level_commander 
         if len(waypoints) > self.smooth_points_num:
             waypoints1 = waypoints[:self.smooth_points_num] # target to retreat
             waypoints2 = waypoints[self.smooth_points_num:] # retreat to target
             wp_list = [waypoints1, waypoints2]
+            velocity = 0.8
         else:
             wp_list = [waypoints]
+            velocity = 1.5
         try:
             for waypoints in wp_list:
                 x, y, z = waypoints[0]
-                commander.go_to(x, y, z, yaw=0, duration_s=0.2)
-                time.sleep(0.2)
+                commander.go_to(x, y, z, yaw=0, duration_s=0.1)
                 trajectory_id = 1
-                traj = Generate_Trajectory(waypoints, velocity=self.velocity, plotting=0, force_zero_yaw=False, is_smoothen=True)
+                traj = Generate_Trajectory(waypoints, velocity=velocity, plotting=0, force_zero_yaw=False, is_smoothen=True)
                 traj_coef = traj.poly_coef
                 duration = upload_trajectory(cf, trajectory_id ,traj_coef)
                 commander.start_trajectory(trajectory_id, 1.0, False)
-                time.sleep(duration)
+                time.sleep(0.2)
         except:
             print('failed to execute trajectory')
 
@@ -121,8 +120,9 @@ class Flight_manager(object):
         self.open_threads[drone_idx] = thread
     
     def get_position(self, drone_idx):
-        scf = self.swarm._cfs[self.uri_dict[drone_idx]]
-        self.swarm.get_single_cf_estimated_position(scf)
+        # scf = self.swarm._cfs[self.uri_dict[drone_idx]]
+        # self.swarm.get_single_cf_estimated_position(scf)
+        self.swarm.daemon_process(self.swarm.get_single_cf_estimated_position, self.uri_dict[drone_idx])
         return self.swarm._positions[self.uri_dict[drone_idx]]
     
     def get_battery(self, drone_idx):
@@ -139,7 +139,7 @@ class Flight_manager(object):
             dist2goal = ((current_x - goal[0])**2 + (current_y - goal[1])**2 +(current_z - goal[2])**2 )**0.5
             max_dist = self.max_dist2target if title == 'target' else self.max_dist2base
             if dist2goal < max_dist:
-                print(f'dist to goal : {dist2goal}')
+                print(f'drone {drone_idx} reached goal')
                 return 1
             else:
                 return 0
@@ -162,7 +162,6 @@ class Flight_manager(object):
                     self.open_threads[i] = thread   
             self.wait_thread_killed(drone_idx)     
             self.swarm.close_links()
-            print(f'total mission time = {int(time.time() - self.mission_start_time)} [sec]')
         else:
             thread = self.swarm.daemon_process(self._land, self.uri_dict[drone_idx], [drone_idx])
             self.open_threads[drone_idx] = thread 

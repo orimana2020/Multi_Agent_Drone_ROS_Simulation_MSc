@@ -148,6 +148,7 @@ class get_figure(object):
         self.block_volume = params.plot_block_volume
         self.constant_blocking_area = params.plot_constant_blocking_area
         self.plot_block_volume_floor_m = params.plot_block_volume_floor_m
+        self.simulate_lps_error = params.SIMULATE_LPS_ERROR
     
     def plot_all_targets(self):
         self.ax.scatter3D(self.targetpos[:,0], self.targetpos[:,1], self.targetpos[:,2], s= 10, c='k',alpha=1, depthshade=False)
@@ -175,6 +176,9 @@ class get_figure(object):
                     self.ax.scatter3D(path_planner.constant_blocking_area_m[j][:,0], path_planner.constant_blocking_area_m[j][:,1], path_planner.constant_blocking_area_m[j][:,2], s= 10, c='m',alpha=0.01,depthshade=False)
                 if self.plot_block_volume_floor_m:
                     self.ax.plot(path_planner.block_volume_floor_m[:,0],path_planner.block_volume_floor_m[:,1], path_planner.block_volume_floor_m[:,2], c='grey', linewidth=4)
+                if self.simulate_lps_error:
+                    self.ax.plot(path_planner.path_gt[j][:,0],path_planner.path_gt[j][:,1], path_planner.path_gt[j][:,2], c='deeppink',linestyle='dashed' ,linewidth=4)
+
     def show(self):
         self.ax.set_xlabel('x')
         self.ax.set_ylabel('y')
@@ -205,7 +209,9 @@ class Logger(object):
     def __init__(self, file_name):
         logging.basicConfig(level=logging.DEBUG, filename=file_name, filemode='w',
                     format="%(asctime)s - %(levelname)s - %(message)s")
-        self.logger = logging.getLogger(file_name)
+        
+        self.logger = logging.getLogger(__name__)
+        self.logger
         handler = logging.FileHandler(file_name)
         formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
         handler.setFormatter(formatter)

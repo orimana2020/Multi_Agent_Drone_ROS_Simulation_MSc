@@ -14,8 +14,10 @@ import params
 import time
 plt.ion()
 
-if not params.downwash_aware:
+if not params.DOWNWASH_AWARE:
     raise Exception("DOWNWASH AWARE MUST BE TRUE IN PARAMS")
+if params.mode == 'cf' and params.SIMULATE_LPS_ERROR:
+    raise Exception("SIMULATE_LPS_ERROR VALID IN SIMULATION ONLY")
 
 if params.mode == 'sim':
     from rotors_flight_manager import Flight_manager
@@ -26,7 +28,6 @@ elif params.mode == 'cf':
     from CF_Flight_Manager import Flight_manager
 
 def main():
-    start_time = time.time()
     logger = Logger('task_logger')
     ta = Allocation(logger) # compute fisrt targets allocation in init
     fig = get_figure()
@@ -35,9 +36,12 @@ def main():
     path_planner = Trajectory(dm.drones, logger)
     fc.take_off_swarm()
 
+    start_time = time.time()
+    for i in range(ta.drone_num):
+        dm.drones[i].timer = start_time
+
     allocation = None
-    last_unvisited = 0 #used for logging
-    last_targets = 0 # used for logging
+    last_unvisited, last_targets = 0, 0 #used for logging
 
     while ta.optim.unvisited_num > 0:
         # ------------------------Target Allocation-------------------------- #   
@@ -180,9 +184,9 @@ def main():
         all_at_base = dm.is_all_at_base(ta.drone_num)
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
+    logger.log(f'Task Done Successfully, Total time:{round(time.time() - start_time, 2)} [sec], exclude take off and landing')
     fc.land('all', dm.drones)
     logger.log('landing all active drones')
-    logger.log(f'Task Done Successfully, Total time:{round(time.time() - start_time, 2)} [sec]')
 
 
 if __name__ == '__main__':

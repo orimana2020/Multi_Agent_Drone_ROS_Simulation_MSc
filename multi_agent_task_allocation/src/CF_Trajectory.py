@@ -105,7 +105,7 @@ class Node:
         for p in self._control_points[1]:
             visualizer.marker(p[0:3], color=color)
 
-    def print(self):
+    def print_(self):
         print('Node ---')
         print('Tail:')
         for c in self._control_points[1]:
@@ -437,16 +437,16 @@ class Uploader:
         self._success = True
 
     def upload(self, trajectory_mem):
-        print('Uploading data')
+        # print('Uploading data')
         trajectory_mem.write_data(self._upload_done, write_failed_cb=self._upload_failed)
-        start_time = time.time()
+        # start_time = time.time()
         while not self._is_done:
-            time.sleep(0.2)
-        print(f'trajecoty uploaded time {time.time() - start_time } seconds')
+            time.sleep(0.1)
+        # print(f'trajecoty uploaded time {time.time() - start_time } seconds')
         return self._success
         
     def _upload_done(self, mem, addr):
-        print('Data uploaded')
+        # print('Data uploaded')
         self._is_done = True
         self._success = True
 

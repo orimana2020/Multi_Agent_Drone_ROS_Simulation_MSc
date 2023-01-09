@@ -33,15 +33,19 @@ class Trajectory(object):
         self.block_volumes_m = [[]] * self.drone_num # used for visualization only
         self.paths_m = [[]] * self.drone_num # used for visualization only
         self.smooth_path_m =[[]] * self.drone_num
+        self.path_gt = [[]] * self.drone_num
         self.constant_blocking_area = [[]] * self.drone_num
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
         self.smooth_points_num = params.points_in_smooth_params
         # self.error_arr = Additionals.generate_fake_error_mapping()
-        self.error_arr = params.error_arr #[x,y,z], resolution =0.05
+        self.error_arr = params.LPS_n_safety_vol #[x,y,z], resolution =0.05
         self.error_arr_max = np.max(self.error_arr)
         self.dw_dist_idx = np.int8(np.round(params.downwash_distance / self.res))
-        self.downwash_aware = params.downwash_aware
+        self.downwash_aware = params.DOWNWASH_AWARE
+        self.simulate_lps_error = params.SIMULATE_LPS_ERROR
+        self.LPS_pos_error = params.LPS_positioning_error_m
+        self.max_LPS_pos_error = np.max(self.LPS_pos_error)
         # self.targetpos_max_x_diff = params.targetpos_max_x_diff
         # generate floor block volume to visualize
         floor = []
@@ -258,7 +262,7 @@ class Trajectory(object):
         for node in path:
             z0, y0, x0 = node
             try:
-                distance_idx = self.error_arr[x0, y0, y0]
+                distance_idx = self.error_arr[x0, y0, z0]
             except:
                 distance_idx = self.error_arr_max
             dist_power2 = distance_idx**2
@@ -277,7 +281,7 @@ class Trajectory(object):
                         for y in range(goal_y - self.dw_dist_idx[1][0], goal_y + self.dw_dist_idx[1][0] + 1):
                             if 0 <= y < self.grid_3d_shape[1]:
                                 # for x in range(goal_x - self.dw_dist_idx[0][0], goal_x + self.dw_dist_idx[0][1] + 1):
-                                for x in range(self.dw_dist_idx[0][0], self.dw_dist_idx[0][1] + 1):
+                                for x in range(min(goal_x, self.dw_dist_idx[0][0]), max(goal_x, self.dw_dist_idx[0][1] + 1)):
                                     if 0 <= x < self.grid_3d_shape[2]:
                                         block_volume.append((z,y,x))
         return np.array(block_volume)
@@ -291,6 +295,9 @@ class Trajectory(object):
 
 
     def get_path(self, start_m, goal_m, is_forward):
+        """
+        find path index, convert to [m], replace start and end to accurate values
+        """
         if is_forward:
             if start_m[0] > goal_m[0]:
                 temp = goal_m
@@ -329,9 +336,11 @@ class Trajectory(object):
             segment1_m = self.convert_idx2meter(path1)
             segment2_m = self.convert_idx2meter(path2)
             segment3_m = self.convert_idx2meter(path3)
-            # --------- replace to accurate location
-            segment1_m[:,1] ,segment1_m[:,2] =  start_m[1], start_m[2]
-            segment3_m[:,1], segment3_m[:,2] = goal_m[1], goal_m[2]
+            # --------- replace to accurate position of start and goal
+            segment1_m[0,0] = start_m[0] 
+            segment1_m[:,1] ,segment1_m[:,2] =  start_m[1], start_m[2] #start y,z values
+            segment3_m[:,1], segment3_m[:,2] = goal_m[1], goal_m[2] # goal y,z values
+            segment3_m[-1,0] = goal_m[0]
             return segment1_m, segment2_m, segment3_m, path
         except:
             self.logger.log('error in creating path segments')
@@ -344,9 +353,8 @@ class Trajectory(object):
         goal_m = drones[drone_idx].goal_coords
         start_title = drones[drone_idx].start_title
         goal_title = drones[drone_idx].goal_title
-        # update grid_3D, exclude current drone block_volume
         self.grid_3d = self.grid_3d_initial.copy()
-        for i in range(drone_num):
+        for i in range(drone_num): # update grid_3D, exclude current drone block_volume
             if (i != drone_idx):
                 self.grid_3d[self.constant_blocking_area[i][:,0], self.constant_blocking_area[i][:,1], self.constant_blocking_area[i][:,2]] = 1
                 if (len(self.block_volume[i]) > 0) and not (drones[i].at_base):
@@ -363,12 +371,14 @@ class Trajectory(object):
                 self.paths_m[drone_idx] = np.vstack((segment1_m, segment2_m, segment3_m))
                 self.smooth_path_m[drone_idx] = self.get_smooth_path(path=self.paths_m[drone_idx],len1=len(segment1_m),len3=len(segment3_m))  
                 self.block_volumes_m[drone_idx] = self.convert_idx2meter(self.block_volume[drone_idx])
+                if self.simulate_lps_error:
+                    self.path_gt[drone_idx] = self.smooth_path_m[drone_idx]
+                    self.smooth_path_m[drone_idx] = self.get_path_LPS_error(self.smooth_path_m[drone_idx], drones, drone_idx)
                 self.logger.log(f'path found drone {drone_idx}')
                 return 1
             except:
                 self.logger.log(f'No Path Found! drone {drone_idx} from {start_title} to {goal_title} , start: {np.round((np.array(start_m)),2)} , goal: {np.round((np.array(goal_m)),2)}')
                 return 0
-
 
         elif (start_title == 'target' and goal_title == 'target'):
             intermidiate_m = (min(start_m[0], goal_m[0]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
@@ -389,12 +399,37 @@ class Trajectory(object):
                 self.paths_m[drone_idx] = np.vstack((path1_m, path2_m))
                 self.smooth_path_m[drone_idx] = np.vstack((smooth_path_m1, smooth_path_m2))
                 self.block_volumes_m[drone_idx] = np.vstack((block_volume1_m, block_volume2_m))
+                if self.simulate_lps_error:
+                    self.path_gt[drone_idx] = self.smooth_path_m[drone_idx]
+                    self.smooth_path_m[drone_idx] = self.get_path_LPS_error(self.smooth_path_m[drone_idx], drones, drone_idx)
                 return 1
             except:
                 self.logger.log(f'No Path Found! drone {drone_idx} from {start_title} to {goal_title} , start: {np.round((np.array(start_m)),2)} , goal: {np.round((np.array(goal_m)),2)}')
                 return 0
 
+    def get_path_LPS_error(self, smooth_path_m, drones, drone_idx):
+        path_fake_error = []
+        signx = np.random.choice([-1,1])
+        signy = np.random.choice([-1,1])
+        signz = np.random.choice([-1,1])
+        for coords in smooth_path_m:
+            x,y,z = np.int8(coords / self.res)
+            try:
+                pos_error = self.LPS_pos_error[x, y, z] 
+            except:
+                pos_error = self.max_LPS_pos_error
+            random_err = np.random.normal(pos_error, 0.015)
+            
+            new_coords = coords + np.array([signx * random_err/2**0.5, 
+            signy * random_err/2**0.5,
+            signz * np.random.normal(0.05, 0.005) ])
+            path_fake_error.append(new_coords)
+        drones[drone_idx].goal_coords = path_fake_error[-1]
+        return np.array(path_fake_error)
+            
+            
 
+        
 
 
 
