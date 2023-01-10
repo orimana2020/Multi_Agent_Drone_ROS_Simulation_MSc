@@ -1,9 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from params import colors
 
-
-task_num = 38
+task_num = 53
+colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- LOAD DATA -----------------
 

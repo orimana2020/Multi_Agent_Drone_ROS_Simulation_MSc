@@ -42,7 +42,7 @@ if mode == 'cf':
 #-----------Drone Sim
 if mode == 'sim':
     drone_num = 3
-    magazine = [3,3,3,3,3,3,3,3,3][:drone_num]
+    magazine = [5,5,5,3,3,3,3,3,3][:drone_num]
     linear_velocity = 1
     # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
     base = [(0.3,-0.7,1), (0.3,0,1), (0.3,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order

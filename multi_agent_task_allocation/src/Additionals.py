@@ -131,6 +131,7 @@ class Analysis(object):
         self.allocation_history['drone_num'] = []
         self.allocation_history['threshold'] = []
         self.allocation_history['combination'] = []
+        self.visited_drone_pair = []
 
     def start(self,dm):
         self.dm = dm
@@ -157,6 +158,7 @@ class Analysis(object):
     def add_visited(self, idx, target_idx ):
         self.dm.drones[idx].visited_targets_idx.append(target_idx)
         self.dm.drones[idx].visited_targets_num += 1
+        self.visited_drone_pair.append([idx, target_idx])
     
     def atBaseTarget(self, idx):
         if self.dm.drones[idx].start_title == 'target':
@@ -169,6 +171,7 @@ class Analysis(object):
         self.allocation_history['drone_num'].append(drone_num)
         self.allocation_history['threshold'].append(threshold)
         self.allocation_history['combination'].append(combination)
+        self.allocation_history['visited_drone_pair'] = self.visited_drone_pair
         
          
     def analyse(self):
@@ -177,6 +180,7 @@ class Analysis(object):
         general_data['initial_drone_num'] = (len(self.dm.drones))
         general_data['total_task_time'] = time.time() - self.start_time
         general_data['targets_position'] = params.targetpos
+        general_data['mode'] = params.mode
         general_data['allocation_history'] = self.allocation_history
         drone_data = {}
         for j in range(len(self.dm.drones)):
