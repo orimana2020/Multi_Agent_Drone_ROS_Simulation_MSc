@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
 import logging
+import time
 
 class Drone_Manager(object):
     def __init__(self, uris, base, full_magazine, ta):
@@ -99,6 +100,7 @@ class Drone_Manager(object):
                 all_at_base = False
         return all_at_base
     
+    
 
 
 class Drone(object):
@@ -126,7 +128,63 @@ class Drone(object):
         self.visited_targets_idx = []
         self.visited_targets_num = 0
 
-                 
+class Analysis(object):
+    def __init__(self):
+        self.allocation_history = []
+
+    def start(self,dm):
+        self.dm = dm
+        self.start_time = time.time()
+        for j in range(len(self.dm.drones)):
+            self.dm.drones[j].timer = self.start_time
+
+    def time_to_base(self, idx):
+        self.dm.drones[idx].time_to_base += time.time() - self.dm.drones[idx].timer
+        self.dm.drones[idx].timer = time.time()
+
+    def time_at_base(self, idx):
+        self.dm.drones[idx].time_at_base += time.time() - self.dm.drones[idx].timer
+        self.dm.drones[idx].timer = time.time()
+
+    def time_to_target(self, idx):
+        self.dm.drones[idx].time_to_target += time.time() - self.dm.drones[idx].timer
+        self.dm.drones[idx].timer = time.time()
+
+    def time_at_target(self, idx):
+        self.dm.drones[idx].time_at_target += time.time() - self.dm.drones[idx].timer
+        self.dm.drones[idx].timer = time.time()
+    
+    def add_visited(self, idx, target_idx ):
+        self.dm.drones[idx].visited_targets_idx.append(target_idx)
+        self.dm.drones[idx].visited_targets_num += 1
+    
+    def atBaseTarget(self, idx):
+        if self.dm.drones[idx].start_title == 'target':
+            self.time_at_target(idx)
+        elif self.dm.drones[idx].start_title == 'base':
+            self.time_at_base(idx)
+    
+    def an_allocation(self, min_dist, drone_num , combination ,threshold=None):
+        if threshold:
+            self.threshold = threshold
+        self.allocation_history.append([min_dist, self.threshold, combination ,drone_num])
+        
+         
+    def analyse(self):
+        general_data = []
+        general_data.append(len(self.dm.drones))
+        total_task_time = time.time() - self.start_time
+        general_data.append(total_task_time)
+        general_data.append(self.allocation_history)
+        drone_data = []
+        for j in range(len(self.dm.drones)):
+            dr = [self.dm.drones[j].time_to_target, self.dm.drones[j].time_at_target, 
+            self.dm.drones[j].time_to_base, self.dm.drones[j].time_at_base,
+            self.dm.drones[j].visited_targets_idx, self.dm.drones[j].visited_targets_num]
+            drone_data.append(dr) 
+        np.save('task_'+ str(params.counter)+'_data', np.array([general_data, drone_data]))
+
+
 class get_figure(object):
     def __init__(self):
         self.targetpos = params.targetpos
@@ -206,7 +264,8 @@ class get_figure(object):
 
 
 class Logger(object):
-    def __init__(self, file_name):
+    def __init__(self):
+        file_name = 'task_'+ str(params.counter)+'_logger'
         logging.basicConfig(level=logging.DEBUG, filename=file_name, filemode='w',
                     format="%(asctime)s - %(levelname)s - %(message)s")
         
@@ -221,6 +280,8 @@ class Logger(object):
     def log(self, msg):
         self.logger.debug(msg)
         print(msg)
+
+
 
 
 def generate_fake_error_mapping(): 

@@ -7,7 +7,7 @@ from itertools import combinations
 import params
 
 class Optim(object):
-    def __init__(self, targets_num, targetpos, logger):
+    def __init__(self, targets_num, targetpos, logger, an):
         drone_num = params.drone_num
         self.k = params.k_init
         # calc distance matrix
@@ -28,6 +28,7 @@ class Optim(object):
         self.threshold_factor = params.threshold_factor
         self.safety_distance_allocation = params.safety_distance_allocation
         self.uri_state_mat = params.uri_state_mat
+        self.an = an
 
         # History
         self.history =[]
@@ -108,7 +109,6 @@ class Optim(object):
         drone_num_changed = 0
         while (self.min_dist_candidate < self.safety_distance_allocation or first_itr == 1) and (drone_num > 1):
             first_itr = 0
-            
             #get initial target by Kmeans
             self.kmeans = KMeans(n_clusters=drone_num).fit(targetpos[self.unvisited,:])
             self.centers = self.kmeans.cluster_centers_
@@ -128,15 +128,16 @@ class Optim(object):
 
             self.min_dist_candidate = min(self.initial_dist_vec)
             self.threshold_dist = self.threshold_factor * self.min_dist_candidate
-            self.logger.log(f'min_dist_org = {round(self.min_dist_candidate, 2)}')
-            self.logger.log(f'threshold dist = {round(self.threshold_dist, 2)}')
-
+            
             if (self.min_dist_candidate < self.safety_distance_allocation ) and (drone_num > 1) :
                 drone_num -= 1
                 drone_num_changed = 1
                 self.logger.log(f'drones number updated: {drone_num}' )
+        if drone_num > 1:
+            self.logger.log(f'min_dist_org = {round(self.min_dist_candidate, 2)}')
+            self.logger.log(f'threshold dist = {round(self.threshold_dist, 2)}')
+            self.an.an_allocation(self.min_dist_candidate, drone_num , combination=self.current_targets ,threshold=self.threshold_dist)
         return drone_num, drone_num_changed
-
 
     def get_knn_last_drone(self):
         temp_distance_matrix = self.distance_mat.copy()
@@ -148,21 +149,21 @@ class Optim(object):
 
 
 class Allocation:
-    def __init__(self, logger):
+    def __init__(self, logger, an):
         self.logger = logger
         self.drone_num = params.drone_num
         self.drone_num_changed = 0
         self.targetpos = params.targetpos
         self.targets_num = params.targets_num
         self.targetpos_reallocate = self.targetpos.copy()
-        self.optim = Optim(self.targets_num, self.targetpos, logger)
+        self.an = an
+        self.optim = Optim(self.targets_num, self.targetpos, self.logger, self.an)
         if self.drone_num > 1:
             self.state_mat = self.optim.get_state_matrix(self.drone_num, init_flag=True)
         self.drone_num, self.drone_num_changed = self.optim.update_kmeans_drone_num(self.drone_num, self.targetpos, self.targetpos_reallocate) # update drone_num for safety distance
         self.base = params.base
         if self.drone_num > 1:
             self.optimal_drone2target()
-
         
     def optimal_drone2target(self, dm=None):
         self.logger.log('calculate optimal drone2agent')
@@ -200,7 +201,8 @@ class Allocation:
                 self.optimal_drone2target(dm)   
         if self.drone_num == 1:
             self.optim.current_targets = np.zeros(1, dtype=int) 
-            self.optim.current_targets[0] = self.optim.get_knn_last_drone()   
+            self.optim.current_targets[0] = self.optim.get_knn_last_drone()  
+            self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist) 
 
     def allocate(self, allocate_to):
         if self.drone_num > 1:
@@ -221,6 +223,7 @@ class Allocation:
             # check if best solution satisfy threshold
             if self.optim.min_dist_candidate > self.optim.threshold_dist:
                 self.optim.current_targets = best_comb_candidate
+                self.an.an_allocation( self.optim.min_dist_candidate, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist)
             else:
                 return 'update_kmeans'
         
@@ -230,5 +233,7 @@ class Allocation:
         if (self.drone_num == 1) and (self.optim.unvisited_num > 0):
             # assign the nearest target as new target
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()
+            self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist)
+
 
 

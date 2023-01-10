@@ -8,7 +8,7 @@
 from planner_3D import Trajectory
 from Allocation_algorithm import Allocation
 import matplotlib.pyplot as plt
-from Additionals import get_figure , Drone_Manager, Logger
+from Additionals import get_figure , Drone_Manager, Logger, Analysis
 import numpy as np
 import params
 import time
@@ -28,18 +28,16 @@ elif params.mode == 'cf':
     from CF_Flight_Manager import Flight_manager
 
 def main():
-    logger = Logger('task_logger')
-    ta = Allocation(logger) # compute fisrt targets allocation in init
+    logger = Logger()
+    an = Analysis()
+    ta = Allocation(logger, an) # compute fisrt targets allocation in init
     fig = get_figure()
     dm = Drone_Manager(params.uri_list, params.base, params.magazine, ta)
     fc = Flight_manager(ta.drone_num)
     path_planner = Trajectory(dm.drones, logger)
     fc.take_off_swarm()
 
-    start_time = time.time()
-    for i in range(ta.drone_num):
-        dm.drones[i].timer = start_time
-
+    an.start(dm)
     allocation = None
     last_unvisited, last_targets = 0, 0 #used for logging
 
@@ -78,6 +76,7 @@ def main():
                             dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
                             if dm.drones[j].path_found:
                                 dm.drones[j].at_base = 0
+                                an.atBaseTarget(j)
                                 fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                                 logger.log(f'executing trajectory drone {j}')
                             else:
@@ -90,21 +89,24 @@ def main():
                                     logger.log(f'kmeans - drone {j} cant reach target, returning to base')
 
                         # arrived to target
-                        elif  (dm.drones[j].goal_title == 'target') and (dm.drones[j].is_reached_goal) :
+                        elif  (dm.drones[j].goal_title == 'target') and (dm.drones[j].is_reached_goal):
                             dm.kmean_arrived_target(j, fc, ta)
                             logger.log(f'drone {j} arrived to target')
+                            an.time_to_target(j)
                             
                         # find path to base 
                         elif (not (dm.drones[j].path_found)) and dm.drones[j].goal_title == 'base'  and (not (fc.open_threads[j].is_alive())) :
                             dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
                             if dm.drones[j].path_found:
                                 fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                                an.atBaseTarget(j)
                      
                         # arrived to base 
                         elif ((dm.drones[j].goal_title == 'base') and (dm.drones[j].is_reached_goal)):
                             dm.drones[j].at_base = 1
                             dm.drones[j].is_available = 1
                             logger.log(f'drone {j} arrived to base')
+                            an.time_to_base(j)
 
                 fig.plot1(path_planner, dm, ta)
                 fc.sleep()
@@ -151,6 +153,7 @@ def main():
                 if dm.drones[j].path_found:
                     dm.drones[j].at_base = 0
                     fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                    an.atBaseTarget(j)
                     logger.log(f'executing trajectory drone {j}')
                 else:
                     if not dm.drones[j].at_base:
@@ -164,8 +167,11 @@ def main():
                 if (dm.drones[j].is_reached_goal) and (dm.drones[j].path_found):
                     if dm.drones[j].goal_title == 'base':
                         dm.arrived_base(j, fc)
+                        an.time_to_base(j)
                         logger.log(f'drone {j} arrived to base')
                     elif dm.drones[j].goal_title == 'target':
+                        an.time_to_target(j)
+                        an.add_visited(j, ta.optim.current_targets[j])
                         dm.arrived_target(j, ta, fc)
                         logger.log(f'drone {j} arrived to target')
         
@@ -184,10 +190,11 @@ def main():
         all_at_base = dm.is_all_at_base(ta.drone_num)
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
-    logger.log(f'Task Done Successfully, Total time:{round(time.time() - start_time, 2)} [sec], exclude take off and landing')
+    logger.log(f'Task Done Successfully, Total time:{round(time.time() - an.start_time, 2)} [sec], exclude take off and landing')
+    an.analyse()
     fc.land('all', dm.drones)
     logger.log('landing all active drones')
-
+    
 
 if __name__ == '__main__':
     main()
