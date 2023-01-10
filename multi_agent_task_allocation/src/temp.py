@@ -1,21 +1,9 @@
 import numpy as np
 
 
-class A(object):
-    def __init__(self):
-        self.lst = 5
+dic2 = np.load('task_38_data.npy',allow_pickle=True)
+dic2 = dic2.item()
 
-
-class B(object):
-    def __init__(self, a):
-        self.a = a
-    def cng(self):
-        self.a.lst = 2
-
-a = A()
-print(a.lst)
-
-b = B(a)
-b.cng()
-print(a.lst)
+for dic in dic2:
+    print(dic)
 

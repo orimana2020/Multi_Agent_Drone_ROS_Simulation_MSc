@@ -90,8 +90,7 @@ class Drone_Manager(object):
         self.drones[j].goal_coords = self.drones[j].base
         self.drones[j].path_found = path_planner.plan(self.drones ,drone_idx=j, drone_num=ta.drone_num)
         if self.drones[j].path_found:
-            fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
-                
+            fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])        
     
     def is_all_at_base(self, drone_num):
         all_at_base = True
@@ -100,9 +99,6 @@ class Drone_Manager(object):
                 all_at_base = False
         return all_at_base
     
-    
-
-
 class Drone(object):
     def __init__(self, index, uri, base, full_magazine, ta):
         self.idx = index
@@ -130,7 +126,11 @@ class Drone(object):
 
 class Analysis(object):
     def __init__(self):
-        self.allocation_history = []
+        self.allocation_history = {}
+        self.allocation_history['min_dist'] = []
+        self.allocation_history['drone_num'] = []
+        self.allocation_history['threshold'] = []
+        self.allocation_history['combination'] = []
 
     def start(self,dm):
         self.dm = dm
@@ -164,25 +164,32 @@ class Analysis(object):
         elif self.dm.drones[idx].start_title == 'base':
             self.time_at_base(idx)
     
-    def an_allocation(self, min_dist, drone_num , combination ,threshold=None):
-        if threshold:
-            self.threshold = threshold
-        self.allocation_history.append([min_dist, self.threshold, combination ,drone_num])
+    def an_allocation(self, min_dist, drone_num , combination ,threshold):
+        self.allocation_history['min_dist'].append(min_dist)
+        self.allocation_history['drone_num'].append(drone_num)
+        self.allocation_history['threshold'].append(threshold)
+        self.allocation_history['combination'].append(combination)
         
          
     def analyse(self):
-        general_data = []
-        general_data.append(len(self.dm.drones))
-        total_task_time = time.time() - self.start_time
-        general_data.append(total_task_time)
-        general_data.append(self.allocation_history)
-        drone_data = []
+        
+        general_data = {}
+        general_data['initial_drone_num'] = (len(self.dm.drones))
+        general_data['total_task_time'] = time.time() - self.start_time
+        general_data['targets_position'] = params.targetpos
+        general_data['allocation_history'] = self.allocation_history
+        drone_data = {}
         for j in range(len(self.dm.drones)):
-            dr = [self.dm.drones[j].time_to_target, self.dm.drones[j].time_at_target, 
-            self.dm.drones[j].time_to_base, self.dm.drones[j].time_at_base,
-            self.dm.drones[j].visited_targets_idx, self.dm.drones[j].visited_targets_num]
-            drone_data.append(dr) 
-        np.save('task_'+ str(params.counter)+'_data', np.array([general_data, drone_data]))
+            name = 'drone_'+str(j)
+            drone_data[name] = {'time_to_target':self.dm.drones[j].time_to_target,
+            'time_at_target': self.dm.drones[j].time_at_target,
+            'time_to_base': self.dm.drones[j].time_to_base,
+            'time_at_base': self.dm.drones[j].time_at_base,
+            'visited_targets_idx': self.dm.drones[j].visited_targets_idx,
+            'visited_targets_num':self.dm.drones[j].visited_targets_num,
+            'full_magazine':self.dm.drones[j].full_magazine }
+        data = {'general_data':general_data, 'drone_data':drone_data}
+        np.save('task_'+ str(params.counter)+'_data', np.array(data))
 
 
 class get_figure(object):
@@ -284,36 +291,36 @@ class Logger(object):
 
 
 
-def generate_fake_error_mapping(): 
-    x_min,x_max,y_min,y_max,z_min,z_max = params.limits_idx
-    y_max = round(y_max - y_min) 
-    y_min = 0
-    res = params.resolution
-    worst_accuracy = 0.5 / res
-    best_accuracy = 0.05 / res
-    error_arr = np.zeros([z_max-z_min,y_max-y_min, x_max-x_min], dtype=int)
-    y_middle = round((y_min+y_max)/2)
-    for x in range(x_max):
-        for y in range(y_max):
-            for z in range(z_max):
-                dist_x = x
-                total_dist_score_x = (dist_x / x_max) 
-                total_dist_score_y = (np.exp(abs(y-y_middle)/y_middle) - 1) / (np.exp(1) - 1)
-                total_dist_score = (total_dist_score_x + total_dist_score_y) / 2
-                error_arr[z,y,x] = round(total_dist_score * (worst_accuracy - best_accuracy) + best_accuracy)
-    print(f'error arr shape: {error_arr.shape}')
-    return error_arr
+# def generate_fake_error_mapping(): 
+#     x_min,x_max,y_min,y_max,z_min,z_max = params.limits_idx
+#     y_max = round(y_max - y_min) 
+#     y_min = 0
+#     res = params.resolution
+#     worst_accuracy = 0.5 / res
+#     best_accuracy = 0.05 / res
+#     error_arr = np.zeros([z_max-z_min,y_max-y_min, x_max-x_min], dtype=int)
+#     y_middle = round((y_min+y_max)/2)
+#     for x in range(x_max):
+#         for y in range(y_max):
+#             for z in range(z_max):
+#                 dist_x = x
+#                 total_dist_score_x = (dist_x / x_max) 
+#                 total_dist_score_y = (np.exp(abs(y-y_middle)/y_middle) - 1) / (np.exp(1) - 1)
+#                 total_dist_score = (total_dist_score_x + total_dist_score_y) / 2
+#                 error_arr[z,y,x] = round(total_dist_score * (worst_accuracy - best_accuracy) + best_accuracy)
+#     print(f'error arr shape: {error_arr.shape}')
+#     return error_arr
 
-class Env(object):
-    def __init__(self, drone_performace, drone_num):
-        self.drone_num = drone_num
-        self.drone_peformace = np.zeros([self.drone_num, 100])
-        for i in range(self.drone_num):
-            self.drone_peformace[i,0:drone_performace[i]] = 1
-    def reached_goal(self, drone_idx, goal=None): 
-        if self.drone_peformace[drone_idx, random.randint(0,99)] == 1:
-            return 1
-        return 0
+# class Env(object):
+#     def __init__(self, drone_performace, drone_num):
+#         self.drone_num = drone_num
+#         self.drone_peformace = np.zeros([self.drone_num, 100])
+#         for i in range(self.drone_num):
+#             self.drone_peformace[i,0:drone_performace[i]] = 1
+#     def reached_goal(self, drone_idx, goal=None): 
+#         if self.drone_peformace[drone_idx, random.randint(0,99)] == 1:
+#             return 1
+#         return 0
 
 
     
