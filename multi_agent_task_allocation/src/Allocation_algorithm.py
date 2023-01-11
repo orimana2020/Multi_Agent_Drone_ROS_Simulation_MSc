@@ -140,7 +140,7 @@ class Optim(object):
         if drone_num > 1:
             self.logger.log(f'min_dist_org = {round(self.min_dist_candidate, 2)}')
             self.logger.log(f'threshold dist = {round(self.threshold_dist, 2)}')
-            self.an.an_allocation(self.min_dist_candidate, drone_num , combination=self.current_targets ,threshold=self.threshold_dist)
+            self.an.an_allocation(self.min_dist_candidate, drone_num , combination=self.current_targets ,threshold=self.threshold_dist,is_kmeans=1)
         return drone_num, drone_num_changed
 
     def get_knn_last_drone(self):
@@ -206,7 +206,7 @@ class Allocation:
         if self.drone_num == 1:
             self.optim.current_targets = np.zeros(1, dtype=int) 
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()  
-            self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist) 
+            self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist,0) 
 
     def allocate(self, allocate_to):
         if self.drone_num > 1:
@@ -227,7 +227,7 @@ class Allocation:
             # check if best solution satisfy threshold
             if self.optim.min_dist_candidate > self.optim.threshold_dist:
                 self.optim.current_targets = best_comb_candidate
-                self.an.an_allocation( self.optim.min_dist_candidate, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist)
+                self.an.an_allocation( self.optim.min_dist_candidate, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist,0)
             else:
                 return 'update_kmeans'
         
@@ -237,7 +237,7 @@ class Allocation:
         if (self.drone_num == 1) and (self.optim.unvisited_num > 0):
             # assign the nearest target as new target
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()
-            self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist)
+            self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist,0)
 
 
 

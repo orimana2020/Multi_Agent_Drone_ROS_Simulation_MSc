@@ -137,7 +137,7 @@ def main():
                             dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title)    
                         return2base = False
                         for j in range(current_drone_num-1, ta.drone_num-1,-1):
-                            if not dm.drones[j].is_reached_goal:
+                            if not dm.drones[j].at_base: #dm.drones[j].is_reached_goal:
                                 return2base = True
                         fc.sleep()
 

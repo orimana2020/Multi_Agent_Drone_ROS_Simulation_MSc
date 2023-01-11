@@ -51,10 +51,10 @@
           </mesh>
         </geometry>
         <material> <!-- Wheel material -->
-          <ambient>1 1 0.1 1</ambient>
-          <diffuse>0.1 0.1 0.2 1</diffuse>
+          <ambient>0.36 0.25 0.2 1</ambient>
+          <diffuse>0.36 0.25 0.2 1</diffuse>
           <specular>0 0 0 0</specular>
-          <emissive>0 0 0 1</emissive>
+          <emissive>0 0 0 0</emissive>
         </material> <!-- End wheel material -->
       </visual>
 

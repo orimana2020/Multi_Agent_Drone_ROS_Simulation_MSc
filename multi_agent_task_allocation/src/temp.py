@@ -1,9 +1,6 @@
 import numpy as np
 
-
-dic2 = np.load('task_38_data.npy',allow_pickle=True)
-dic2 = dic2.item()
-
-for dic in dic2:
-    print(dic)
-
+a = np.load('pear_fruitpos_close_1offset_2.3_-0.75_0.npy')
+b = np.load('pear_fruitpos_close_2offset_2.3_-0.75_0.npy')
+c = np.vstack((a,b))
+np.save('experiment_1_targets', c)
