@@ -67,7 +67,6 @@ def plot_sampled_data(error_arr, threshold, title, pos_vicon_arr, nodes):
     ax.set_zlabel('z')
     ax.set_title(title+' - Sampeled Data')
 
-
 def interpolate_3d(limits, resolution, pos_vicon_arr, error_arr):
     grid_x, grid_y, grid_z = np.mgrid[limits[0][0]:limits[0][1]:resolution, limits[1][0]:limits[1][1]:resolution, limits[2][0]:limits[2][1]:resolution ]
     interpolated_error = griddata(pos_vicon_arr, error_arr, (grid_x, grid_y, grid_z ), method='linear')
@@ -81,7 +80,6 @@ def interpolate_3d(limits, resolution, pos_vicon_arr, error_arr):
         merged[i] = interp_f[i] if not np.isnan(interp_f[i]) else extep_f[i]
     merged = merged.reshape(interpolated_error.shape)
     return grid_x, grid_y, grid_z, interpolated_error ,exterpolated_error, merged  
-
 
 def plot_interpolate(interpolated_error, threshold, grid_x, grid_y, grid_z, nodes,title):
     factor = interpolated_error  #/ threshold 
@@ -227,7 +225,7 @@ plot_hovering(hovering_dir, is_deck=True, exp_num=1, cutoff_start=0.3,cutoff_end
 
 # save error array to load to simulation
 save = False
-plotting = False
+plotting = True
 
 # print(np.int8(np.ceil(merged_1/0.05)))
 # print(np.max(np.int8(np.ceil(merged_1/0.05))))

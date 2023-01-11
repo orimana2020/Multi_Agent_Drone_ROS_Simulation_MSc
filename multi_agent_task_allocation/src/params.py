@@ -78,7 +78,7 @@ segments_num = 8 # max = 30
 points_in_smooth_params = segments_num + 1
 LPS_positioning_error_m = np.load(str(os.getcwd())+ uri_state_mat + '/positioning_error_arr/error_arr_box_config.npy')
 LPS_n_safety_vol = np.int8(np.ceil(LPS_positioning_error_m / resolution)) + np.int8(drone_size_m / resolution)
-SIMULATE_LPS_ERROR = False
+SIMULATE_LPS_ERROR = True
 
 
 if mode == 'sim':

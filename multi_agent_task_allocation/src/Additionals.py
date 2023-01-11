@@ -10,12 +10,13 @@ import time
 class Drone_Manager(object):
     def __init__(self, uris, base, full_magazine, ta):
         self.drones = []
+        self.simulate_lps_error = params.SIMULATE_LPS_ERROR
         for i in range(ta.drone_num):
             self.drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i], ta=ta))
     
     def arrived_base(self,j, fc):
         self.drones[j].start_title = 'base'
-        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].start_coords = tuple(fc.get_position(j)) if not self.simulate_lps_error else self.drones[j].base
         self.drones[j].goal_title = 'target'
         self.drones[j].goal_coords = None
         self.drones[j].current_magazine = self.drones[j].full_magazine
@@ -26,7 +27,7 @@ class Drone_Manager(object):
 
     def arrived_target(self, j, ta, fc):
         self.drones[j].start_title = 'target'
-        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].start_coords = tuple(fc.get_position(j)) if not self.simulate_lps_error else tuple(ta.targetpos[ta.optim.current_targets[j],:])
         self.drones[j].current_magazine -= 1
         self.drones[j].path_found = 0
         self.drones[j].is_reached_goal = 0
@@ -53,7 +54,7 @@ class Drone_Manager(object):
         ta.optim.update_distance_mat(ta.optim.current_targets[j])
         self.drones[j].path_found = 0
         self.drones[j].start_title = 'target' 
-        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].start_coords = tuple(fc.get_position(j)) if not self.simulate_lps_error else tuple(ta.targetpos[ta.optim.current_targets[j],:])
         self.drones[j].is_reached_goal = 0 
         self.drones[j].current_magazine -= 1
         self.drones[j].at_base = 0 
@@ -70,7 +71,7 @@ class Drone_Manager(object):
     def kmeans_permit(self, j, fc):
         if self.drones[j].at_base:
             self.drones[j].start_title = 'base'
-            self.drones[j].start_coords = tuple(fc.get_position(j))
+            self.drones[j].start_coords = tuple(fc.get_position(j)) if not self.simulate_lps_error else self.drones[j].base
             self.drones[j].current_magazine = self.drones[j].full_magazine
             self.drones[j].goal_title = 'target'
             self.drones[j].is_reached_goal = 0
@@ -85,7 +86,7 @@ class Drone_Manager(object):
         return k_means_permit
 
     def return_base(self, j, path_planner, fc, ta):
-        self.drones[j].start_coords = tuple(fc.get_position(j))
+        self.drones[j].start_coords = tuple(fc.get_position(j)) if not self.simulate_lps_error else tuple(ta.targetpos[self.drones[j].visited_targets_idx[-1],:])
         self.drones[j].goal_title = 'base'
         self.drones[j].goal_coords = self.drones[j].base
         self.drones[j].path_found = path_planner.plan(self.drones ,drone_idx=j, drone_num=ta.drone_num)

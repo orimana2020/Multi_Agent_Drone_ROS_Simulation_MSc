@@ -93,6 +93,7 @@ def main():
                             dm.kmean_arrived_target(j, fc, ta)
                             logger.log(f'drone {j} arrived to target')
                             an.time_to_target(j)
+                            an.add_visited(j, ta.optim.current_targets[j])
                             
                         # find path to base 
                         elif (not (dm.drones[j].path_found)) and dm.drones[j].goal_title == 'base'  and (not (fc.open_threads[j].is_alive())) :

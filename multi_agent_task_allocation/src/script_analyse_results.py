@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-task_num = 53
+task_num = 56
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- LOAD DATA -----------------
