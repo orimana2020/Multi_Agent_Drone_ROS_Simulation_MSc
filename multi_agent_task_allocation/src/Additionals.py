@@ -183,6 +183,7 @@ class Analysis(object):
         general_data['targets_position'] = params.targetpos
         general_data['mode'] = params.mode
         general_data['allocation_history'] = self.allocation_history
+        general_data['safety_distance_allocation'] = params.safety_distance_allocation
         drone_data = {}
         for j in range(len(self.dm.drones)):
             name = 'drone_'+str(j)

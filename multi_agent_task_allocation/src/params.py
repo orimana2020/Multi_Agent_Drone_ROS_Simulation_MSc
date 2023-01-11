@@ -44,10 +44,9 @@ if mode == 'sim':
     drone_num = 3
     magazine = [5,5,5,3,3,3,3,3,3][:drone_num]
     linear_velocity = 1
-    # base = [ (1.5,-0.7,1), (1.5,0,1), (1.5,0.7,1),(-1,0.2,1), (-1,0.2,1)][:drone_num] # (x,y,z) -> same coords definds in launch file
     base = [(0.3,-0.7,1), (0.3,0,1), (0.3,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
-    drone_size_m = 0.25 # [m]
+    drone_size_m = 0.2 # [m]
 
 
 # ------------------ Allocation --------------------#
@@ -78,8 +77,7 @@ segments_num = 8 # max = 30
 points_in_smooth_params = segments_num + 1
 LPS_positioning_error_m = np.load(str(os.getcwd())+ uri_state_mat + '/positioning_error_arr/error_arr_box_config.npy')
 LPS_n_safety_vol = np.int8(np.ceil(LPS_positioning_error_m / resolution)) + np.int8(drone_size_m / resolution)
-SIMULATE_LPS_ERROR = True
-
+SIMULATE_LPS_ERROR = False
 
 if mode == 'sim':
     dist_to_target = 0.05

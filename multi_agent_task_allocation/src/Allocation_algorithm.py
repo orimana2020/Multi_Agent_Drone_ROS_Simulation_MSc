@@ -127,8 +127,12 @@ class Optim(object):
                 self.initial_dist_vec[k] = self.distance_mat[self.current_targets[i], self.current_targets[j]]  
 
             self.min_dist_candidate = min(self.initial_dist_vec)
-            self.threshold_dist = self.threshold_factor * self.min_dist_candidate
-            
+            new_thershold_candidate = self.threshold_factor * self.min_dist_candidate 
+            if new_thershold_candidate > self.safety_distance_allocation:
+                self.threshold_dist = new_thershold_candidate
+            else:
+                self.threshold_dist = self.safety_distance_allocation          
+                  
             if (self.min_dist_candidate < self.safety_distance_allocation ) and (drone_num > 1) :
                 drone_num -= 1
                 drone_num_changed = 1

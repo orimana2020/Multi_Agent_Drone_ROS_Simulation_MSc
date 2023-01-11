@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-task_num = 56
+task_num = 1
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- LOAD DATA -----------------
@@ -16,6 +16,7 @@ min_dist = allocation_history['min_dist']
 threshold = allocation_history['threshold']
 combination = allocation_history['combination']
 drone_num = allocation_history['drone_num']
+safety_distance_allocation = general_data['safety_distance_allocation']
 idx = np.array(range(0,len(min_dist)))
 # #check drone changed idx
 current_drone_num = general_data['initial_drone_num']
@@ -32,8 +33,9 @@ drone_change_idx = [x-0.5 for x in drone_change_idx]
 fig1 = plt.figure()
 ax1 = fig1.add_subplot('111')
 ax1.scatter(idx, min_dist,c='blue', label='min_dist')
-ax1.scatter(idx, threshold, c='red', label='Threshold')
+ax1.scatter(idx, threshold, c='green', label='Threshold')
 ax1.vlines(x=drone_change_idx, ymin=0, ymax=max(min_dist), colors='purple', ls='--', lw=2, label='Drone Num changed')
+ax1.hlines(y=safety_distance_allocation, xmin=0, xmax=max(idx), colors='red',ls='--', lw=2, label='safety distance')
 ax1.set_xlabel("Iteration")
 ax1.set_ylabel("Distance [m]")
 ax1.set_title('Allocation Performance')

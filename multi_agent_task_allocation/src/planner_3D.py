@@ -39,16 +39,15 @@ class Trajectory(object):
         self.mean_x_targets_position = params.mean_x_targets_position
         self.smooth_points_num = params.points_in_smooth_params
         # self.error_arr = Additionals.generate_fake_error_mapping()
-        self.error_arr = params.LPS_n_safety_vol #[x,y,z], resolution =0.05
-        self.error_arr_max = np.max(self.error_arr)
-        self.dw_dist_idx = np.int8(np.round(params.downwash_distance / self.res))
+        self.error_arr = params.LPS_n_safety_vol #[x,y,z], resolution =0.05 # for inflate
+        self.error_arr_max = np.max(self.error_arr) # for inflate
+        self.dw_dist_idx = np.int8(np.round(params.downwash_distance / self.res)) 
         self.downwash_aware = params.DOWNWASH_AWARE
-        self.simulate_lps_error = params.SIMULATE_LPS_ERROR
-        self.LPS_pos_error = params.LPS_positioning_error_m
-        self.max_LPS_pos_error = np.max(self.LPS_pos_error)
+        self.simulate_lps_error = params.SIMULATE_LPS_ERROR # add error to path planning 
+        self.LPS_pos_error = params.LPS_positioning_error_m # add error to path planning 
+        self.max_LPS_pos_error = np.max(self.LPS_pos_error) # add error to path planning 
         # self.targetpos_max_x_diff = params.targetpos_max_x_diff
-        # generate floor block volume to visualize
-        floor = []
+        floor = []  # generate floor block volume to visualize
         z_floor, y_floor, x_floor = self.grid_3d_initial[:minimum_floor_idx].shape
         for z in range(z_floor):
             for y in range(y_floor):
