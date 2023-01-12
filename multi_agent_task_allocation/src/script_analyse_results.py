@@ -1,12 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-task_num = 4
+
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- LOAD DATA -----------------
-
-data = np.load("task_"+str(task_num)+"_data.npy", allow_pickle=True)
+k_init = 2
+threshold_factor = 0.9
+data = np.load('task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_1'+"_data.npy", allow_pickle=True)
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
 
@@ -29,14 +30,15 @@ for i, drone in enumerate(drone_num):
 drone_change_idx = [x-0.5 for x in drone_change_idx]
 # check kmeans
 kmeans_idx = [idx-0.5 for idx in range(len(kmeans)) if kmeans[idx]==1] 
-print(kmeans_idx)
+
 # # ------------- plotting ------------------
-# # Allocation
+# Allocation
 fig1 = plt.figure()
+fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
 ax1 = fig1.add_subplot('111')
-ax1.scatter(idx, min_dist,c='blue', label='min_dist')
-ax1.scatter(idx, threshold, c='green', label='Threshold')
-ax1.vlines(x=drone_change_idx, ymin=0, ymax=max(min_dist), colors='purple', ls='--', lw=2, label='Drone Num changed')
+ax1.scatter(idx, min_dist,c='blue', label='min_dist',s=2)
+ax1.scatter(idx, threshold, c='green', label='Threshold',s=2)
+ax1.vlines(x=drone_change_idx, ymin=0, ymax=max(min_dist), colors='purple', ls='--', lw=1, label='Drone Num changed')
 ax1.vlines(x=kmeans_idx, ymin=0, ymax=max(min_dist), colors='yellow', ls='--', lw=0.5, label='KMEANS')
 ax1.hlines(y=safety_distance_allocation, xmin=0, xmax=max(idx), colors='red',ls='--', lw=2, label='safety distance')
 ax1.set_xlabel("Iteration")

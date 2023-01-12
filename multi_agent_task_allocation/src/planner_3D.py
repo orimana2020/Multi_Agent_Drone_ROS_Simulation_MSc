@@ -280,7 +280,7 @@ class Trajectory(object):
                         for y in range(goal_y - self.dw_dist_idx[1][0], goal_y + self.dw_dist_idx[1][0] + 1):
                             if 0 <= y < self.grid_3d_shape[1]:
                                 # for x in range(goal_x - self.dw_dist_idx[0][0], goal_x + self.dw_dist_idx[0][1] + 1):
-                                for x in range(min(goal_x, self.dw_dist_idx[0][0]), max(goal_x, self.dw_dist_idx[0][1] + 1)):
+                                for x in range(self.dw_dist_idx[0][0],  self.dw_dist_idx[0][1] + 1):
                                     if 0 <= x < self.grid_3d_shape[2]:
                                         block_volume.append((z,y,x))
         return np.array(block_volume)
@@ -293,7 +293,7 @@ class Trajectory(object):
         return np.stack(((coords_idx[:,2]) * self.res, (coords_idx[:,1] - (-self.y_offset)) * self.res, coords_idx[:,0] * self.res), axis=-1)        
 
 
-    def get_path(self, start_m, goal_m, is_forward):
+    def get_path(self, start_m, goal_m, start_accurate_m, is_forward):
         """
         find path index, convert to [m], replace start and end to accurate values
         """
@@ -336,8 +336,8 @@ class Trajectory(object):
             segment2_m = self.convert_idx2meter(path2)
             segment3_m = self.convert_idx2meter(path3)
             # --------- replace to accurate position of start and goal
-            segment1_m[0,0] = start_m[0] 
-            segment1_m[:,1] ,segment1_m[:,2] =  start_m[1], start_m[2] #start y,z values
+            segment1_m[0,0] = start_accurate_m[0] 
+            segment1_m[:,1] ,segment1_m[:,2] =  start_accurate_m[1], start_accurate_m[2] #start y,z values
             segment3_m[:,1], segment3_m[:,2] = goal_m[1], goal_m[2] # goal y,z values
             segment3_m[-1,0] = goal_m[0]
             return segment1_m, segment2_m, segment3_m, path
@@ -349,6 +349,7 @@ class Trajectory(object):
     def plan(self, drones ,drone_idx, drone_num):
         self.logger.log(f'start path planning for drone {drone_idx}')
         start_m = drones[drone_idx].start_coords
+        start_accurate_m = drones[drone_idx].accurate_coords
         goal_m = drones[drone_idx].goal_coords
         start_title = drones[drone_idx].start_title
         goal_title = drones[drone_idx].goal_title
@@ -363,9 +364,9 @@ class Trajectory(object):
         if (start_title == 'base' and goal_title == 'target') or (start_title == 'target' and goal_title == 'base'):
             try:
                 if (start_title == 'base' and goal_title == 'target'):
-                    segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, goal_m, is_forward=True)
+                    segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, goal_m, start_accurate_m ,is_forward=True)
                 elif (start_title == 'target' and goal_title == 'base'):
-                    segment1_m, segment2_m, segment3_m, path = self.get_path(goal_m, start_m, is_forward=False)
+                    segment1_m, segment2_m, segment3_m, path = self.get_path(goal_m, start_m,start_accurate_m ,is_forward=False)
                 self.block_volume[drone_idx] = self.inflate(path, goal_title)
                 self.paths_m[drone_idx] = np.vstack((segment1_m, segment2_m, segment3_m))
                 self.smooth_path_m[drone_idx] = self.get_smooth_path(path=self.paths_m[drone_idx],len1=len(segment1_m),len3=len(segment3_m))  
@@ -382,13 +383,13 @@ class Trajectory(object):
         elif (start_title == 'target' and goal_title == 'target'):
             intermidiate_m = (min(start_m[0], goal_m[0]) - self.retreat_dist, (start_m[1]+goal_m[1])/2, (start_m[2]+goal_m[2])/2)
             try:
-                segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m, is_forward=False)
+                segment1_m, segment2_m, segment3_m, path = self.get_path(start_m, intermidiate_m, start_accurate_m ,is_forward=False)
                 block_volume1 = self.inflate(path, goal_title=None) #because we don't want to add inflation at intermidiate point
                 path1_m = np.vstack((segment1_m, segment2_m, segment3_m))
                 smooth_path_m1 = self.get_smooth_path(path=path1_m, len1=len(segment1_m), len3=len(segment3_m))
                 block_volume1_m = self.convert_idx2meter(block_volume1)
                     
-                segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m, is_forward=True)
+                segment1_m, segment2_m, segment3_m, path = self.get_path(intermidiate_m, goal_m, intermidiate_m,is_forward=True)
                 block_volume2 = self.inflate(path, goal_title)
                 path2_m = np.vstack((segment1_m, segment2_m, segment3_m))
                 smooth_path_m2 = self.get_smooth_path(path=path2_m, len1=len(segment1_m), len3=len(segment3_m))

@@ -36,7 +36,8 @@ def main():
     fc = Flight_manager(ta.drone_num)
     path_planner = Trajectory(dm.drones, logger)
     fc.take_off_swarm()
-
+    dm.update_current_coords(fc)
+    
     an.start(dm)
     allocation = None
     last_unvisited, last_targets = 0, 0 #used for logging
