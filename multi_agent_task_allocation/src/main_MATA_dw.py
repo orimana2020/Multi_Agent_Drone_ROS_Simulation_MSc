@@ -14,18 +14,7 @@ import params
 import time
 plt.ion()
 
-if not params.DOWNWASH_AWARE:
-    raise Exception("DOWNWASH AWARE MUST BE TRUE IN PARAMS")
-if params.mode == 'cf' and params.SIMULATE_LPS_ERROR:
-    raise Exception("SIMULATE_LPS_ERROR VALID IN SIMULATION ONLY")
 
-if params.mode == 'sim':
-    from rotors_flight_manager import Flight_manager
-    import rospy
-    rospy.init_node('send_my_command', anonymous=True)
-    rospy.sleep(3)
-elif params.mode == 'cf':
-    from CF_Flight_Manager import Flight_manager
 
 def main():
     logger = Logger()
@@ -199,7 +188,18 @@ def main():
     
 
 if __name__ == '__main__':
+
+    if not params.DOWNWASH_AWARE:
+        raise Exception("DOWNWASH AWARE MUST BE TRUE IN PARAMS")
+    if params.mode == 'cf' and params.SIMULATE_LPS_ERROR:
+        raise Exception("SIMULATE_LPS_ERROR VALID IN SIMULATION ONLY")
+
+    if params.mode == 'sim':
+        from rotors_flight_manager import Flight_manager
+        import rospy
+        rospy.init_node('send_my_command', anonymous=True)
+        rospy.sleep(3)
+    elif params.mode == 'cf':
+        from CF_Flight_Manager import Flight_manager
+
     main()
-    
-
-

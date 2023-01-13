@@ -50,8 +50,8 @@ if mode == 'sim':
 
 
 # ------------------ Allocation --------------------#
-k_init = 4
-threshold_factor = 0.9
+k_init = 9
+threshold_factor = 0.
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
 if mode == 'sim':
