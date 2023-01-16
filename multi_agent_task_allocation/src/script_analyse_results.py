@@ -7,8 +7,8 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- LOAD DATA -----------------
-k_init = 5
-threshold_factor = 0.8
+k_init = 3
+threshold_factor = 0.6
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/'
 url=''
 data = np.load(url + 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_2'+"_data.npy", allow_pickle=True)

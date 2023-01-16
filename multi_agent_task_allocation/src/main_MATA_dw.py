@@ -14,8 +14,6 @@ import params
 import time
 plt.ion()
 
-
-
 def main():
     logger = Logger()
     an = Analysis()
@@ -50,27 +48,34 @@ def main():
             last_targets = ta.optim.current_targets
             logger.log(f'current targets: {ta.optim.current_targets}')
         # --------------------------- REMOVE DRONES ------------------------- #  
-        while allocation == 'remove_drone':    
-            #land inactive drones
+        if allocation == 'remove_drone':    
             logger.log('returning to base inactive drones')
-            return2base = True
-            while return2base:
-                for j in range(ta.drone_num-1, ta.drone_num-2, -1):
-                    if not (dm.drones[j].at_base) and not (dm.drones[j].path_found) and (not (fc.open_threads[j].is_alive())):
-                        dm.return_base(j, path_planner, fc, ta)
-                    elif (dm.drones[j].is_reached_goal):
-                        dm.drones[j].at_base = 1
-                    dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title)    
-                return2base = False
-                for j in range(ta.drone_num-2, ta.drone_num-1,-1):
-                    if not dm.drones[j].at_base: #dm.drones[j].is_reached_goal:
-                        return2base = True
+            drone_idx = ta.drone_num -1
+            while not (dm.drones[drone_idx].at_base) and (ta.optim.unvisited[ta.optim.current_targets[drone_idx]]) and (dm.drones[drone_idx].path_found):
+                dm.drones[drone_idx].is_reached_goal = fc.reached_goal(drone_idx=drone_idx, goal=dm.drones[drone_idx].goal_coords, title=dm.drones[drone_idx].goal_title)    
+                if dm.drones[drone_idx].is_reached_goal and dm.drones[drone_idx].goal_title == 'target':
+                    dm.kmean_arrived_target(drone_idx, fc, ta)
+                    logger.log(f'drone {drone_idx} arrived to target')
+                    an.time_to_target(drone_idx)
+                    an.add_visited(drone_idx, ta.optim.current_targets[drone_idx])
+                elif dm.drones[drone_idx].is_reached_goal and dm.drones[drone_idx].goal_title == 'base':
+                    dm.drones[drone_idx].at_base = 1
+                    logger.log(f'drone {j} arrived to base')
+                    an.time_to_base(drone_idx)
                 fc.sleep()
+
+            while not (dm.drones[drone_idx].at_base):
+                if not (dm.drones[drone_idx].path_found) and (not (fc.open_threads[drone_idx].is_alive())):
+                    dm.return_base(drone_idx, path_planner, fc, ta)
+                elif (dm.drones[drone_idx].is_reached_goal):
+                    dm.drones[drone_idx].at_base = 1
+                dm.drones[drone_idx].is_reached_goal = fc.reached_goal(drone_idx=drone_idx, goal=dm.drones[drone_idx].goal_coords, title=dm.drones[drone_idx].goal_title)    
+                fc.sleep()
+
             allocation = 'update_kmeans'
-            for j in range(ta.drone_num-1, ta.drone_num-2, -1):
-                fc.land(drone_idx=j)
-                dm.drones[j].is_active = False
-                logger.log(f'drone {j} is landing')
+            fc.land(drone_idx=drone_idx)
+            dm.drones[drone_idx].is_active = False
+            logger.log(f'drone {drone_idx} is landing')
             ta.drone_num -= 1
         # --------------------------- UPDATE KMEANS ------------------------- #  
         while allocation == 'update_kmeans':
@@ -188,7 +193,6 @@ def main():
     
 
 if __name__ == '__main__':
-
     if not params.DOWNWASH_AWARE:
         raise Exception("DOWNWASH AWARE MUST BE TRUE IN PARAMS")
     if params.mode == 'cf' and params.SIMULATE_LPS_ERROR:
@@ -201,5 +205,4 @@ if __name__ == '__main__':
         rospy.sleep(3)
     elif params.mode == 'cf':
         from CF_Flight_Manager import Flight_manager
-
     main()

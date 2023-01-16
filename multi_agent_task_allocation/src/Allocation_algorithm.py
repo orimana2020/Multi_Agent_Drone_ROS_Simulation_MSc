@@ -19,27 +19,9 @@ class Optim(object):
                 self.distance_mat[i,j] = np.linalg.norm(tar1 - tar2, ord=2)
                 if i == j:
                     self.distance_mat[i,j] = np.Inf
-        self.distance_mat_y = np.zeros([targets_num, targets_num])
-        for i in range(targets_num):
-            tar1 = targetpos[i,1] # ------------- add dist_mat y
-            for j in range(targets_num):
-                tar2 = targetpos[j,1] # ------------- add dist_mat y
-                self.distance_mat_y[i,j] = abs(tar1 - tar2 )
-                if i == j:
-                    self.distance_mat_y[i,j] = np.Inf
-        self.distance_mat_z = np.zeros([targets_num, targets_num])
-        for i in range(targets_num):
-            tar1 = targetpos[i,2] # ------------- add dist_mat z
-            for j in range(targets_num):
-                tar2 = targetpos[j,2] # ------------- add dist_mat z
-                self.distance_mat_z[i,j] = abs(tar1 - tar2 )
-                if i == j:
-                    self.distance_mat_z[i,j] = np.Inf
         self.targetpos = targetpos
         self.logger = logger
         self.distance_mat_nochange = self.distance_mat.copy()
-        self.distance_mat_nochange_y = self.distance_mat_y.copy()
-        self.distance_mat_nochange_z = self.distance_mat_z.copy()
         self.unvisited_num = targets_num
         self.current_targets = np.zeros(drone_num, dtype=int)
         self.unvisited = np.ones(targets_num, dtype=bool)
