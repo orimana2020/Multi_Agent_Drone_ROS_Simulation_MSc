@@ -50,8 +50,8 @@ if mode == 'sim':
 
 
 # ------------------ Allocation --------------------#
-k_init = 9
-threshold_factor = 0.
+k_init = 5
+threshold_factor = 0.8
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
 if mode == 'sim':
@@ -60,8 +60,6 @@ elif mode == 'cf':
     uri_state_mat = uri_targetpos_cf
 
 # -------------------   safety
-safety_distance_trajectory = 0.4 # update error map experiment
-safety_distance_allocation = safety_distance_trajectory * 1.2 # update error map experiment
 DOWNWASH_AWARE = True
 floor_safety_distance = 0.3 
 min_battery_voltage = 3.2 
@@ -112,7 +110,8 @@ span, limits, limits_idx = get_span(targetpos, base, resolution)
 
 
 # --------------------- Safety 2
-downwash_distance = np.array([[min(targetpos[:,0]), max(targetpos[:,0])], [0.25,0.25], [1.5,1.5]]) # [m] , also distance to avoid flowdeck disturbance
+downwash_distance = np.array([[min(targetpos[:,0]), max(targetpos[:,0])], [0.35,0.35], [1.2,1.2]]) # [m] , also distance to avoid flowdeck disturbance
+
 
 # --------------------- General
 sleep_time = 0.05
@@ -129,7 +128,7 @@ elvazim = [37, 175]
 
 # --------------- Analysis -------------
 # counter = np.load("counter_analysis.npy")
-file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_1'
+file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_2'
 print(file_name)
 # np.save("counter_analysis", np.array(counter+1))
 # print(f'Task num: {counter}')

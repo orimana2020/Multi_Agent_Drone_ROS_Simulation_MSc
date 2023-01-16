@@ -193,7 +193,6 @@ class Analysis(object):
         general_data['targets_position'] = params.targetpos
         general_data['mode'] = params.mode
         general_data['allocation_history'] = self.allocation_history
-        general_data['safety_distance_allocation'] = params.safety_distance_allocation
         general_data['downwash_size'] = params.downwash_distance
         general_data['k_init'] = params.k_init
         general_data['threshold_factor'] = params.threshold_factor

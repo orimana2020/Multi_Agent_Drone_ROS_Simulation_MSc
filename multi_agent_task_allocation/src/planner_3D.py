@@ -5,8 +5,6 @@ from scipy import interpolate
 import params
 import Additionals
 
-
-
 class Trajectory(object):
     def __init__(self, drones, logger):
         self.drone_num = len(drones)
@@ -28,7 +26,7 @@ class Trajectory(object):
         self.x_lim = x_lim -1
         self.y_lim = y_lim -1
         self.z_lim = z_lim -1 
-        self.safety_distance = params.safety_distance_trajectory
+        # self.safety_distance = params.safety_distance_trajectory
         self.block_volume = [[]] * self.drone_num
         self.block_volumes_m = [[]] * self.drone_num # used for visualization only
         self.paths_m = [[]] * self.drone_num # used for visualization only
@@ -66,6 +64,9 @@ class Trajectory(object):
             path.append(mean_intermidiate)
             self.constant_blocking_area[j] = self.inflate(path, goal_title=None)
             self.constant_blocking_area_m[j] = self.convert_idx2meter(self.constant_blocking_area[j])
+        self.downwash_distance =params.downwash_distance
+        self.a0 = -(self.downwash_distance[2][0] / self.downwash_distance[1][0]) 
+        self.b0 = (self.downwash_distance[2][0] ) / self.res
 
         
     def get_neighbors(self, current):
@@ -279,10 +280,14 @@ class Trajectory(object):
                     if 0 <= z < self.grid_3d_shape[0]:
                         for y in range(goal_y - self.dw_dist_idx[1][0], goal_y + self.dw_dist_idx[1][0] + 1):
                             if 0 <= y < self.grid_3d_shape[1]:
-                                # for x in range(goal_x - self.dw_dist_idx[0][0], goal_x + self.dw_dist_idx[0][1] + 1):
-                                for x in range(self.dw_dist_idx[0][0],  self.dw_dist_idx[0][1] + 1):
-                                    if 0 <= x < self.grid_3d_shape[2]:
-                                        block_volume.append((z,y,x))
+                                dz = abs(z - goal_z)
+                                dy = abs(y - goal_y)
+                                z_ = self.a0*dy + self.b0
+                                if dz <= z_: # inside triangle volume
+                                    # for x in range(goal_x - self.dw_dist_idx[0][0], goal_x + self.dw_dist_idx[0][1] + 1):
+                                    for x in range(self.dw_dist_idx[0][0],  self.dw_dist_idx[0][1] + 1):
+                                        if 0 <= x < self.grid_3d_shape[2]:
+                                            block_volume.append((z,y,x))
         return np.array(block_volume)
 
 

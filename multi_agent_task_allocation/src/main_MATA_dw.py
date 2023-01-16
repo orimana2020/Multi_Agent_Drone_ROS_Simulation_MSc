@@ -26,7 +26,6 @@ def main():
     path_planner = Trajectory(dm.drones, logger)
     fc.take_off_swarm()
     dm.update_current_coords(fc)
-    
     an.start(dm)
     allocation = None
     last_unvisited, last_targets = 0, 0 #used for logging
@@ -50,6 +49,29 @@ def main():
         if not np.array_equal(last_targets, ta.optim.current_targets):
             last_targets = ta.optim.current_targets
             logger.log(f'current targets: {ta.optim.current_targets}')
+        # --------------------------- remove drones ------------------------- #  
+        while allocation == 'remove_drone':    
+            #land inactive drones
+            logger.log('returning to base inactive drones')
+            return2base = True
+            while return2base:
+                for j in range(ta.drone_num-1, ta.drone_num-2, -1):
+                    if not (dm.drones[j].at_base) and not (dm.drones[j].path_found) and (not (fc.open_threads[j].is_alive())):
+                        dm.return_base(j, path_planner, fc, ta)
+                    elif (dm.drones[j].is_reached_goal):
+                        dm.drones[j].at_base = 1
+                    dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title)    
+                return2base = False
+                for j in range(ta.drone_num-2, ta.drone_num-1,-1):
+                    if not dm.drones[j].at_base: #dm.drones[j].is_reached_goal:
+                        return2base = True
+                fc.sleep()
+            allocation = 'update_kmeans'
+            for j in range(ta.drone_num-1, ta.drone_num-2, -1):
+                fc.land(drone_idx=j)
+                dm.drones[j].is_active = False
+                logger.log(f'drone {j} is landing')
+            ta.drone_num -= 1
         # --------------------------- UPDATE KMEANS ------------------------- #  
         while allocation == 'update_kmeans':
             k_means_permit = False
@@ -105,7 +127,6 @@ def main():
             if k_means_permit :
                 for j in range(ta.drone_num):
                    dm.kmeans_permit(j, fc)
-                current_drone_num = ta.drone_num
                 ta.update_kmeans(dm)
                 for j in range(ta.drone_num):
                     dm.drones[j].goal_coords = tuple(ta.targetpos[ta.optim.current_targets[j],:])
@@ -114,28 +135,7 @@ def main():
                 logger.log(f'current targets: {ta.optim.current_targets}')
                 allocation = None 
 
-                #land inactive drones
-                if current_drone_num > ta.drone_num: 
-                    logger.log('returning to base inactive drones')
-                    return2base = True
-                    while return2base:
-                        for j in range(current_drone_num-1, ta.drone_num-1,-1):
-                            if not (dm.drones[j].at_base) and not (dm.drones[j].path_found) and (not (fc.open_threads[j].is_alive())):
-                                dm.return_base(j, path_planner, fc, ta)
-                            elif (dm.drones[j].is_reached_goal):
-                                dm.drones[j].at_base = 1
-                            dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title)    
-                        return2base = False
-                        for j in range(current_drone_num-1, ta.drone_num-1,-1):
-                            if not dm.drones[j].at_base: #dm.drones[j].is_reached_goal:
-                                return2base = True
-                        fc.sleep()
 
-                    for j in range(current_drone_num-1, ta.drone_num-1, -1):
-                        fc.land(drone_idx=j)
-                        dm.drones[j].is_active = False
-                        logger.log(f'drone {j} is landing')
-           
         #  -------------------------------- PATH PLANNING ------------------------------------------ #
         fig.ax.axes.clear()
         for j in range(ta.drone_num):
