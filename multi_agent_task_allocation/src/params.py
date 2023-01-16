@@ -48,8 +48,8 @@ if mode == 'sim':
 
 
 # ------------------ Allocation --------------------#
-k_init = 8
-threshold_factor = 0.9
+k_init = 5
+threshold_factor = 0.8
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
 if mode == 'sim':
@@ -121,7 +121,7 @@ elvazim = [37, 175]
 
 # --------------- Analysis -------------
 # counter = np.load("counter_analysis.npy")
-file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_2'
+file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'
 print(file_name)
 # np.save("counter_analysis", np.array(counter+1))
 # print(f'Task num: {counter}')

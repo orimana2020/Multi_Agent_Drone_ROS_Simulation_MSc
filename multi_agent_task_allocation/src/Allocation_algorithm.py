@@ -76,6 +76,14 @@ class Optim(object):
             for j in range(self.combs_size):
                 dist_vec[j] = self.distance_mat_nochange[next_targets[self.combs[j][0]], next_targets[self.combs[j][1]]]
             next_diff = np.linalg.norm(dist_vec - self.initial_dist_vec, ord=2) 
+            # ############ travel_dist
+            travel_dist = 0
+            for j in range(drone_num):
+                if self.current_targets[j] != next_targets[j]:
+                    travel_dist += (self.distance_mat_nochange[self.current_targets[j], next_targets[j]])**2
+            travel_dist = travel_dist ** 0.5
+            next_diff = next_diff+ 0.5 * travel_dist
+            # ########################
             if self.is_in_dw_volume(next_targets):
                 next_diff *= 5
             if next_diff < min_diff:
