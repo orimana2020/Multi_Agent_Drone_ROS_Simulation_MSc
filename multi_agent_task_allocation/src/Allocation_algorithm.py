@@ -68,49 +68,52 @@ class Optim(object):
         return knn
 
 
-    def search_best_combination(self, drone_num, state_mat, knn): # account for y constraints
-        min_diff = np.inf
+    def search_best_combination(self, drone_num, state_mat, knn): 
+        min_cost = np.inf
         for i in range(self.k ** drone_num):
             next_targets = np.sum(knn * state_mat[:,:,i], axis=0)
             dist_vec = np.zeros(self.combs_size)
             for j in range(self.combs_size):
                 dist_vec[j] = self.distance_mat_nochange[next_targets[self.combs[j][0]], next_targets[self.combs[j][1]]]
+            # change in distancenes between initial distance and current distance    
             next_diff = np.linalg.norm(dist_vec - self.initial_dist_vec, ord=2) 
-            # ############ travel_dist
-            travel_dist = 0
+            # traveled distance between current targets and next targets
+            travel_dist_vec = np.zeros(drone_num)
             for j in range(drone_num):
                 if self.current_targets[j] != next_targets[j]:
-                    travel_dist += (self.distance_mat_nochange[self.current_targets[j], next_targets[j]])**2
-            travel_dist = travel_dist ** 0.5
-            next_diff = next_diff+ 0.5 * travel_dist
-            # ########################
+                    travel_dist_vec[j] = self.distance_mat_nochange[self.current_targets[j], next_targets[j]]
+            travel_dist = np.linalg.norm(travel_dist_vec, ord=2)
+            # total cost
+            current_cost = next_diff + travel_dist
             if self.is_in_dw_volume(next_targets):
-                next_diff *= 5
-            if next_diff < min_diff:
-                min_diff = next_diff
+                current_cost *= 5
+            if current_cost < min_cost:
+                min_cost = current_cost
                 min_dist = min(dist_vec)
                 best_comb = next_targets
         return best_comb, min_dist  
 
 
-    def  update_kmeans_drone_num(self, drone_num ,targetpos, targetpos_reallocate):
+    def  update_kmeans(self, drone_num ,targetpos, targetpos_reallocate):
         self.logger.log('kmeans updated')
-        if (drone_num > 1):
-            self.kmeans = KMeans(n_clusters=drone_num).fit(targetpos[self.unvisited,1:]) # ------------- change to yz dist
-            self.centers = self.kmeans.cluster_centers_
-            self.current_targets = np.zeros(drone_num, dtype=int)
-            unvisited_targets_temp = targetpos_reallocate.copy()
-            for i in range(drone_num): 
-                self.current_targets[i] = self.get_1_min(unvisited_targets_temp, self.centers[i,:]) 
-                unvisited_targets_temp[self.current_targets[i],:] = np.inf 
-            self.combs = list(combinations(list(range(drone_num)), 2))
-            self.combs_size = len(self.combs)
-            self.initial_dist_vec = np.zeros(self.combs_size)
-            for k in range(self.combs_size):
-                i,j = self.combs[k]
-                self.initial_dist_vec[k] = self.distance_mat[self.current_targets[i], self.current_targets[j]]  
-            self.threshold_dist = min(self.initial_dist_vec) * self.threshold_factor
-            self.an.an_allocation(min(self.initial_dist_vec), drone_num , self.current_targets ,self.threshold_dist, is_kmeans=1)
+        self.kmeans = KMeans(n_clusters=drone_num).fit(targetpos[self.unvisited,1:]) # ------------- change to yz dist
+        self.centers = self.kmeans.cluster_centers_
+        self.current_targets = np.zeros(drone_num, dtype=int)
+        unvisited_targets_temp = targetpos_reallocate.copy()
+        for i in range(drone_num): 
+            self.current_targets[i] = self.get_1_min(unvisited_targets_temp, self.centers[i,:]) 
+            unvisited_targets_temp[self.current_targets[i],:] = np.inf 
+        self.combs = list(combinations(list(range(drone_num)), 2))
+        self.combs_size = len(self.combs)
+    
+    def get_initial_dist(self, drone_num):
+        self.initial_dist_vec = np.zeros(self.combs_size)
+        for k in range(self.combs_size):
+            i,j = self.combs[k]
+            self.initial_dist_vec[k] = self.distance_mat[self.current_targets[i], self.current_targets[j]]  
+        self.threshold_dist = min(self.initial_dist_vec) * self.threshold_factor
+        self.an.an_allocation(min(self.initial_dist_vec), drone_num, self.current_targets ,self.threshold_dist, is_kmeans=1)
+
 
     def get_1_min(self, targets, test_pnt): 
         diff = np.linalg.norm(targets[:,1:] - test_pnt, ord=2, axis=1) # ------------- change to yz dist   
@@ -134,7 +137,6 @@ class Optim(object):
                     return True
         return False
 
-
     def get_knn_last_drone(self):
         temp_distance_matrix = self.distance_mat.copy()
         temp_distance_matrix[:, self.current_targets[0]] = np.inf
@@ -148,14 +150,15 @@ class Allocation:
         self.targetpos = params.targetpos
         self.targets_num = params.targets_num
         self.targetpos_reallocate = self.targetpos.copy()
+        self.base = params.base
         self.an = an
         self.optim = Optim(self.targets_num, self.targetpos, self.logger, self.an)
         if self.drone_num > 1:
             self.state_mat = self.optim.get_state_matrix(self.drone_num, init_flag=True)
-            self.optim.update_kmeans_drone_num(self.drone_num, self.targetpos, self.targetpos_reallocate) # update drone_num for safety distance
-        self.base = params.base
-        if self.drone_num > 1:
+            self.optim.update_kmeans(self.drone_num, self.targetpos, self.targetpos_reallocate) # update drone_num for safety distance
             self.optimal_drone2target()
+            self.optim.get_initial_dist(self.drone_num)
+            
         
     def optimal_drone2target(self, dm=None):
         self.logger.log('calculate optimal drone2agent')
@@ -188,9 +191,10 @@ class Allocation:
             self.drone_num -= 1
         self.logger.log(f'drone number updated: {self.drone_num}')
         if self.drone_num > 1:
-            self.optim.update_kmeans_drone_num(self.drone_num, self.targetpos, self.targetpos_reallocate) 
-            if self.drone_num > 1:
-                self.optimal_drone2target(dm)   
+            self.optim.update_kmeans(self.drone_num, self.targetpos, self.targetpos_reallocate) 
+            self.optimal_drone2target(dm)  
+            self.optim.get_initial_dist(self.drone_num)
+
         if self.drone_num == 1:
             self.optim.current_targets = np.zeros(1, dtype=int) 
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()  

@@ -36,6 +36,7 @@ if mode == 'cf':
     linear_velocity = 1
     drone_size_m = 0.15 # [m]
     base = [(0.3,-0.6,1), (0.3,0,1), (0.3,0.6,1),(0.3,0.9,1)][:drone_num]# (x,y,z)   -> right to left order
+    segments_num = 8
 
 #-----------Drone Sim
 if mode == 'sim':
@@ -44,7 +45,8 @@ if mode == 'sim':
     linear_velocity = 1
     base = [(0.1,-0.7,1), (0.1,0,1), (0.1,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
-    drone_size_m = 0.2 # [m]
+    drone_size_m = 0.25 # [m]
+    segments_num = 15
 
 
 # ------------------ Allocation --------------------#

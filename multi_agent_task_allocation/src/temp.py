@@ -9,22 +9,26 @@ targetpos = params.targetpos
 # centers = kmeans.cluster_centers_
 # print(centers)
 
-downwash_distance = params.downwash_distance
-a0 = -downwash_distance[2][0]/downwash_distance[1][0] 
-b0 = downwash_distance[2][0] 
-centers = np.array([[0,0],[-0.1,0.2],[2,2]])
+# downwash_distance = params.downwash_distance
+# a0 = -downwash_distance[2][0]/downwash_distance[1][0] 
+# b0 = downwash_distance[2][0] 
+# centers = np.array([[0,0],[-0.1,0.2],[2,2]])
 
 
-combs = list(combinations(list(range(drone_num)), 2))
-for comb in combs:
-    print(comb)
-    y1,z1 = centers[comb[0],0], centers[comb[0],1]
-    y2,z2 = centers[comb[1],0], centers[comb[1],1]
-    dy = abs(y1-y2)
-    dz = abs(z1-z2)
-    if dy <= downwash_distance[1][0] and dz <= downwash_distance[2][0]:
-        z = a0*dy + b0
-        if dz <= z: #inside
+# combs = list(combinations(list(range(drone_num)), 2))
+# for comb in combs:
+#     print(comb)
+#     y1,z1 = centers[comb[0],0], centers[comb[0],1]
+#     y2,z2 = centers[comb[1],0], centers[comb[1],1]
+#     dy = abs(y1-y2)
+#     dz = abs(z1-z2)
+#     if dy <= downwash_distance[1][0] and dz <= downwash_distance[2][0]:
+#         z = a0*dy + b0
+#         if dz <= z: #inside
            
-            print('inside')
-            # return True
+#             print('inside')
+#             # return True
+
+a = np.array([1,2,3,4,5])
+print(np.average(a))
+print(np.linalg.norm(a, ord=2))

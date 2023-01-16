@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 # ------------------------ how to run  -----------------------
-# terminal 1 : $ roslaunch rotors_gazebo drone_poll_circle.launch 
+# terminal 1 : $ roslaunch rotors_gazebo experiment1.launch 
 # terminal 2: $ rosrun multi_agent_task_allocation main_MATA_dw.py
 # -------------------------------------------------------------
 

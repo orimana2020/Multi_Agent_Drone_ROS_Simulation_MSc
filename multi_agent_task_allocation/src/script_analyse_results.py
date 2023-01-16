@@ -35,6 +35,7 @@ drone_change_idx = [x-0.5 for x in drone_change_idx]
 # check kmeans
 kmeans_idx = [idx-0.5 for idx in range(len(kmeans)) if kmeans[idx]==1] 
 
+
 # # ------------- analysis ------------------
 analysis = True
 if analysis:
@@ -53,7 +54,6 @@ if analysis:
     ax1.set_title('Allocation Performance')
     ax1.legend()
 
-    print(np.mean(min_dist))
     fig2, ax2 = plt.subplots()
     i=j=0
     for drone in drone_data.keys(): 
@@ -101,7 +101,7 @@ if restore:
         ax.set_ylim(limits[1])
         ax.set_zlim(limits[2])
         fig.canvas.flush_events()
-        plt.pause(0.1)
+        plt.pause(5)
             
 
 
