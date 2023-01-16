@@ -15,8 +15,6 @@ def get_span(targetpos, base, resolution):
     span_m = [x_span, y_span, z_span]
     min_max_m = [x_min, x_max, y_min, y_max, z_min, z_max]
     min_max_idx = [round(x_min/resolution), round(x_max/resolution), round(y_min/resolution), round(y_max/resolution), round(z_min/resolution), round(z_max/resolution)]     
-    print(min_max_m)
-    print(min_max_idx)
     return span_m, min_max_m, min_max_idx
 
 # ------------------------------------------------------------------------------ #
@@ -63,7 +61,6 @@ elif mode == 'cf':
 DOWNWASH_AWARE = True
 floor_safety_distance = 0.3 
 min_battery_voltage = 3.2 
-check_battery_interval_time = 7 #[sec]
 
 # ------------------- Trajectory
 resolution = 0.05 #[m]
@@ -86,7 +83,6 @@ elif mode == 'cf':
 
 # -------------------- Targets
 uri_targetpos_sim = '/src/rotors_simulator/multi_agent_task_allocation/datasets/experiment1/experiment1_targets.npy'
-# uri_targetpos_cf = '/src/rotors_simulator/src/multi_agent_task_allocation/peach/peach_fruitpos_close_1.npy'
 
 data_source = 'dataset'
 if data_source == 'circle':
@@ -102,16 +98,13 @@ elif data_source == 'first_exp_cyrcle':
 
 targetpos_x_off = targetpos_raw - np.array([offset_x_dist_target, 0 ,0]) 
 targetpos = np.array([target for target in targetpos_x_off if target[2] > floor_safety_distance + resolution * 2])
-# targetpos_max_x_diff = round(abs(max(targetpos[:,0]) - min(targetpos[:,0]) ), 2)
 targets_num, _ = targetpos.shape
 print(f'target num: {targets_num}')
 mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num
 span, limits, limits_idx = get_span(targetpos, base, resolution)
 
-
 # --------------------- Safety 2
 downwash_distance = np.array([[min(targetpos[:,0]), max(targetpos[:,0])], [0.35,0.35], [1.2,1.2]]) # [m] , also distance to avoid flowdeck disturbance
-
 
 # --------------------- General
 sleep_time = 0.05

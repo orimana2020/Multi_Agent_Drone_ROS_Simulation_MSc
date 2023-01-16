@@ -49,7 +49,7 @@ def main():
         if not np.array_equal(last_targets, ta.optim.current_targets):
             last_targets = ta.optim.current_targets
             logger.log(f'current targets: {ta.optim.current_targets}')
-        # --------------------------- remove drones ------------------------- #  
+        # --------------------------- REMOVE DRONES ------------------------- #  
         while allocation == 'remove_drone':    
             #land inactive drones
             logger.log('returning to base inactive drones')
