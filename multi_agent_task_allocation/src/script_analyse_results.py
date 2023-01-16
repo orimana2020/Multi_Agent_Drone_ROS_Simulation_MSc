@@ -7,8 +7,8 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- LOAD DATA -----------------
-k_init = 3
-threshold_factor = 0.6
+k_init = 7
+threshold_factor = 0.9
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/'
 url=''
 data = np.load(url + 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_2'+"_data.npy", allow_pickle=True)
@@ -41,7 +41,7 @@ if analysis:
     plt.ioff()
     # Allocation
     fig1 = plt.figure()
-    fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
+    fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, average: {round(np.average(min_dist),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
     ax1 = fig1.add_subplot('111')
     ax1.scatter(idx, min_dist,c='blue', label='min_dist',s=2)
     ax1.scatter(idx, threshold, c='green', label='Threshold',s=2)

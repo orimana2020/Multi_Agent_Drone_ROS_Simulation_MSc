@@ -351,7 +351,7 @@ class Trajectory(object):
             return None
 
 
-    def plan(self, drones ,drone_idx, drone_num):
+    def plan(self, drones ,drone_idx, drone_num, override=False):
         self.logger.log(f'start path planning for drone {drone_idx}')
         start_m = drones[drone_idx].start_coords
         start_accurate_m = drones[drone_idx].accurate_coords
@@ -359,11 +359,12 @@ class Trajectory(object):
         start_title = drones[drone_idx].start_title
         goal_title = drones[drone_idx].goal_title
         self.grid_3d = self.grid_3d_initial.copy()
-        for i in range(drone_num): # update grid_3D, exclude current drone block_volume
-            if (i != drone_idx):
-                self.grid_3d[self.constant_blocking_area[i][:,0], self.constant_blocking_area[i][:,1], self.constant_blocking_area[i][:,2]] = 1
-                if (len(self.block_volume[i]) > 0) and not (drones[i].at_base):
-                    self.grid_3d[self.block_volume[i][:,0], self.block_volume[i][:,1], self.block_volume[i][:,2]] = 1
+        if not override:
+            for i in range(drone_num): # update grid_3D, exclude current drone block_volume
+                if (i != drone_idx):
+                    self.grid_3d[self.constant_blocking_area[i][:,0], self.constant_blocking_area[i][:,1], self.constant_blocking_area[i][:,2]] = 1
+                    if (len(self.block_volume[i]) > 0) and not (drones[i].at_base):
+                        self.grid_3d[self.block_volume[i][:,0], self.block_volume[i][:,1], self.block_volume[i][:,2]] = 1
         self.visited_3d = self.grid_3d.copy()
 
         if (start_title == 'base' and goal_title == 'target') or (start_title == 'target' and goal_title == 'base'):

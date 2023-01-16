@@ -93,12 +93,12 @@ class Drone_Manager(object):
                 k_means_permit = False
         return k_means_permit
 
-    def return_base(self, j, path_planner, fc, ta):
+    def return_base(self, j, path_planner, fc, ta, override=False):
         self.drones[j].start_coords = tuple(ta.targetpos[self.drones[j].visited_targets_idx[-1],:])
         self.drones[j].accurate_coords = tuple(fc.get_position(j))
         self.drones[j].goal_title = 'base'
         self.drones[j].goal_coords = self.drones[j].base
-        self.drones[j].path_found = path_planner.plan(self.drones ,drone_idx=j, drone_num=ta.drone_num)
+        self.drones[j].path_found = path_planner.plan(self.drones ,drone_idx=j, drone_num=ta.drone_num, override=override)
         if self.drones[j].path_found:
             fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])        
     

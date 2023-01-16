@@ -51,6 +51,7 @@ def main():
         if allocation == 'remove_drone':    
             logger.log('returning to base inactive drones')
             drone_idx = ta.drone_num -1
+
             while not (dm.drones[drone_idx].at_base) and (ta.optim.unvisited[ta.optim.current_targets[drone_idx]]) and (dm.drones[drone_idx].path_found):
                 dm.drones[drone_idx].is_reached_goal = fc.reached_goal(drone_idx=drone_idx, goal=dm.drones[drone_idx].goal_coords, title=dm.drones[drone_idx].goal_title)    
                 if dm.drones[drone_idx].is_reached_goal and dm.drones[drone_idx].goal_title == 'target':
@@ -66,7 +67,7 @@ def main():
 
             while not (dm.drones[drone_idx].at_base):
                 if not (dm.drones[drone_idx].path_found) and (not (fc.open_threads[drone_idx].is_alive())):
-                    dm.return_base(drone_idx, path_planner, fc, ta)
+                    dm.return_base(drone_idx, path_planner, fc, ta, override=True)
                 elif (dm.drones[drone_idx].is_reached_goal):
                     dm.drones[drone_idx].at_base = 1
                 dm.drones[drone_idx].is_reached_goal = fc.reached_goal(drone_idx=drone_idx, goal=dm.drones[drone_idx].goal_coords, title=dm.drones[drone_idx].goal_title)    

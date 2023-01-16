@@ -1,0 +1,1053 @@
+2023-01-16 17:22:39,527 - DEBUG - kmeans updated
+2023-01-16 17:22:39,868 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:22:46,654 - DEBUG - unvisited targets = 179
+2023-01-16 17:22:46,654 - DEBUG - current targets: [ 33 100 133]
+2023-01-16 17:22:46,670 - DEBUG - start path planning for drone 0
+2023-01-16 17:22:46,869 - DEBUG - path found drone 0
+2023-01-16 17:22:46,870 - DEBUG - executing trajectory drone 0
+2023-01-16 17:22:46,870 - DEBUG - start path planning for drone 1
+2023-01-16 17:22:47,081 - DEBUG - path found drone 1
+2023-01-16 17:22:47,082 - DEBUG - executing trajectory drone 1
+2023-01-16 17:22:47,083 - DEBUG - start path planning for drone 2
+2023-01-16 17:22:48,600 - DEBUG - path found drone 2
+2023-01-16 17:22:48,601 - DEBUG - executing trajectory drone 2
+2023-01-16 17:22:49,886 - DEBUG - drone 0 arrived to target
+2023-01-16 17:22:50,119 - DEBUG - unvisited targets = 178
+2023-01-16 17:22:50,131 - DEBUG - current targets: [ 89 100 133]
+2023-01-16 17:22:50,146 - DEBUG - start path planning for drone 0
+2023-01-16 17:22:50,252 - DEBUG - executing trajectory drone 0
+2023-01-16 17:22:50,283 - DEBUG - drone 1 arrived to target
+2023-01-16 17:22:50,538 - DEBUG - unvisited targets = 177
+2023-01-16 17:22:50,555 - DEBUG - kmeans mode started, j = 1
+2023-01-16 17:22:51,966 - DEBUG - drone 2 arrived to target
+2023-01-16 17:22:53,075 - DEBUG - drone 0 arrived to target
+2023-01-16 17:22:53,408 - DEBUG - kmeans permit True
+2023-01-16 17:22:53,408 - DEBUG - -------kmeans mode-------
+2023-01-16 17:22:53,408 - DEBUG - drone number updated: 3
+2023-01-16 17:22:53,408 - DEBUG - kmeans updated
+2023-01-16 17:22:53,564 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:22:53,577 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:22:53,577 - DEBUG - current targets: [ 34 177 125]
+2023-01-16 17:22:53,600 - DEBUG - start path planning for drone 0
+2023-01-16 17:22:53,671 - DEBUG - executing trajectory drone 0
+2023-01-16 17:22:53,671 - DEBUG - start path planning for drone 1
+2023-01-16 17:22:53,744 - DEBUG - executing trajectory drone 1
+2023-01-16 17:22:53,745 - DEBUG - start path planning for drone 2
+2023-01-16 17:22:53,807 - DEBUG - executing trajectory drone 2
+2023-01-16 17:22:54,100 - DEBUG - unvisited targets = 175
+2023-01-16 17:22:54,100 - DEBUG - current targets: [ 34 177 125]
+2023-01-16 17:22:56,316 - DEBUG - drone 1 arrived to target
+2023-01-16 17:22:56,594 - DEBUG - unvisited targets = 174
+2023-01-16 17:22:56,607 - DEBUG - current targets: [ 34  76 125]
+2023-01-16 17:22:56,654 - DEBUG - drone 0 arrived to target
+2023-01-16 17:22:56,654 - DEBUG - start path planning for drone 1
+2023-01-16 17:22:56,708 - DEBUG - executing trajectory drone 1
+2023-01-16 17:22:56,729 - DEBUG - drone 2 arrived to target
+2023-01-16 17:22:56,895 - DEBUG - unvisited targets = 172
+2023-01-16 17:22:56,920 - DEBUG - current targets: [ 19  76 131]
+2023-01-16 17:22:56,934 - DEBUG - start path planning for drone 0
+2023-01-16 17:22:57,003 - DEBUG - executing trajectory drone 0
+2023-01-16 17:22:57,013 - DEBUG - start path planning for drone 2
+2023-01-16 17:22:57,099 - DEBUG - executing trajectory drone 2
+2023-01-16 17:22:59,823 - DEBUG - drone 0 arrived to target
+2023-01-16 17:22:59,844 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:00,043 - DEBUG - unvisited targets = 170
+2023-01-16 17:23:00,057 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:23:00,280 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:00,501 - DEBUG - kmeans permit True
+2023-01-16 17:23:00,502 - DEBUG - -------kmeans mode-------
+2023-01-16 17:23:00,502 - DEBUG - drone number updated: 3
+2023-01-16 17:23:00,502 - DEBUG - kmeans updated
+2023-01-16 17:23:00,702 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:23:00,702 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:23:00,703 - DEBUG - current targets: [ 17  66 110]
+2023-01-16 17:23:00,731 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:00,780 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:00,780 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:00,869 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:00,869 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:00,970 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:01,266 - DEBUG - unvisited targets = 169
+2023-01-16 17:23:01,266 - DEBUG - current targets: [ 17  66 110]
+2023-01-16 17:23:03,568 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:03,855 - DEBUG - unvisited targets = 168
+2023-01-16 17:23:03,867 - DEBUG - current targets: [ 96  66 110]
+2023-01-16 17:23:03,882 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:03,947 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:03,968 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:04,244 - DEBUG - unvisited targets = 167
+2023-01-16 17:23:04,258 - DEBUG - current targets: [ 96  68 110]
+2023-01-16 17:23:04,283 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:04,349 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:04,370 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:04,614 - DEBUG - unvisited targets = 166
+2023-01-16 17:23:04,632 - DEBUG - current targets: [ 96  68 126]
+2023-01-16 17:23:04,668 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:04,745 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:06,936 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:07,194 - DEBUG - unvisited targets = 165
+2023-01-16 17:23:07,208 - DEBUG - current targets: [ 92  68 126]
+2023-01-16 17:23:07,222 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:07,282 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:07,304 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:07,551 - DEBUG - unvisited targets = 164
+2023-01-16 17:23:07,563 - DEBUG - current targets: [ 92  71 126]
+2023-01-16 17:23:07,590 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:07,682 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:07,703 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:07,942 - DEBUG - unvisited targets = 163
+2023-01-16 17:23:07,956 - DEBUG - current targets: [ 92  71 167]
+2023-01-16 17:23:07,991 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:08,097 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:10,319 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:10,541 - DEBUG - unvisited targets = 162
+2023-01-16 17:23:10,555 - DEBUG - current targets: [ 95  71 167]
+2023-01-16 17:23:10,572 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:10,632 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:10,653 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:10,903 - DEBUG - unvisited targets = 161
+2023-01-16 17:23:10,917 - DEBUG - current targets: [ 95 163 167]
+2023-01-16 17:23:10,941 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:11,014 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:11,035 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:11,262 - DEBUG - unvisited targets = 160
+2023-01-16 17:23:11,277 - DEBUG - current targets: [ 95 163 168]
+2023-01-16 17:23:11,313 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:11,379 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:13,630 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:13,651 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:13,831 - DEBUG - unvisited targets = 158
+2023-01-16 17:23:13,857 - DEBUG - current targets: [ 85 143 168]
+2023-01-16 17:23:13,873 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:13,931 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:13,932 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:13,995 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:14,016 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:14,279 - DEBUG - unvisited targets = 157
+2023-01-16 17:23:14,296 - DEBUG - current targets: [ 85 143 172]
+2023-01-16 17:23:14,334 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:14,464 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:16,691 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:16,913 - DEBUG - unvisited targets = 156
+2023-01-16 17:23:16,930 - DEBUG - current targets: [ 85 152 172]
+2023-01-16 17:23:16,954 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:17,017 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:17,643 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:17,675 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:17,869 - DEBUG - unvisited targets = 154
+2023-01-16 17:23:17,899 - DEBUG - current targets: [ 93 152 171]
+2023-01-16 17:23:17,912 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:17,979 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:17,990 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:18,082 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:20,057 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:20,305 - DEBUG - unvisited targets = 153
+2023-01-16 17:23:20,323 - DEBUG - current targets: [ 93 154 171]
+2023-01-16 17:23:20,348 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:20,404 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:20,773 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:21,012 - DEBUG - unvisited targets = 152
+2023-01-16 17:23:21,026 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:21,238 - DEBUG - path found drone 0
+2023-01-16 17:23:21,239 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:21,270 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:21,458 - DEBUG - unvisited targets = 151
+2023-01-16 17:23:21,472 - DEBUG - current targets: [ 93 154 173]
+2023-01-16 17:23:21,509 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:21,583 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:23,181 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:23,399 - DEBUG - unvisited targets = 150
+2023-01-16 17:23:23,426 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:25,752 - DEBUG - path found drone 1
+2023-01-16 17:23:25,753 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:25,774 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:25,945 - DEBUG - unvisited targets = 149
+2023-01-16 17:23:25,990 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:26,146 - DEBUG - path found drone 2
+2023-01-16 17:23:26,147 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:27,411 - DEBUG - drone 0 arrived to base
+2023-01-16 17:23:27,627 - DEBUG - current targets: [ 94 154 173]
+2023-01-16 17:23:27,642 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:27,975 - DEBUG - path found drone 0
+2023-01-16 17:23:27,976 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:29,375 - DEBUG - drone 1 arrived to base
+2023-01-16 17:23:29,396 - DEBUG - drone 2 arrived to base
+2023-01-16 17:23:29,587 - DEBUG - current targets: [ 94 151 170]
+2023-01-16 17:23:29,612 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:32,444 - DEBUG - path found drone 1
+2023-01-16 17:23:32,446 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:32,446 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:32,575 - DEBUG - path found drone 2
+2023-01-16 17:23:32,576 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:33,470 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:33,698 - DEBUG - unvisited targets = 148
+2023-01-16 17:23:33,712 - DEBUG - current targets: [ 62 151 170]
+2023-01-16 17:23:33,747 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:33,817 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:35,449 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:35,692 - DEBUG - unvisited targets = 147
+2023-01-16 17:23:35,707 - DEBUG - current targets: [ 62 151 147]
+2023-01-16 17:23:35,743 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:35,860 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:36,187 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:36,419 - DEBUG - unvisited targets = 146
+2023-01-16 17:23:36,432 - DEBUG - current targets: [ 62 153 147]
+2023-01-16 17:23:36,458 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:36,535 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:36,876 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:37,119 - DEBUG - unvisited targets = 145
+2023-01-16 17:23:37,137 - DEBUG - current targets: [ 53 153 147]
+2023-01-16 17:23:37,154 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:37,214 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:38,793 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:39,006 - DEBUG - unvisited targets = 144
+2023-01-16 17:23:39,023 - DEBUG - current targets: [ 53 153 145]
+2023-01-16 17:23:39,058 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:39,152 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:39,452 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:39,675 - DEBUG - unvisited targets = 143
+2023-01-16 17:23:39,688 - DEBUG - current targets: [ 53 150 145]
+2023-01-16 17:23:39,714 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:39,793 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:40,107 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:40,377 - DEBUG - unvisited targets = 142
+2023-01-16 17:23:40,390 - DEBUG - current targets: [ 52 150 145]
+2023-01-16 17:23:40,405 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:40,466 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:42,180 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:42,406 - DEBUG - unvisited targets = 141
+2023-01-16 17:23:42,421 - DEBUG - current targets: [ 52 150 146]
+2023-01-16 17:23:42,458 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:42,533 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:42,885 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:43,186 - DEBUG - unvisited targets = 140
+2023-01-16 17:23:43,202 - DEBUG - current targets: [ 52  56 146]
+2023-01-16 17:23:43,237 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:43,237 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:43,344 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:43,621 - DEBUG - unvisited targets = 139
+2023-01-16 17:23:43,634 - DEBUG - current targets: [ 99  56 146]
+2023-01-16 17:23:43,650 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:43,727 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:45,378 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:45,606 - DEBUG - unvisited targets = 138
+2023-01-16 17:23:45,622 - DEBUG - current targets: [ 99  56 144]
+2023-01-16 17:23:45,658 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:45,720 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:46,055 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:46,280 - DEBUG - unvisited targets = 137
+2023-01-16 17:23:46,297 - DEBUG - current targets: [ 99 142 144]
+2023-01-16 17:23:46,320 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:46,389 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:46,702 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:46,952 - DEBUG - unvisited targets = 136
+2023-01-16 17:23:46,964 - DEBUG - current targets: [ 40 142 144]
+2023-01-16 17:23:46,981 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:47,053 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:48,636 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:48,868 - DEBUG - unvisited targets = 135
+2023-01-16 17:23:48,882 - DEBUG - current targets: [ 40 142 148]
+2023-01-16 17:23:48,922 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:48,988 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:49,348 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:49,576 - DEBUG - unvisited targets = 134
+2023-01-16 17:23:49,587 - DEBUG - current targets: [ 40 141 148]
+2023-01-16 17:23:49,614 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:49,678 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:50,293 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:50,561 - DEBUG - unvisited targets = 133
+2023-01-16 17:23:50,573 - DEBUG - current targets: [ 43 141 148]
+2023-01-16 17:23:50,588 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:50,681 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:51,761 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:51,993 - DEBUG - unvisited targets = 132
+2023-01-16 17:23:52,008 - DEBUG - current targets: [ 43 141 169]
+2023-01-16 17:23:52,043 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:52,107 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:52,416 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:52,649 - DEBUG - unvisited targets = 131
+2023-01-16 17:23:52,663 - DEBUG - current targets: [ 43  55 169]
+2023-01-16 17:23:52,688 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:52,758 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:54,671 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:54,935 - DEBUG - unvisited targets = 130
+2023-01-16 17:23:54,950 - DEBUG - current targets: [ 44  55 169]
+2023-01-16 17:23:54,966 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:55,034 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:55,066 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:55,304 - DEBUG - unvisited targets = 129
+2023-01-16 17:23:55,318 - DEBUG - current targets: [ 44  55 149]
+2023-01-16 17:23:55,353 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:55,413 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:55,753 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:56,011 - DEBUG - unvisited targets = 128
+2023-01-16 17:23:56,025 - DEBUG - current targets: [ 44  59 149]
+2023-01-16 17:23:56,050 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:56,117 - DEBUG - executing trajectory drone 1
+2023-01-16 17:23:58,059 - DEBUG - drone 0 arrived to target
+2023-01-16 17:23:58,333 - DEBUG - unvisited targets = 127
+2023-01-16 17:23:58,351 - DEBUG - current targets: [101  59 149]
+2023-01-16 17:23:58,371 - DEBUG - start path planning for drone 0
+2023-01-16 17:23:58,431 - DEBUG - executing trajectory drone 0
+2023-01-16 17:23:58,462 - DEBUG - drone 2 arrived to target
+2023-01-16 17:23:58,677 - DEBUG - unvisited targets = 126
+2023-01-16 17:23:58,692 - DEBUG - current targets: [101  59 128]
+2023-01-16 17:23:58,728 - DEBUG - start path planning for drone 2
+2023-01-16 17:23:58,822 - DEBUG - executing trajectory drone 2
+2023-01-16 17:23:59,194 - DEBUG - drone 1 arrived to target
+2023-01-16 17:23:59,430 - DEBUG - unvisited targets = 125
+2023-01-16 17:23:59,446 - DEBUG - current targets: [101 156 128]
+2023-01-16 17:23:59,472 - DEBUG - start path planning for drone 1
+2023-01-16 17:23:59,536 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:01,122 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:01,369 - DEBUG - unvisited targets = 124
+2023-01-16 17:24:01,383 - DEBUG - current targets: [178 156 128]
+2023-01-16 17:24:01,400 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:01,524 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:01,898 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:02,135 - DEBUG - unvisited targets = 123
+2023-01-16 17:24:02,148 - DEBUG - current targets: [178 156 123]
+2023-01-16 17:24:02,195 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:02,196 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:02,289 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:02,518 - DEBUG - unvisited targets = 122
+2023-01-16 17:24:02,532 - DEBUG - current targets: [178 138 123]
+2023-01-16 17:24:02,558 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:02,626 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:04,622 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:04,887 - DEBUG - unvisited targets = 121
+2023-01-16 17:24:04,901 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:04,964 - DEBUG - path found drone 0
+2023-01-16 17:24:04,965 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:05,602 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:05,623 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:05,813 - DEBUG - unvisited targets = 119
+2023-01-16 17:24:05,839 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:06,513 - DEBUG - path found drone 1
+2023-01-16 17:24:06,514 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:06,514 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:06,960 - DEBUG - path found drone 2
+2023-01-16 17:24:06,961 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:08,133 - DEBUG - drone 0 arrived to base
+2023-01-16 17:24:08,367 - DEBUG - current targets: [ 97 138 123]
+2023-01-16 17:24:08,381 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:08,621 - DEBUG - path found drone 0
+2023-01-16 17:24:08,622 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:09,807 - DEBUG - drone 1 arrived to base
+2023-01-16 17:24:10,032 - DEBUG - current targets: [ 97 136 123]
+2023-01-16 17:24:10,058 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:11,203 - DEBUG - path found drone 1
+2023-01-16 17:24:11,204 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:11,225 - DEBUG - drone 2 arrived to base
+2023-01-16 17:24:11,492 - DEBUG - current targets: [ 97 136 124]
+2023-01-16 17:24:11,528 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:11,590 - DEBUG - path found drone 2
+2023-01-16 17:24:11,591 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:12,252 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:12,486 - DEBUG - unvisited targets = 118
+2023-01-16 17:24:12,502 - DEBUG - current targets: [ 48 136 124]
+2023-01-16 17:24:12,516 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:12,578 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:14,928 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:14,949 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:15,151 - DEBUG - unvisited targets = 116
+2023-01-16 17:24:15,174 - DEBUG - current targets: [ 48 135 127]
+2023-01-16 17:24:15,199 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:15,267 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:15,267 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:15,343 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:15,654 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:15,893 - DEBUG - unvisited targets = 115
+2023-01-16 17:24:15,908 - DEBUG - current targets: [174 135 127]
+2023-01-16 17:24:15,922 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:15,980 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:17,937 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:18,179 - DEBUG - unvisited targets = 114
+2023-01-16 17:24:18,196 - DEBUG - current targets: [174 108 127]
+2023-01-16 17:24:18,220 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:18,303 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:18,649 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:18,939 - DEBUG - unvisited targets = 113
+2023-01-16 17:24:18,949 - DEBUG - kmeans mode started, j = 2
+2023-01-16 17:24:18,970 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:21,147 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:21,402 - DEBUG - kmeans permit True
+2023-01-16 17:24:21,402 - DEBUG - -------kmeans mode-------
+2023-01-16 17:24:21,402 - DEBUG - drone number updated: 3
+2023-01-16 17:24:21,402 - DEBUG - kmeans updated
+2023-01-16 17:24:21,552 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:24:21,553 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:24:21,554 - DEBUG - current targets: [176  18 115]
+2023-01-16 17:24:21,570 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:21,642 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:21,643 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:22,017 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:22,017 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:22,097 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:22,365 - DEBUG - unvisited targets = 111
+2023-01-16 17:24:22,366 - DEBUG - current targets: [176  18 115]
+2023-01-16 17:24:24,411 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:24,678 - DEBUG - unvisited targets = 110
+2023-01-16 17:24:24,692 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:24:24,968 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:26,741 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:26,952 - DEBUG - kmeans permit True
+2023-01-16 17:24:26,952 - DEBUG - -------kmeans mode-------
+2023-01-16 17:24:26,953 - DEBUG - drone number updated: 3
+2023-01-16 17:24:26,953 - DEBUG - kmeans updated
+2023-01-16 17:24:27,091 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:24:27,093 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:24:27,103 - DEBUG - current targets: [ 49  36 119]
+2023-01-16 17:24:27,130 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:27,198 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:27,199 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:27,241 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:27,241 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:27,304 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:27,574 - DEBUG - unvisited targets = 108
+2023-01-16 17:24:27,575 - DEBUG - current targets: [ 49  36 119]
+2023-01-16 17:24:27,619 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:27,849 - DEBUG - unvisited targets = 107
+2023-01-16 17:24:27,860 - DEBUG - current targets: [ 49  30 119]
+2023-01-16 17:24:27,887 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:27,964 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:30,171 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:30,202 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:30,388 - DEBUG - unvisited targets = 105
+2023-01-16 17:24:30,402 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:24:30,796 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:31,062 - DEBUG - kmeans permit True
+2023-01-16 17:24:31,062 - DEBUG - -------kmeans mode-------
+2023-01-16 17:24:31,063 - DEBUG - drone number updated: 3
+2023-01-16 17:24:31,063 - DEBUG - kmeans updated
+2023-01-16 17:24:31,129 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:24:31,130 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:24:31,131 - DEBUG - current targets: [ 86  21 134]
+2023-01-16 17:24:31,155 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:31,216 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:31,217 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:31,284 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:31,284 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:31,369 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:31,650 - DEBUG - unvisited targets = 104
+2023-01-16 17:24:31,651 - DEBUG - current targets: [ 86  21 134]
+2023-01-16 17:24:34,002 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:34,237 - DEBUG - unvisited targets = 103
+2023-01-16 17:24:34,251 - DEBUG - current targets: [ 86  37 134]
+2023-01-16 17:24:34,276 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:34,343 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:34,364 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:34,597 - DEBUG - unvisited targets = 102
+2023-01-16 17:24:34,610 - DEBUG - current targets: [ 86  37 132]
+2023-01-16 17:24:34,646 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:34,656 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:34,724 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:34,943 - DEBUG - unvisited targets = 101
+2023-01-16 17:24:34,956 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:24:36,979 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:37,536 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:37,770 - DEBUG - kmeans permit True
+2023-01-16 17:24:37,771 - DEBUG - -------kmeans mode-------
+2023-01-16 17:24:37,771 - DEBUG - drone number updated: 3
+2023-01-16 17:24:37,771 - DEBUG - kmeans updated
+2023-01-16 17:24:37,885 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:24:37,886 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:24:37,886 - DEBUG - current targets: [ 47  35 112]
+2023-01-16 17:24:37,919 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:37,987 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:37,987 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:38,049 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:38,050 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:38,129 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:38,411 - DEBUG - unvisited targets = 99
+2023-01-16 17:24:38,411 - DEBUG - current targets: [ 47  35 112]
+2023-01-16 17:24:41,015 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:41,036 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:41,210 - DEBUG - unvisited targets = 97
+2023-01-16 17:24:41,239 - DEBUG - kmeans mode started, j = 2
+2023-01-16 17:24:41,240 - DEBUG - current targets: [ 47  15 112]
+2023-01-16 17:24:41,261 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:41,272 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:41,412 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:44,933 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:45,063 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:45,183 - DEBUG - path found drone 1
+2023-01-16 17:24:49,227 - DEBUG - drone 1 arrived to base
+2023-01-16 17:24:49,585 - DEBUG - kmeans permit True
+2023-01-16 17:24:49,596 - DEBUG - -------kmeans mode-------
+2023-01-16 17:24:49,597 - DEBUG - drone number updated: 3
+2023-01-16 17:24:49,597 - DEBUG - kmeans updated
+2023-01-16 17:24:49,761 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:24:49,762 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:24:49,762 - DEBUG - current targets: [ 67  32 113]
+2023-01-16 17:24:49,774 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:49,865 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:49,865 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:49,942 - DEBUG - path found drone 1
+2023-01-16 17:24:49,943 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:49,943 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:49,998 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:50,279 - DEBUG - unvisited targets = 95
+2023-01-16 17:24:50,279 - DEBUG - current targets: [ 67  32 113]
+2023-01-16 17:24:50,335 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:50,557 - DEBUG - unvisited targets = 94
+2023-01-16 17:24:50,570 - DEBUG - current targets: [ 67  32 109]
+2023-01-16 17:24:50,605 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:50,661 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:52,940 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:53,187 - DEBUG - unvisited targets = 93
+2023-01-16 17:24:53,201 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:24:53,464 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:53,664 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:53,885 - DEBUG - kmeans permit True
+2023-01-16 17:24:53,885 - DEBUG - -------kmeans mode-------
+2023-01-16 17:24:53,886 - DEBUG - drone number updated: 3
+2023-01-16 17:24:53,893 - DEBUG - kmeans updated
+2023-01-16 17:24:54,014 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:24:54,022 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:24:54,024 - DEBUG - current targets: [ 88  20 116]
+2023-01-16 17:24:54,050 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:54,119 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:54,119 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:54,184 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:54,184 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:54,250 - DEBUG - executing trajectory drone 2
+2023-01-16 17:24:54,521 - DEBUG - unvisited targets = 91
+2023-01-16 17:24:54,522 - DEBUG - current targets: [ 88  20 116]
+2023-01-16 17:24:57,151 - DEBUG - drone 0 arrived to target
+2023-01-16 17:24:57,172 - DEBUG - drone 1 arrived to target
+2023-01-16 17:24:57,193 - DEBUG - drone 2 arrived to target
+2023-01-16 17:24:57,335 - DEBUG - unvisited targets = 88
+2023-01-16 17:24:57,361 - DEBUG - current targets: [ 78   9 116]
+2023-01-16 17:24:57,375 - DEBUG - start path planning for drone 0
+2023-01-16 17:24:57,455 - DEBUG - executing trajectory drone 0
+2023-01-16 17:24:57,455 - DEBUG - start path planning for drone 1
+2023-01-16 17:24:57,509 - DEBUG - executing trajectory drone 1
+2023-01-16 17:24:57,510 - DEBUG - start path planning for drone 2
+2023-01-16 17:24:58,748 - DEBUG - path found drone 2
+2023-01-16 17:24:58,752 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:00,186 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:00,207 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:00,365 - DEBUG - unvisited targets = 86
+2023-01-16 17:25:00,387 - DEBUG - current targets: [ 78  14 116]
+2023-01-16 17:25:00,403 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:01,131 - DEBUG - path found drone 0
+2023-01-16 17:25:01,132 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:01,132 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:01,185 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:02,137 - DEBUG - drone 2 arrived to base
+2023-01-16 17:25:02,391 - DEBUG - current targets: [ 78  14 155]
+2023-01-16 17:25:02,425 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:03,315 - DEBUG - path found drone 2
+2023-01-16 17:25:03,316 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:03,915 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:04,119 - DEBUG - unvisited targets = 85
+2023-01-16 17:25:04,134 - DEBUG - current targets: [ 78  13 155]
+2023-01-16 17:25:04,170 - DEBUG - drone 0 arrived to base
+2023-01-16 17:25:04,170 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:04,219 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:04,483 - DEBUG - current targets: [ 91  13 155]
+2023-01-16 17:25:04,496 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:04,911 - DEBUG - path found drone 0
+2023-01-16 17:25:04,912 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:06,533 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:06,746 - DEBUG - unvisited targets = 84
+2023-01-16 17:25:06,758 - DEBUG - current targets: [ 91  13 162]
+2023-01-16 17:25:06,804 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:06,804 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:06,854 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:07,078 - DEBUG - unvisited targets = 83
+2023-01-16 17:25:07,093 - DEBUG - current targets: [ 91  10 162]
+2023-01-16 17:25:07,118 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:07,185 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:08,423 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:08,677 - DEBUG - unvisited targets = 82
+2023-01-16 17:25:08,689 - DEBUG - current targets: [ 90  10 162]
+2023-01-16 17:25:08,705 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:08,762 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:09,792 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:10,046 - DEBUG - unvisited targets = 81
+2023-01-16 17:25:10,060 - DEBUG - current targets: [90 10 65]
+2023-01-16 17:25:10,107 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:10,107 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:10,165 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:10,391 - DEBUG - unvisited targets = 80
+2023-01-16 17:25:10,409 - DEBUG - current targets: [90 11 65]
+2023-01-16 17:25:10,436 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:10,499 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:11,465 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:11,724 - DEBUG - unvisited targets = 79
+2023-01-16 17:25:11,738 - DEBUG - current targets: [82 11 65]
+2023-01-16 17:25:11,755 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:11,829 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:12,865 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:13,088 - DEBUG - unvisited targets = 78
+2023-01-16 17:25:13,102 - DEBUG - current targets: [ 82  11 158]
+2023-01-16 17:25:13,148 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:13,149 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:13,201 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:13,416 - DEBUG - unvisited targets = 77
+2023-01-16 17:25:13,430 - DEBUG - current targets: [ 82  12 158]
+2023-01-16 17:25:13,453 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:13,511 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:13,532 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:13,769 - DEBUG - unvisited targets = 76
+2023-01-16 17:25:13,782 - DEBUG - current targets: [ 82  12 159]
+2023-01-16 17:25:13,827 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:13,827 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:13,904 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:14,113 - DEBUG - unvisited targets = 75
+2023-01-16 17:25:14,128 - DEBUG - current targets: [ 82   5 159]
+2023-01-16 17:25:14,154 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:14,224 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:14,888 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:15,134 - DEBUG - unvisited targets = 74
+2023-01-16 17:25:15,148 - DEBUG - current targets: [ 79   5 159]
+2023-01-16 17:25:15,161 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:15,222 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:17,159 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:17,180 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:17,385 - DEBUG - unvisited targets = 72
+2023-01-16 17:25:17,411 - DEBUG - current targets: [ 79   4 157]
+2023-01-16 17:25:17,435 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:17,537 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:17,537 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:17,597 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:18,210 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:18,456 - DEBUG - unvisited targets = 71
+2023-01-16 17:25:18,469 - DEBUG - current targets: [ 81   4 157]
+2023-01-16 17:25:18,486 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:18,556 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:20,554 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:20,575 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:20,763 - DEBUG - unvisited targets = 69
+2023-01-16 17:25:20,780 - DEBUG - current targets: [ 81   4 140]
+2023-01-16 17:25:20,806 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:21,580 - DEBUG - path found drone 1
+2023-01-16 17:25:21,581 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:21,581 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:21,651 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:22,001 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:22,240 - DEBUG - unvisited targets = 68
+2023-01-16 17:25:22,257 - DEBUG - current targets: [ 80   4 140]
+2023-01-16 17:25:22,271 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:22,325 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:24,471 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:24,689 - DEBUG - unvisited targets = 67
+2023-01-16 17:25:24,701 - DEBUG - current targets: [ 80   4 137]
+2023-01-16 17:25:24,736 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:24,809 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:25,121 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:25,351 - DEBUG - unvisited targets = 66
+2023-01-16 17:25:25,368 - DEBUG - current targets: [ 83   4 137]
+2023-01-16 17:25:25,381 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:25,456 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:25,806 - DEBUG - drone 1 arrived to base
+2023-01-16 17:25:26,048 - DEBUG - current targets: [ 83   6 137]
+2023-01-16 17:25:26,072 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:26,595 - DEBUG - path found drone 1
+2023-01-16 17:25:26,596 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:27,628 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:27,844 - DEBUG - unvisited targets = 65
+2023-01-16 17:25:27,857 - DEBUG - current targets: [83  6 58]
+2023-01-16 17:25:27,894 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:27,963 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:28,307 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:28,568 - DEBUG - unvisited targets = 64
+2023-01-16 17:25:28,581 - DEBUG - current targets: [84  6 58]
+2023-01-16 17:25:28,595 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:28,655 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:29,351 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:29,598 - DEBUG - unvisited targets = 63
+2023-01-16 17:25:29,609 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:25:30,599 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:30,825 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:31,054 - DEBUG - kmeans permit True
+2023-01-16 17:25:31,054 - DEBUG - -------kmeans mode-------
+2023-01-16 17:25:31,054 - DEBUG - drone number updated: 3
+2023-01-16 17:25:31,055 - DEBUG - kmeans updated
+2023-01-16 17:25:31,206 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:25:31,220 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:25:31,222 - DEBUG - current targets: [ 51  29 118]
+2023-01-16 17:25:31,249 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:31,313 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:31,313 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:31,379 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:31,379 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:31,453 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:31,709 - DEBUG - unvisited targets = 61
+2023-01-16 17:25:31,710 - DEBUG - current targets: [ 51  29 118]
+2023-01-16 17:25:34,238 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:34,459 - DEBUG - unvisited targets = 60
+2023-01-16 17:25:34,494 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:34,515 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:34,515 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:35,940 - DEBUG - path found drone 2
+2023-01-16 17:25:35,941 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:36,098 - DEBUG - unvisited targets = 58
+2023-01-16 17:25:36,115 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:25:39,366 - DEBUG - drone 2 arrived to base
+2023-01-16 17:25:39,708 - DEBUG - kmeans permit True
+2023-01-16 17:25:39,719 - DEBUG - -------kmeans mode-------
+2023-01-16 17:25:39,719 - DEBUG - drone number updated: 3
+2023-01-16 17:25:39,719 - DEBUG - kmeans updated
+2023-01-16 17:25:39,858 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:25:39,858 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:25:39,858 - DEBUG - current targets: [ 77  31 105]
+2023-01-16 17:25:39,872 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:39,939 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:39,939 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:40,001 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:40,001 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:41,060 - DEBUG - path found drone 2
+2023-01-16 17:25:41,062 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:41,338 - DEBUG - current targets: [ 77  31 105]
+2023-01-16 17:25:42,921 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:42,942 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:43,139 - DEBUG - unvisited targets = 56
+2023-01-16 17:25:43,153 - DEBUG - current targets: [ 77   7 105]
+2023-01-16 17:25:43,168 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:43,322 - DEBUG - path found drone 0
+2023-01-16 17:25:43,323 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:43,323 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:43,403 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:44,541 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:44,788 - DEBUG - unvisited targets = 55
+2023-01-16 17:25:44,802 - DEBUG - current targets: [ 77   7 107]
+2023-01-16 17:25:44,835 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:44,903 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:46,130 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:46,328 - DEBUG - unvisited targets = 54
+2023-01-16 17:25:46,342 - DEBUG - current targets: [ 77   8 107]
+2023-01-16 17:25:46,376 - DEBUG - drone 0 arrived to base
+2023-01-16 17:25:46,377 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:46,441 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:46,709 - DEBUG - current targets: [ 75   8 107]
+2023-01-16 17:25:46,724 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:46,885 - DEBUG - path found drone 0
+2023-01-16 17:25:46,886 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:46,907 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:47,170 - DEBUG - unvisited targets = 53
+2023-01-16 17:25:47,189 - DEBUG - current targets: [ 75   0 107]
+2023-01-16 17:25:47,215 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:47,281 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:47,605 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:47,830 - DEBUG - unvisited targets = 52
+2023-01-16 17:25:47,847 - DEBUG - current targets: [ 75   0 106]
+2023-01-16 17:25:47,882 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:47,947 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:49,831 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:50,106 - DEBUG - unvisited targets = 51
+2023-01-16 17:25:50,118 - DEBUG - current targets: [ 74   0 106]
+2023-01-16 17:25:50,136 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:50,211 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:50,232 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:50,474 - DEBUG - unvisited targets = 50
+2023-01-16 17:25:50,487 - DEBUG - kmeans mode started, j = 1
+2023-01-16 17:25:50,757 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:53,098 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:53,362 - DEBUG - kmeans permit True
+2023-01-16 17:25:53,362 - DEBUG - -------kmeans mode-------
+2023-01-16 17:25:53,362 - DEBUG - drone number updated: 3
+2023-01-16 17:25:53,363 - DEBUG - kmeans updated
+2023-01-16 17:25:53,890 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:25:53,900 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:25:53,907 - DEBUG - current targets: [175  27 117]
+2023-01-16 17:25:53,927 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:53,999 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:54,000 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:54,111 - DEBUG - executing trajectory drone 1
+2023-01-16 17:25:54,112 - DEBUG - start path planning for drone 2
+2023-01-16 17:25:54,180 - DEBUG - executing trajectory drone 2
+2023-01-16 17:25:54,445 - DEBUG - unvisited targets = 48
+2023-01-16 17:25:54,446 - DEBUG - current targets: [175  27 117]
+2023-01-16 17:25:56,927 - DEBUG - drone 0 arrived to target
+2023-01-16 17:25:57,163 - DEBUG - unvisited targets = 47
+2023-01-16 17:25:57,177 - DEBUG - current targets: [161  27 117]
+2023-01-16 17:25:57,193 - DEBUG - start path planning for drone 0
+2023-01-16 17:25:57,275 - DEBUG - executing trajectory drone 0
+2023-01-16 17:25:57,296 - DEBUG - drone 1 arrived to target
+2023-01-16 17:25:57,317 - DEBUG - drone 2 arrived to target
+2023-01-16 17:25:57,499 - DEBUG - unvisited targets = 45
+2023-01-16 17:25:57,527 - DEBUG - kmeans mode started, j = 2
+2023-01-16 17:25:57,528 - DEBUG - current targets: [161  22 117]
+2023-01-16 17:25:57,549 - DEBUG - start path planning for drone 1
+2023-01-16 17:25:57,618 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:00,317 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:00,338 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:00,584 - DEBUG - kmeans permit True
+2023-01-16 17:26:00,585 - DEBUG - -------kmeans mode-------
+2023-01-16 17:26:00,585 - DEBUG - drone number updated: 3
+2023-01-16 17:26:00,585 - DEBUG - kmeans updated
+2023-01-16 17:26:00,746 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:26:00,755 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:26:00,761 - DEBUG - current targets: [ 45  28 120]
+2023-01-16 17:26:00,785 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:00,867 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:00,868 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:00,956 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:00,956 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:01,026 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:01,302 - DEBUG - unvisited targets = 43
+2023-01-16 17:26:01,302 - DEBUG - current targets: [ 45  28 120]
+2023-01-16 17:26:03,882 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:03,902 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:03,923 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:04,099 - DEBUG - unvisited targets = 40
+2023-01-16 17:26:04,144 - DEBUG - kmeans mode started, j = 2
+2023-01-16 17:26:04,145 - DEBUG - current targets: [ 63  26 120]
+2023-01-16 17:26:04,155 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:04,205 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:04,215 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:04,392 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:05,108 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:07,491 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:07,640 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:07,900 - DEBUG - path found drone 1
+2023-01-16 17:26:12,132 - DEBUG - drone 1 arrived to base
+2023-01-16 17:26:12,421 - DEBUG - kmeans permit True
+2023-01-16 17:26:12,432 - DEBUG - -------kmeans mode-------
+2023-01-16 17:26:12,432 - DEBUG - drone number updated: 3
+2023-01-16 17:26:12,433 - DEBUG - kmeans updated
+2023-01-16 17:26:12,640 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:26:12,640 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:26:12,642 - DEBUG - current targets: [ 50   1 111]
+2023-01-16 17:26:12,674 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:12,757 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:12,758 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:12,837 - DEBUG - path found drone 1
+2023-01-16 17:26:12,838 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:12,838 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:12,937 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:13,216 - DEBUG - unvisited targets = 38
+2023-01-16 17:26:13,216 - DEBUG - current targets: [ 50   1 111]
+2023-01-16 17:26:15,794 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:15,825 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:16,007 - DEBUG - unvisited targets = 36
+2023-01-16 17:26:16,028 - DEBUG - current targets: [ 70   1 103]
+2023-01-16 17:26:16,042 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:16,100 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:16,111 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:16,184 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:16,810 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:17,035 - DEBUG - unvisited targets = 35
+2023-01-16 17:26:17,052 - DEBUG - current targets: [ 70  16 103]
+2023-01-16 17:26:17,077 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:17,141 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:18,929 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:18,961 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:19,128 - DEBUG - unvisited targets = 33
+2023-01-16 17:26:19,156 - DEBUG - current targets: [ 73  16 130]
+2023-01-16 17:26:19,170 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:19,234 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:19,245 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:19,406 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:19,761 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:20,005 - DEBUG - unvisited targets = 32
+2023-01-16 17:26:20,018 - DEBUG - current targets: [ 73  23 130]
+2023-01-16 17:26:20,049 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:20,230 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:22,134 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:22,369 - DEBUG - unvisited targets = 31
+2023-01-16 17:26:22,384 - DEBUG - current targets: [ 72  23 130]
+2023-01-16 17:26:22,402 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:22,464 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:22,853 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:23,082 - DEBUG - unvisited targets = 30
+2023-01-16 17:26:23,094 - DEBUG - current targets: [ 72  23 121]
+2023-01-16 17:26:23,129 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:23,232 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:23,566 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:23,795 - DEBUG - unvisited targets = 29
+2023-01-16 17:26:23,809 - DEBUG - current targets: [ 72  25 121]
+2023-01-16 17:26:23,837 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:23,916 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:24,233 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:24,506 - DEBUG - unvisited targets = 28
+2023-01-16 17:26:24,519 - DEBUG - current targets: [ 72  24 121]
+2023-01-16 17:26:24,548 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:24,613 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:25,286 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:25,564 - DEBUG - unvisited targets = 27
+2023-01-16 17:26:25,577 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:26,241 - DEBUG - path found drone 0
+2023-01-16 17:26:26,242 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:26,579 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:26,797 - DEBUG - unvisited targets = 26
+2023-01-16 17:26:26,810 - DEBUG - current targets: [ 72  24 104]
+2023-01-16 17:26:26,845 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:26,944 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:27,556 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:27,796 - DEBUG - unvisited targets = 25
+2023-01-16 17:26:27,809 - DEBUG - current targets: [ 72   2 104]
+2023-01-16 17:26:27,834 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:28,100 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:29,903 - DEBUG - drone 0 arrived to base
+2023-01-16 17:26:29,935 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:30,103 - DEBUG - unvisited targets = 24
+2023-01-16 17:26:30,118 - DEBUG - current targets: [ 69   2 104]
+2023-01-16 17:26:30,131 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:30,197 - DEBUG - path found drone 0
+2023-01-16 17:26:30,198 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:30,209 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:33,367 - DEBUG - path found drone 2
+2023-01-16 17:26:33,368 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:33,643 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:33,664 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:33,835 - DEBUG - unvisited targets = 22
+2023-01-16 17:26:33,848 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:26:37,196 - DEBUG - drone 2 arrived to base
+2023-01-16 17:26:37,503 - DEBUG - kmeans permit True
+2023-01-16 17:26:37,514 - DEBUG - -------kmeans mode-------
+2023-01-16 17:26:37,514 - DEBUG - drone number updated: 3
+2023-01-16 17:26:37,514 - DEBUG - kmeans updated
+2023-01-16 17:26:37,702 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:26:37,704 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:26:37,704 - DEBUG - current targets: [114  61  38]
+2023-01-16 17:26:37,734 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:37,813 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:37,813 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:37,883 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:37,883 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:38,122 - DEBUG - path found drone 2
+2023-01-16 17:26:38,123 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:38,420 - DEBUG - current targets: [114  61  38]
+2023-01-16 17:26:41,022 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:41,053 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:41,274 - DEBUG - unvisited targets = 20
+2023-01-16 17:26:41,274 - DEBUG - k updated : 5
+2023-01-16 17:26:41,291 - DEBUG - current targets: [165  60  38]
+2023-01-16 17:26:41,305 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:41,389 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:41,389 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:41,440 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:42,390 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:42,627 - DEBUG - unvisited targets = 19
+2023-01-16 17:26:42,638 - DEBUG - current targets: [165  60  41]
+2023-01-16 17:26:42,672 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:42,730 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:44,286 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:44,307 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:44,499 - DEBUG - unvisited targets = 17
+2023-01-16 17:26:44,500 - DEBUG - k updated : 4
+2023-01-16 17:26:44,510 - DEBUG - current targets: [129  87  41]
+2023-01-16 17:26:44,525 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:44,595 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:44,595 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:44,688 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:45,662 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:45,890 - DEBUG - unvisited targets = 16
+2023-01-16 17:26:45,897 - DEBUG - current targets: [129  87  98]
+2023-01-16 17:26:45,932 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:46,015 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:47,668 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:47,689 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:47,888 - DEBUG - unvisited targets = 14
+2023-01-16 17:26:47,888 - DEBUG - k updated : 3
+2023-01-16 17:26:47,893 - DEBUG - kmeans mode started, j = 1
+2023-01-16 17:26:47,893 - DEBUG - current targets: [166  87  98]
+2023-01-16 17:26:47,904 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:48,015 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:49,266 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:51,115 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:51,373 - DEBUG - kmeans permit True
+2023-01-16 17:26:51,376 - DEBUG - -------kmeans mode-------
+2023-01-16 17:26:51,376 - DEBUG - drone number updated: 3
+2023-01-16 17:26:51,376 - DEBUG - kmeans updated
+2023-01-16 17:26:51,489 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:26:51,495 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:26:51,499 - DEBUG - current targets: [57  3 39]
+2023-01-16 17:26:51,526 - DEBUG - start path planning for drone 0
+2023-01-16 17:26:51,648 - DEBUG - executing trajectory drone 0
+2023-01-16 17:26:51,648 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:51,725 - DEBUG - executing trajectory drone 1
+2023-01-16 17:26:51,725 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:51,819 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:52,111 - DEBUG - unvisited targets = 12
+2023-01-16 17:26:52,111 - DEBUG - current targets: [57  3 39]
+2023-01-16 17:26:55,047 - DEBUG - drone 2 arrived to target
+2023-01-16 17:26:55,297 - DEBUG - unvisited targets = 11
+2023-01-16 17:26:55,298 - DEBUG - k updated : 2
+2023-01-16 17:26:55,299 - DEBUG - current targets: [57  3 42]
+2023-01-16 17:26:55,340 - DEBUG - drone 0 arrived to target
+2023-01-16 17:26:55,361 - DEBUG - drone 1 arrived to target
+2023-01-16 17:26:55,362 - DEBUG - start path planning for drone 2
+2023-01-16 17:26:55,422 - DEBUG - executing trajectory drone 2
+2023-01-16 17:26:55,620 - DEBUG - unvisited targets = 9
+2023-01-16 17:26:55,621 - DEBUG - kmeans mode started, j = 0
+2023-01-16 17:26:55,631 - DEBUG - start path planning for drone 1
+2023-01-16 17:26:56,924 - DEBUG - path found drone 1
+2023-01-16 17:26:58,104 - DEBUG - drone 2 arrived to target
+2023-01-16 17:27:00,988 - DEBUG - drone 1 arrived to base
+2023-01-16 17:27:01,327 - DEBUG - kmeans permit True
+2023-01-16 17:27:01,337 - DEBUG - -------kmeans mode-------
+2023-01-16 17:27:01,338 - DEBUG - drone number updated: 3
+2023-01-16 17:27:01,339 - DEBUG - kmeans updated
+2023-01-16 17:27:01,431 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:27:01,432 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:27:01,433 - DEBUG - current targets: [ 46 102  54]
+2023-01-16 17:27:01,450 - DEBUG - start path planning for drone 0
+2023-01-16 17:27:01,525 - DEBUG - executing trajectory drone 0
+2023-01-16 17:27:01,526 - DEBUG - start path planning for drone 1
+2023-01-16 17:27:02,050 - DEBUG - path found drone 1
+2023-01-16 17:27:02,051 - DEBUG - executing trajectory drone 1
+2023-01-16 17:27:02,051 - DEBUG - start path planning for drone 2
+2023-01-16 17:27:02,151 - DEBUG - executing trajectory drone 2
+2023-01-16 17:27:02,431 - DEBUG - unvisited targets = 8
+2023-01-16 17:27:02,432 - DEBUG - current targets: [ 46 102  54]
+2023-01-16 17:27:04,357 - DEBUG - drone 0 arrived to target
+2023-01-16 17:27:04,608 - DEBUG - unvisited targets = 7
+2023-01-16 17:27:04,608 - DEBUG - k updated : 1
+2023-01-16 17:27:04,609 - DEBUG - current targets: [ 64 102  54]
+2023-01-16 17:27:04,622 - DEBUG - start path planning for drone 0
+2023-01-16 17:27:04,623 - DEBUG - Sanity check failed
+2023-01-16 17:27:04,624 - DEBUG - No Path Found! drone 0 from target to target , start: [1.72 0.31 1.53] , goal: [1.62 0.31 1.57]
+2023-01-16 17:27:04,624 - DEBUG - drone 0 cant reach target, returning to base
+2023-01-16 17:27:04,873 - DEBUG - start path planning for drone 0
+2023-01-16 17:27:04,994 - DEBUG - path found drone 0
+2023-01-16 17:27:04,995 - DEBUG - executing trajectory drone 0
+2023-01-16 17:27:05,026 - DEBUG - drone 2 arrived to target
+2023-01-16 17:27:05,231 - DEBUG - unvisited targets = 6
+2023-01-16 17:27:05,232 - DEBUG - kmeans mode started, j = 2
+2023-01-16 17:27:06,202 - DEBUG - drone 1 arrived to target
+2023-01-16 17:27:08,501 - DEBUG - drone 0 arrived to base
+2023-01-16 17:27:08,822 - DEBUG - kmeans permit True
+2023-01-16 17:27:08,833 - DEBUG - -------kmeans mode-------
+2023-01-16 17:27:08,833 - DEBUG - drone number updated: 3
+2023-01-16 17:27:08,833 - DEBUG - kmeans updated
+2023-01-16 17:27:09,026 - DEBUG - calculate optimal drone2agent
+2023-01-16 17:27:09,035 - DEBUG - kmeans updated, current drone num: 3
+2023-01-16 17:27:09,039 - DEBUG - current targets: [122 139  64]
+2023-01-16 17:27:09,071 - DEBUG - start path planning for drone 0
+2023-01-16 17:27:16,301 - DEBUG - path found drone 0
+2023-01-16 17:27:16,302 - DEBUG - executing trajectory drone 0
+2023-01-16 17:27:16,302 - DEBUG - start path planning for drone 1
+2023-01-16 17:27:16,359 - DEBUG - executing trajectory drone 1
+2023-01-16 17:27:16,359 - DEBUG - start path planning for drone 2
+2023-01-16 17:27:16,435 - DEBUG - executing trajectory drone 2
+2023-01-16 17:27:16,701 - DEBUG - unvisited targets = 5
+2023-01-16 17:27:16,701 - DEBUG - current targets: [122 139  64]
+2023-01-16 17:27:19,382 - DEBUG - drone 1 arrived to target
+2023-01-16 17:27:19,661 - DEBUG - unvisited targets = 4
+2023-01-16 17:27:19,662 - DEBUG - returning to base inactive drones
+2023-01-16 17:27:19,683 - DEBUG - drone 2 arrived to target
+2023-01-16 17:27:19,714 - DEBUG - start path planning for drone 2
+2023-01-16 17:27:20,092 - DEBUG - path found drone 2
+2023-01-16 17:27:24,382 - DEBUG - drone 2 is landing
+2023-01-16 17:27:24,403 - DEBUG - drone 0 arrived to target
+2023-01-16 17:27:24,424 - DEBUG - drone 1 arrived to target
+2023-01-16 17:27:24,683 - DEBUG - kmeans permit True
+2023-01-16 17:27:24,683 - DEBUG - -------kmeans mode-------
+2023-01-16 17:27:24,684 - DEBUG - drone number updated: 1
+2023-01-16 17:27:24,684 - DEBUG - kmeans updated, current drone num: 1
+2023-01-16 17:27:24,684 - DEBUG - current targets: [160]
+2023-01-16 17:27:24,699 - DEBUG - start path planning for drone 0
+2023-01-16 17:27:24,810 - DEBUG - executing trajectory drone 0
+2023-01-16 17:27:24,987 - DEBUG - unvisited targets = 1
+2023-01-16 17:27:24,988 - DEBUG - current targets: [160]
+2023-01-16 17:27:28,389 - DEBUG - drone 0 arrived to target
+2023-01-16 17:27:28,543 - DEBUG - return all drones to base
+2023-01-16 17:27:28,554 - DEBUG - start path planning for drone 0
+2023-01-16 17:27:28,605 - DEBUG - path found drone 0
+2023-01-16 17:27:32,175 - DEBUG - Task Done Successfully, Total time:285.52 [sec], exclude take off and landing
+2023-01-16 17:27:33,205 - DEBUG - landing all active drones
