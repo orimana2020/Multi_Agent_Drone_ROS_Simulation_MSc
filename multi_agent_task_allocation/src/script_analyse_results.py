@@ -37,7 +37,7 @@ kmeans_idx = [idx-0.5 for idx in range(len(kmeans)) if kmeans[idx]==1]
 
 
 # # ------------- analysis ------------------
-analysis = True
+analysis = False
 if analysis:
     plt.ioff()
     # Allocation
@@ -101,7 +101,7 @@ if restore:
         ax.set_ylim(limits[1])
         ax.set_zlim(limits[2])
         fig.canvas.flush_events()
-        plt.pause(5)
+        plt.pause(0.1)
             
 
 

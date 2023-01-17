@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 import numpy as np
-import random
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import params 
@@ -12,7 +11,7 @@ class Drone_Manager(object):
         self.drones = []
         self.simulate_lps_error = params.SIMULATE_LPS_ERROR
         for i in range(ta.drone_num):
-            self.drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i], ta=ta))
+            self.drones.append(Drone(index=i, uri=uris[i], base=base[i], full_magazine=full_magazine[i]))
     
     def update_current_coords(self, fc):
         for idx, drone in enumerate(self.drones):
@@ -109,13 +108,17 @@ class Drone_Manager(object):
                 all_at_base = False
         return all_at_base
     
+    def update_first_goals(self, ta):
+        for i in range(ta.drone_num):
+            self.drones[i].goal_coords = tuple(ta.targetpos[ta.optim.current_targets[i],:])
+    
 class Drone(object):
-    def __init__(self, index, uri, base, full_magazine, ta):
+    def __init__(self, index, uri, base, full_magazine):
         self.idx = index
         self.uri = uri
         self.base = base
         self.start_coords = base
-        self.goal_coords = tuple(ta.targetpos[ta.optim.current_targets[self.idx],:])
+        self.goal_coords = None #tuple(ta.targetpos[ta.optim.current_targets[self.idx],:])
         self.accurate_coords = None 
         self.full_magazine = full_magazine
         self.current_magazine = full_magazine
