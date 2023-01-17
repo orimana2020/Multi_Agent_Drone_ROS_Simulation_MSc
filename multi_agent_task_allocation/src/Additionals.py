@@ -143,13 +143,15 @@ class Analysis(object):
         self.allocation_history = {}
         self.allocation_history['min_dist'] = []
         self.allocation_history['drone_num'] = []
-        self.allocation_history['threshold'] = []
+        self.allocation_history['threshold_low'] = []
+        self.allocation_history['threshold_up'] = []
         self.allocation_history['combination'] = []
         self.allocation_history['is_kmeans'] = []
         self.allocation_history['visited_drone_pair'] = []
         self.allocation_history['next_diff'] = []
         self.allocation_history['travel_dist'] = []
         self.allocation_history['path'] = []
+        self.allocation_history['min_cost'] = []
 
     def start(self,dm):
         self.dm = dm
@@ -184,16 +186,18 @@ class Analysis(object):
         elif self.dm.drones[idx].start_title == 'base':
             self.time_at_base(idx)
     
-    def an_allocation(self, min_dist, drone_num , combination ,threshold, is_kmeans):
+    def an_allocation(self, min_dist, drone_num , combination ,threshold_low, threshold_up, is_kmeans):
         self.allocation_history['min_dist'].append(min_dist)
         self.allocation_history['drone_num'].append(drone_num)
-        self.allocation_history['threshold'].append(threshold)
+        self.allocation_history['threshold_low'].append(threshold_low)
+        self.allocation_history['threshold_up'].append(threshold_up)
         self.allocation_history['combination'].append(combination)
         self.allocation_history['is_kmeans'].append(is_kmeans)
     
-    def cost(self, next_diff, travel_dist):
+    def cost(self, next_diff, travel_dist, min_cost):
         self.allocation_history['next_diff'].append(next_diff)
         self.allocation_history['travel_dist'].append(travel_dist)
+        self.allocation_history['min_cost'].append(min_cost)
     
     def path(self, drone_idx, waypoints, start_title ,goal_title):
         self.allocation_history['path'].append([drone_idx,start_title, goal_title, waypoints])

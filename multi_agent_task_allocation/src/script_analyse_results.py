@@ -7,12 +7,12 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 7
-threshold_factor = 0.9
-analysis = 0
+k_init = 5
+threshold_factor = 0.
+analysis = 1
 restore = 0
-restore_history = 1
-cost = 0
+restore_history = 0
+show_cost = 0
 show_path = 0
 
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp2/'
@@ -24,13 +24,15 @@ general_data, drone_data = data['general_data'],  data['drone_data']
 # Allocatio
 allocation_history = general_data['allocation_history']
 min_dist = allocation_history['min_dist']
-threshold = allocation_history['threshold']
+threshold_up = allocation_history['threshold_up']
+threshold_low = allocation_history['threshold_low']
 combination = allocation_history['combination']
 drone_num = allocation_history['drone_num']
 kmeans = allocation_history['is_kmeans']
 targetpos = general_data['targets_position']
 next_diff = allocation_history['next_diff']
 travel_dist = allocation_history['travel_dist'] 
+cost = allocation_history['min_cost']
 paths = allocation_history['path'] # drone_idx, start_title, goal_title, waypoints
 initial_drone_num = general_data['initial_drone_num']
 idx = np.array(range(0,len(min_dist)))
@@ -55,7 +57,8 @@ if analysis:
     fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, average: {round(np.average(min_dist),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
     ax1 = fig1.add_subplot('111')
     ax1.scatter(idx, min_dist,c='blue', label='min_dist',s=2)
-    ax1.scatter(idx, threshold, c='green', label='Threshold',s=2)
+    ax1.scatter(idx, threshold_low, c='green', label='Threshold',s=2)
+    ax1.scatter(idx, threshold_up, c='green', label='Threshold',s=2)
     ax1.vlines(x=drone_change_idx, ymin=0, ymax=max(min_dist), colors='purple', ls='--', lw=1, label='Drone Num changed')
     ax1.vlines(x=kmeans_idx, ymin=0, ymax=max(min_dist), colors='yellow', ls='--', lw=0.5, label='KMEANS')
     # ax1.hlines(y=safety_distance_allocation, xmin=0, xmax=max(idx), colors='red',ls='--', lw=2, label='safety distance')
@@ -92,7 +95,6 @@ if analysis:
 
 
 # ----- restore
-
 if restore:
     plt.ion()
     fig = plt.figure()
@@ -136,7 +138,7 @@ if restore_history:
         fig.canvas.flush_events()
         plt.pause(0.1)
             
-if cost:
+if show_cost:
     plt.ioff()
     # Allocation
     fig3 = plt.figure()
@@ -145,6 +147,7 @@ if cost:
     idx = np.array(range(0,len(next_diff)))
     ax3.scatter(idx, next_diff,c='blue', label='next_diff',s=10)
     ax3.scatter(idx, travel_dist, c='green', label='travel_dist',s=10)
+    ax3.scatter(idx, cost, c='red', label='travel_dist',s=10)
     ax3.set_xlabel("Iteration")
     ax3.set_ylabel("cost")
     ax3.set_title('cost')

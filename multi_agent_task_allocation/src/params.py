@@ -50,8 +50,8 @@ if mode == 'sim':
 
 
 # ------------------ Allocation --------------------#
-k_init = 3
-threshold_factor = 0.5
+k_init = 5
+threshold_factor = 0.9
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/cflib/Ori_CF/multi_agent_task_allocation/src'
 if mode == 'sim':
@@ -86,7 +86,7 @@ uri_targetpos_sim = '/src/rotors_simulator/multi_agent_task_allocation/datasets/
 
 data_source = 'dataset'
 if data_source == 'circle':
-    targets_num_gen = 35; t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen); radius=0.6; depth=2;z_offset = radius + floor_safety_distance + 0.1;
+    targets_num_gen = 50; t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen); radius=0.6; depth=2.5;z_offset = radius + floor_safety_distance + 0.1;
     targetpos_raw = np.stack([depth*np.ones([targets_num_gen]) , radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
 
 elif data_source == 'dataset':

@@ -58,4 +58,4 @@ targetpos = params.targetpos
 # print(drone_idx)
 # print(y_target_idx)
 
-print(targetpos[[1,4,8,3],0])
+print((1.5**2 + 1.4**2))
