@@ -30,7 +30,7 @@ kmeans = allocation_history['is_kmeans']
 targetpos = general_data['targets_position']
 next_diff = allocation_history['next_diff']
 travel_dist = allocation_history['travel_dist'] 
-path = allocation_history['path'] # drone_idx, start_title, goal_title, waypoints
+paths = allocation_history['path'] # drone_idx, start_title, goal_title, waypoints
 idx = np.array(range(0,len(min_dist)))
 #check drone num changed idx
 current_drone_num = general_data['initial_drone_num']
@@ -111,9 +111,6 @@ if restore:
         fig.canvas.flush_events()
         plt.pause(0.1)
             
-
-
-
 if cost:
     plt.ioff()
     # Allocation
@@ -127,6 +124,18 @@ if cost:
     ax3.set_ylabel("cost")
     ax3.set_title('cost')
     ax3.legend()    
-
     plt.show()
 
+if show_path:
+    plt.ioff()
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter3D(targetpos[:,0],targetpos[:,1],targetpos[:,2],  s= 10, c='k',alpha=1, depthshade=False)
+    for path in paths:
+        drone_idx, start_title, goal_title, waypoints = path
+        if start_title == 'base' and goal_title == 'target':
+            ax.plot(waypoints[:,0], waypoints[:,1], waypoints[:,2], c=colors[drone_idx],alpha=1)
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+    plt.show()
