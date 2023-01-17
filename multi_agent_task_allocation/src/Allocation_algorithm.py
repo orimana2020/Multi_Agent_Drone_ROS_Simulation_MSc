@@ -157,11 +157,6 @@ class Allocation:
         self.optim = Optim(self.targets_num, self.targetpos, self.logger, self.an)
         if self.drone_num > 1:
             self.state_mat = self.optim.get_state_matrix(self.drone_num, init_flag=True)
-            # self.optim.update_kmeans(self.drone_num, self.targetpos, self.targetpos_reallocate) # update drone_num for safety distance
-            # self.optimal_drone2target()
-            # self.optim.get_initial_dist(self.drone_num)
-            
-
            
     def optimal_drone2target(self, dm):
         drones_idx = [i for i in range(self.drone_num)]
@@ -171,11 +166,9 @@ class Allocation:
         #sort targets
         sorted_targets_indices = np.argsort(targets_y_coords) 
         targets_idx[:] = [targets_idx[i] for i in sorted_targets_indices]
-
         # sort drones
         indices_y_drones = np.argsort(drones_y_coords)
         drones_idx[:] = [drones_idx[i] for i in indices_y_drones]
-
         # sort by drone idx
         indeces_drone_idx = np.argsort(drones_idx)
         drones_idx[:] = [drones_idx[i] for i in indeces_drone_idx]
@@ -185,21 +178,20 @@ class Allocation:
 
     def update_kmeans(self, dm):
         self.logger.log('-------kmeans mode-------')
-        while (self.optim.unvisited_num < self.drone_num) and (self.drone_num > 1):
-            self.drone_num -= 1
-        self.logger.log(f'drone number updated: {self.drone_num}')
+        # while (self.optim.unvisited_num < self.drone_num) and (self.drone_num > 1):
+        #     self.drone_num -= 1
+        # self.logger.log(f'drone number updated: {self.drone_num}')
         if self.drone_num > 1:
             self.optim.update_kmeans(self.drone_num, self.targetpos, self.targetpos_reallocate) 
             self.optimal_drone2target(dm)  
             self.optim.get_initial_dist(self.drone_num)
 
-        if self.drone_num == 1:
+        elif self.drone_num == 1:
             self.optim.current_targets = np.zeros(1, dtype=int) 
             self.optim.current_targets[0] = self.optim.get_knn_last_drone()  
             self.an.an_allocation( 0, self.drone_num , self.optim.current_targets ,self.optim.threshold_dist,0) 
 
     def allocate(self, allocate_to):
-
         if (self.optim.unvisited_num < 2 * self.drone_num) and (self.drone_num > 1):
             self.drone_num_changed = True
             return 'remove_drone'

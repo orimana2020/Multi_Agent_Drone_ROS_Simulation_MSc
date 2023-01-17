@@ -32,29 +32,30 @@ targetpos = params.targetpos
 # a = np.array([1,2,3,4,5])
 # print(np.average(a))
 # print(np.linalg.norm(a, ord=2))
-y_target_idx = [2,5,1,3,7]
-y_targets = np.array([1,2,3,4,-5])
+# y_target_idx = [2,5,1,3,7]
+# y_targets = np.array([1,2,3,4,-5])
 
-drone_idx = np.array([0,1,2,3,4])
-y_drones = np.array([1,2,3,4,-10])
+# drone_idx = np.array([0,1,2,3,4])
+# y_drones = np.array([1,2,3,4,-10])
 
-#sort targets
-sorted_targets_indices = np.argsort(y_targets) 
-# y_targets[:] = [y_targets[i] for i in sorted_targets_indices]
-y_target_idx[:] = [y_target_idx[i] for i in sorted_targets_indices]
+# #sort targets
+# sorted_targets_indices = np.argsort(y_targets) 
+# # y_targets[:] = [y_targets[i] for i in sorted_targets_indices]
+# y_target_idx[:] = [y_target_idx[i] for i in sorted_targets_indices]
 
-# sort drones
-indices_y_drones = np.argsort(y_drones)
-# y_drones[:] = [y_drones[i] for i in indices_y_drones]
-drone_idx[:] = [drone_idx[i] for i in indices_y_drones]
+# # sort drones
+# indices_y_drones = np.argsort(y_drones)
+# # y_drones[:] = [y_drones[i] for i in indices_y_drones]
+# drone_idx[:] = [drone_idx[i] for i in indices_y_drones]
 
-# sort by drone idx
-indeces_drone_idx = np.argsort(drone_idx)
-drone_idx[:] = [drone_idx[i] for i in indeces_drone_idx]
-# y_drones[:] = [y_drones[i] for i in indeces_drone_idx]
-# y_targets[:] = [y_targets[i] for i in indeces_drone_idx]
-y_target_idx[:] = [y_target_idx[i] for i in indeces_drone_idx]
+# # sort by drone idx
+# indeces_drone_idx = np.argsort(drone_idx)
+# drone_idx[:] = [drone_idx[i] for i in indeces_drone_idx]
+# # y_drones[:] = [y_drones[i] for i in indeces_drone_idx]
+# # y_targets[:] = [y_targets[i] for i in indeces_drone_idx]
+# y_target_idx[:] = [y_target_idx[i] for i in indeces_drone_idx]
 
-print(drone_idx)
-print(y_target_idx)
+# print(drone_idx)
+# print(y_target_idx)
 
+print(targetpos[[1,4,8,3],0])

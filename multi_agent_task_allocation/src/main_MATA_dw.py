@@ -79,6 +79,7 @@ def main():
             dm.drones[drone_idx].is_active = False
             logger.log(f'drone {drone_idx} is landing')
             ta.drone_num -= 1
+            logger.log(f'drone number updated to: {ta.drone_num}')
         # --------------------------- UPDATE KMEANS ------------------------- #  
         while allocation == 'update_kmeans':
             k_means_permit = False

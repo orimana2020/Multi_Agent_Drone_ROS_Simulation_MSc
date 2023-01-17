@@ -7,12 +7,13 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 5
-threshold_factor = 0.8
-analysis = False
-restore = False
-cost = False
-show_path = True
+k_init = 7
+threshold_factor = 0.9
+analysis = 0
+restore = 0
+restore_history = 1
+cost = 0
+show_path = 0
 
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp2/'
 url=''
@@ -31,6 +32,7 @@ targetpos = general_data['targets_position']
 next_diff = allocation_history['next_diff']
 travel_dist = allocation_history['travel_dist'] 
 paths = allocation_history['path'] # drone_idx, start_title, goal_title, waypoints
+initial_drone_num = general_data['initial_drone_num']
 idx = np.array(range(0,len(min_dist)))
 #check drone num changed idx
 current_drone_num = general_data['initial_drone_num']
@@ -102,6 +104,29 @@ if restore:
         for j in range(len(comb)):
             ax.scatter3D(targetpos[comb[j],0],targetpos[comb[j],1],targetpos[comb[j],2],  s= 70, c=colors[j],alpha=1, depthshade=False)
         
+        ax.set_xlabel('x')
+        ax.set_ylabel('y')
+        ax.set_zlabel('z')
+        ax.set_xlim((limits[0][0]-2,limits[0][1]))
+        ax.set_ylim(limits[1])
+        ax.set_zlim(limits[2])
+        fig.canvas.flush_events()
+        plt.pause(0.1)
+
+if restore_history:
+    plt.ion()
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    limits = [[min(targetpos[:,0]), max(targetpos[:,0])],[min(targetpos[:,1]), max(targetpos[:,1])],[min(targetpos[:,2]), max(targetpos[:,2])]]
+    history = [[] for _ in range(initial_drone_num)]
+    for comb in combination:
+        ax.axes.clear()
+        ax.scatter3D(targetpos[:,0],targetpos[:,1],targetpos[:,2],  s= 10, c='k',alpha=1, depthshade=False)
+        for j in range(len(comb)):
+            ax.scatter3D(targetpos[comb[j],0],targetpos[comb[j],1],targetpos[comb[j],2],  s= 120, c=colors[j],alpha=1, depthshade=False)
+            history[j].append(comb[j])
+        for j in range(initial_drone_num):
+            ax.scatter3D(targetpos[history[j],0], targetpos[history[j],1], targetpos[history[j],2],  s= 30, c=colors[j],alpha=1, depthshade=False)
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.set_zlabel('z')
