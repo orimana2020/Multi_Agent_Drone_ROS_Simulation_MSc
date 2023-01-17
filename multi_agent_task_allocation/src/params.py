@@ -70,8 +70,6 @@ retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
 break_trajectory_len_factor = 0.15
 offset_x_dist_target = 0.4 # [m]
-segments_num = 8 # max = 30
-points_in_smooth_params = segments_num + 1
 LPS_positioning_error_m = np.load(str(os.getcwd())+ uri_state_mat + '/positioning_error_arr/error_arr_box_config.npy')
 LPS_n_safety_vol = np.int8(np.ceil(LPS_positioning_error_m / resolution)) + np.int8(drone_size_m / resolution)
 SIMULATE_LPS_ERROR = False

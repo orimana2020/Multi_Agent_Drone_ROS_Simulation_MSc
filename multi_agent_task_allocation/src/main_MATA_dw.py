@@ -22,7 +22,7 @@ def main():
     dm = Drone_Manager(params.uri_list, params.base, params.magazine, ta)
     ta.update_kmeans(dm);  dm.update_first_goals(ta);
     fc = Flight_manager(ta.drone_num)
-    path_planner = Trajectory(dm.drones, logger)
+    path_planner = Trajectory(dm.drones, logger, an)
     fc.take_off_swarm()
     dm.update_current_coords(fc)
     an.start(dm)

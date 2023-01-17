@@ -147,6 +147,9 @@ class Analysis(object):
         self.allocation_history['combination'] = []
         self.allocation_history['is_kmeans'] = []
         self.allocation_history['visited_drone_pair'] = []
+        self.allocation_history['next_diff'] = []
+        self.allocation_history['travel_dist'] = []
+        self.allocation_history['path'] = []
 
     def start(self,dm):
         self.dm = dm
@@ -187,8 +190,15 @@ class Analysis(object):
         self.allocation_history['threshold'].append(threshold)
         self.allocation_history['combination'].append(combination)
         self.allocation_history['is_kmeans'].append(is_kmeans)
+    
+    def cost(self, next_diff, travel_dist):
+        self.allocation_history['next_diff'].append(next_diff)
+        self.allocation_history['travel_dist'].append(travel_dist)
+    
+    def path(self, drone_idx, waypoints, start_title ,goal_title):
+        self.allocation_history['path'].append([drone_idx,start_title, goal_title, waypoints])
         
-         
+
     def analyse(self):
         general_data = {}
         general_data['initial_drone_num'] = (len(self.dm.drones))
@@ -199,6 +209,7 @@ class Analysis(object):
         general_data['downwash_size'] = params.downwash_distance
         general_data['k_init'] = params.k_init
         general_data['threshold_factor'] = params.threshold_factor
+
         drone_data = {}
         for j in range(len(self.dm.drones)):
             name = 'drone_'+str(j)

@@ -6,9 +6,14 @@ from mpl_toolkits.mplot3d import Axes3D
 
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
-# ------------- LOAD DATA -----------------
+# ------------- experiment_parmas -----------------
 k_init = 5
 threshold_factor = 0.8
+analysis = False
+restore = False
+cost = False
+show_path = True
+
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp2/'
 url=''
 data = np.load(url + 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'+"_data.npy", allow_pickle=True)
@@ -23,6 +28,9 @@ combination = allocation_history['combination']
 drone_num = allocation_history['drone_num']
 kmeans = allocation_history['is_kmeans']
 targetpos = general_data['targets_position']
+next_diff = allocation_history['next_diff']
+travel_dist = allocation_history['travel_dist'] 
+path = allocation_history['path'] # drone_idx, start_title, goal_title, waypoints
 idx = np.array(range(0,len(min_dist)))
 #check drone num changed idx
 current_drone_num = general_data['initial_drone_num']
@@ -37,7 +45,7 @@ kmeans_idx = [idx-0.5 for idx in range(len(kmeans)) if kmeans[idx]==1]
 
 
 # # ------------- analysis ------------------
-analysis = False
+
 if analysis:
     plt.ioff()
     # Allocation
@@ -82,7 +90,7 @@ if analysis:
 
 
 # ----- restore
-restore = not analysis
+
 if restore:
     plt.ion()
     fig = plt.figure()
@@ -106,5 +114,19 @@ if restore:
 
 
 
+if cost:
+    plt.ioff()
+    # Allocation
+    fig3 = plt.figure()
+    # fig3.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, average: {round(np.average(min_dist),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
+    ax3= fig3.add_subplot('111')
+    idx = np.array(range(0,len(next_diff)))
+    ax3.scatter(idx, next_diff,c='blue', label='next_diff',s=10)
+    ax3.scatter(idx, travel_dist, c='green', label='travel_dist',s=10)
+    ax3.set_xlabel("Iteration")
+    ax3.set_ylabel("cost")
+    ax3.set_title('cost')
+    ax3.legend()    
 
+    plt.show()
 

@@ -83,14 +83,16 @@ class Optim(object):
                 if self.current_targets[j] != next_targets[j]:
                     travel_dist_vec[j] = self.distance_mat_nochange[self.current_targets[j], next_targets[j]]
             travel_dist = np.linalg.norm(travel_dist_vec, ord=2)
-            # total cost
-            current_cost = next_diff + travel_dist
+            current_cost = next_diff**2 + travel_dist**2
             if self.is_in_dw_volume(next_targets):
                 current_cost *= 5
             if current_cost < min_cost:
                 min_cost = current_cost
                 min_dist = min(dist_vec)
                 best_comb = next_targets
+                min_travel_dist = travel_dist #for debug
+                min_next_diff = next_diff #for debug
+        self.an.cost(min_next_diff, min_travel_dist)
         return best_comb, min_dist  
 
 

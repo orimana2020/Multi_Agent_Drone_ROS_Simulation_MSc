@@ -24,7 +24,7 @@ class Flight_manager(object):
         self.swarm.reset_estimators()
         self.open_threads = [[]] * self.drone_num
         self.sleep_time = params.sleep_time
-        self.smooth_points_num = params.points_in_smooth_params
+        self.smooth_points_num = params.segments_num + 1
         self.max_dist2target = params.dist_to_target
         self.max_dist2base = params.dist_to_base
         self.velocity = params.linear_velocity

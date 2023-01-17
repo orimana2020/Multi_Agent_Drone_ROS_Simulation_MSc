@@ -3,12 +3,12 @@
 import numpy as np
 from scipy import interpolate
 import params
-import Additionals
 
 class Trajectory(object):
-    def __init__(self, drones, logger):
+    def __init__(self, drones, logger, an):
         self.drone_num = len(drones)
         self.logger = logger
+        self.an = an
         self.res = params.resolution
         self.break_trajectory_len_factor = params.break_trajectory_len_factor
         self.minimum_floor_distance = params.floor_safety_distance # [m]
@@ -35,7 +35,7 @@ class Trajectory(object):
         self.constant_blocking_area = [[]] * self.drone_num
         self.constant_blocking_area_m = [[]] * self.drone_num
         self.mean_x_targets_position = params.mean_x_targets_position
-        self.smooth_points_num = params.points_in_smooth_params
+        self.smooth_points_num = params.segments_num + 1
         # self.error_arr = Additionals.generate_fake_error_mapping()
         self.error_arr = params.LPS_n_safety_vol #[x,y,z], resolution =0.05 # for inflate
         self.error_arr_max = np.max(self.error_arr) # for inflate
@@ -381,6 +381,7 @@ class Trajectory(object):
                     self.path_gt[drone_idx] = self.smooth_path_m[drone_idx]
                     self.smooth_path_m[drone_idx] = self.get_path_LPS_error(self.smooth_path_m[drone_idx], drones, drone_idx)
                 self.logger.log(f'path found drone {drone_idx}')
+                self.an.path(drone_idx=drone_idx, waypoints=self.smooth_path_m[drone_idx],start_title=drones[drone_idx].start_title ,goal_title=drones[drone_idx].goal_title)
                 return 1
             except:
                 self.logger.log(f'No Path Found! drone {drone_idx} from {start_title} to {goal_title} , start: {np.round((np.array(start_m)),2)} , goal: {np.round((np.array(goal_m)),2)}')
@@ -408,6 +409,8 @@ class Trajectory(object):
                 if self.simulate_lps_error:
                     self.path_gt[drone_idx] = self.smooth_path_m[drone_idx]
                     self.smooth_path_m[drone_idx] = self.get_path_LPS_error(self.smooth_path_m[drone_idx], drones, drone_idx)
+                self.logger.log(f'path found drone {drone_idx}')
+                self.an.path(drone_idx=drone_idx, waypoints=self.smooth_path_m[drone_idx],start_title=drones[drone_idx].start_title ,goal_title=drones[drone_idx].goal_title)
                 return 1
             except:
                 self.logger.log(f'No Path Found! drone {drone_idx} from {start_title} to {goal_title} , start: {np.round((np.array(start_m)),2)} , goal: {np.round((np.array(goal_m)),2)}')
