@@ -7,13 +7,14 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 5
-threshold_factor = 0.
+k_init = 8
+threshold_factor = 0.8
 analysis = 1
 restore = 0
 restore_history = 0
 show_cost = 0
 show_path = 0
+compare_k_threshold=0
 
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp2/'
 url=''
@@ -167,3 +168,33 @@ if show_path:
     ax.set_ylabel('y')
     ax.set_zlabel('z')
     plt.show()
+
+if compare_k_threshold:
+    k_lst = [2,3,4,5,6,7,8]
+    threshold_lst = [0.5,0.6,0.7,0.8,0.9]
+    exp_data = [[] for _ in range(len(k_lst) * len(threshold_lst))]
+    idx = 0
+    for k in k_lst:
+        for thersh in threshold_lst:
+            data = np.load(url + 'task_k_'+str(k)+'_threshold_'+str(thersh)+'_3'+"_data.npy", allow_pickle=True)
+            data = data.item()
+            general_data, drone_data = data['general_data'],  data['drone_data']
+            allocation_history = general_data['allocation_history']
+            min_dist = allocation_history['min_dist']
+            median = np.median(min_dist)
+            kmeans = allocation_history['is_kmeans']
+            kmeans_sum = sum(kmeans)
+            exp_data[idx] = [k, thersh, median,kmeans_sum]
+        
+    k = exp_data[:,0]
+    threshold  = exp_data[:,1]
+    median  = exp_data[:,2]    
+    kmeans_sum = exp_data[:,3]
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter3D(k, threshold, median)
+    ax.set_xlabel('k')
+    ax.set_ylabel('threshold')
+    ax.set_zlabel('median distance')
+    plt.show()
+            

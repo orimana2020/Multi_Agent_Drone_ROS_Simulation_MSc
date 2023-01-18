@@ -58,4 +58,8 @@ targetpos = params.targetpos
 # print(drone_idx)
 # print(y_target_idx)
 
-print((1.5**2 + 1.4**2))
+s = 'orikirbi'
+
+n=2
+# for i in range(len(s)-1):
+#     s[i],s[i+1] = s[i+1],s[i]

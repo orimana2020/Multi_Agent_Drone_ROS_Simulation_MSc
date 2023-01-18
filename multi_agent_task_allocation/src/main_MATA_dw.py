@@ -26,7 +26,7 @@ def main():
     fc.take_off_swarm()
     dm.update_current_coords(fc)
     an.start(dm)
-    allocation = None
+    allocation = 'allocate'
     last_unvisited, last_targets = 0, 0 #used for logging
 
     while ta.optim.unvisited_num > 0:
@@ -34,17 +34,21 @@ def main():
         if ta.optim.unvisited_num != last_unvisited:
             logger.log(f'unvisited targets = {ta.optim.unvisited_num}')
             last_unvisited = ta.optim.unvisited_num
-        for j in range(ta.drone_num):
-            if dm.drones[j].is_available:
-                change_flag = np.zeros(ta.drone_num, dtype=int)
-                change_flag[j] = 1
-                allocation = ta.allocate(change_flag)
-                if allocation == 'update_kmeans':
-                    logger.log(f'kmeans mode started, j = {j}')
-                    break
-                else:
-                    dm.drones[j].goal_coords = tuple(ta.targetpos[ta.optim.current_targets[j],:])
-                    dm.drones[j].is_available = 0
+        if allocation == 'allocate':
+            for j in range(ta.drone_num):
+                if dm.drones[j].is_available:
+                    change_flag = np.zeros(ta.drone_num, dtype=int)
+                    change_flag[j] = 1
+                    allocation = ta.allocate(change_flag)
+                    if allocation == 'update_kmeans':
+                        logger.log(f'kmeans mode started, j = {j}')
+                        break
+                    elif allocation == 'remove_drone':
+                        logger.log(f'remove_drone started, j = {j}')
+                        break
+                    else:
+                        dm.drones[j].goal_coords = tuple(ta.targetpos[ta.optim.current_targets[j],:])
+                        dm.drones[j].is_available = 0
         if not np.array_equal(last_targets, ta.optim.current_targets):
             last_targets = ta.optim.current_targets
             logger.log(f'current targets: {ta.optim.current_targets}')
@@ -52,7 +56,6 @@ def main():
         if allocation == 'remove_drone':    
             logger.log('returning to base inactive drones')
             drone_idx = ta.drone_num -1
-
             while not (dm.drones[drone_idx].at_base) and (ta.optim.unvisited[ta.optim.current_targets[drone_idx]]) and (dm.drones[drone_idx].path_found):
                 dm.drones[drone_idx].is_reached_goal = fc.reached_goal(drone_idx=drone_idx, goal=dm.drones[drone_idx].goal_coords, title=dm.drones[drone_idx].goal_title)    
                 if dm.drones[drone_idx].is_reached_goal and dm.drones[drone_idx].goal_title == 'target':
@@ -73,13 +76,14 @@ def main():
                     dm.drones[drone_idx].at_base = 1
                 dm.drones[drone_idx].is_reached_goal = fc.reached_goal(drone_idx=drone_idx, goal=dm.drones[drone_idx].goal_coords, title=dm.drones[drone_idx].goal_title)    
                 fc.sleep()
-
+            
             allocation = 'update_kmeans'
             fc.land(drone_idx=drone_idx)
             dm.drones[drone_idx].is_active = False
             logger.log(f'drone {drone_idx} is landing')
             ta.drone_num -= 1
-            logger.log(f'drone number updated to: {ta.drone_num}')
+            logger.log(f'drone number updated to: {ta.drone_num}') 
+            
         # --------------------------- UPDATE KMEANS ------------------------- #  
         while allocation == 'update_kmeans':
             k_means_permit = False
@@ -131,8 +135,14 @@ def main():
 
                 fig.plot1(path_planner, dm, ta)
                 fc.sleep()
+
             logger.log(f'kmeans permit {k_means_permit}')
-            if k_means_permit :
+            if (ta.optim.unvisited_num < ta.drone_num) and (ta.drone_num > 1):
+                ta.drone_num_changed = True
+                allocation = 'remove_drone'
+                break
+
+            if k_means_permit:
                 for j in range(ta.drone_num):
                    dm.kmeans_permit(j, fc)
                 ta.update_kmeans(dm)
@@ -141,38 +151,40 @@ def main():
                     dm.drones[j].is_available = 0
                 logger.log(f'kmeans updated, current drone num: {ta.drone_num}')
                 logger.log(f'current targets: {ta.optim.current_targets}')
-                allocation = None 
+                allocation = 'allocate'
+            
 
 
         #  -------------------------------- PATH PLANNING ------------------------------------------ #
         fig.ax.axes.clear()
-        for j in range(ta.drone_num):
-            if not (dm.drones[j].path_found) and (ta.optim.unvisited_num > 0) and (not (fc.open_threads[j].is_alive())):
-                dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
-                if dm.drones[j].path_found:
-                    dm.drones[j].at_base = 0
-                    fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
-                    an.atBaseTarget(j)
-                    logger.log(f'executing trajectory drone {j}')
+        if allocation == 'allocate':
+            for j in range(ta.drone_num):
+                if not (dm.drones[j].path_found) and (ta.optim.unvisited_num > 0) and (not (fc.open_threads[j].is_alive())):
+                    dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
+                    if dm.drones[j].path_found:
+                        dm.drones[j].at_base = 0
+                        fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                        an.atBaseTarget(j)
+                        logger.log(f'executing trajectory drone {j}')
+                    else:
+                        if not dm.drones[j].at_base:
+                            dm.drones[j].goal_title = 'base'
+                            dm.drones[j].goal_coords = dm.drones[j].base
+                            logger.log(f'drone {j} cant reach target, returning to base')
+        
+                # ------------------ UPDATE DRONES STATUS -------------------------------------------#
                 else:
-                    if not dm.drones[j].at_base:
-                        dm.drones[j].goal_title = 'base'
-                        dm.drones[j].goal_coords = dm.drones[j].base
-                        logger.log(f'drone {j} cant reach target, returning to base')
-    
-            # ------------------ UPDATE DRONES STATUS -------------------------------------------#
-            else:
-                dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = dm.drones[j].goal_coords, title=dm.drones[j].goal_title) 
-                if (dm.drones[j].is_reached_goal) and (dm.drones[j].path_found):
-                    if dm.drones[j].goal_title == 'base':
-                        dm.arrived_base(j, fc)
-                        an.time_to_base(j)
-                        logger.log(f'drone {j} arrived to base')
-                    elif dm.drones[j].goal_title == 'target':
-                        an.time_to_target(j)
-                        an.add_visited(j, ta.optim.current_targets[j])
-                        dm.arrived_target(j, ta, fc)
-                        logger.log(f'drone {j} arrived to target')
+                    dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal = dm.drones[j].goal_coords, title=dm.drones[j].goal_title) 
+                    if (dm.drones[j].is_reached_goal) and (dm.drones[j].path_found):
+                        if dm.drones[j].goal_title == 'base':
+                            dm.arrived_base(j, fc)
+                            an.time_to_base(j)
+                            logger.log(f'drone {j} arrived to base')
+                        elif dm.drones[j].goal_title == 'target':
+                            an.time_to_target(j)
+                            an.add_visited(j, ta.optim.current_targets[j])
+                            dm.arrived_target(j, ta, fc)
+                            logger.log(f'drone {j} arrived to target')
         
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
