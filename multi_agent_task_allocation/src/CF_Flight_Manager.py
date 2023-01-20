@@ -120,9 +120,9 @@ class Flight_manager(object):
         self.open_threads[drone_idx] = thread
     
     def get_position(self, drone_idx):
-        # scf = self.swarm._cfs[self.uri_dict[drone_idx]]
-        # self.swarm.get_single_cf_estimated_position(scf)
-        self.swarm.daemon_process(self.swarm.get_single_cf_estimated_position, self.uri_dict[drone_idx])
+        scf = self.swarm._cfs[self.uri_dict[drone_idx]]
+        self.swarm.get_single_cf_estimated_position(scf)
+        # self.swarm.daemon_process(self.swarm.get_single_cf_estimated_position, self.uri_dict[drone_idx])
         return self.swarm._positions[self.uri_dict[drone_idx]]
     
     def get_battery(self, drone_idx):

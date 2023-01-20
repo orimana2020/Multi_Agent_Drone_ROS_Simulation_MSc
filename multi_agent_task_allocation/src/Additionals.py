@@ -208,6 +208,7 @@ class Analysis(object):
         general_data['initial_drone_num'] = (len(self.dm.drones))
         general_data['total_task_time'] = time.time() - self.start_time
         general_data['targets_position'] = params.targetpos
+        general_data['lps_position'] = params.LPS_anchor_pos
         general_data['mode'] = params.mode
         general_data['allocation_history'] = self.allocation_history
         general_data['downwash_size'] = params.downwash_distance
