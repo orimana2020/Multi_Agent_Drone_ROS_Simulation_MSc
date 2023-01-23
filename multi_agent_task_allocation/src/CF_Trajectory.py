@@ -1,14 +1,19 @@
 
+"""
+Example of how to generate trajectories for the High Level commander using
+Bezier curves. The output from this script is intended to be pasted into the
+autonomous_sequence_high_level.py example.
+
+This code uses Bezier curves of degree 7, that is with 8 control points.
+See https://en.wikipedia.org/wiki/B%C3%A9zier_curve
+
+All coordinates are (x, y, z, yaw)
+"""
 import math
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D 
-from scipy import interpolate
-import time
-import sys
 import numpy as np
 from cflib.crazyflie.mem import MemoryElement
 from cflib.crazyflie.mem import Poly4D
-
+import sys
 
 
 class Node:
@@ -105,14 +110,7 @@ class Node:
         for p in self._control_points[1]:
             visualizer.marker(p[0:3], color=color)
 
-    def print_(self):
-        print('Node ---')
-        print('Tail:')
-        for c in self._control_points[1]:
-            print(c)
-        print('Head:')
-        for c in self._control_points[0]:
-            print(c)
+
 
 
 class Segment:
@@ -229,7 +227,7 @@ class Segment:
 
         s += '],  # noqa'
         print(s)
-    
+
     def get_coef(self):
         coef = []
         coef.append(self._scale)
@@ -237,7 +235,6 @@ class Segment:
             for d in range(8):
                 coef.append(self._polys[axis][d]) 
         return coef
-
 
     def print_poly_c(self):
         s = ''
@@ -282,12 +279,16 @@ class Segment:
         s = scale
         l_s = 1 - s
         p = unscaled_points
+
         result = [None] * 8
+
         result[0] = p[0]
         result[1] = l_s * p[0] + s * p[1]
         result[2] = l_s ** 2 * p[0] + 2 * l_s * s * p[1] + s ** 2 * p[2]
-        result[3] = l_s ** 3 * p[0] + 3 * l_s ** 2 * s * p[1] + 3 * l_s * s ** 2 * p[2] + s ** 3 * p[3]
-        result[4] = l_s ** 3 * p[7] + 3 * l_s ** 2 * s * p[6] + 3 * l_s * s ** 2 * p[5] + s ** 3 * p[4]
+        result[3] = l_s ** 3 * p[0] + 3 * l_s ** 2 * s * p[
+            1] + 3 * l_s * s ** 2 * p[2] + s ** 3 * p[3]
+        result[4] = l_s ** 3 * p[7] + 3 * l_s ** 2 * s * p[
+            6] + 3 * l_s * s ** 2 * p[5] + s ** 3 * p[4]
         result[5] = l_s ** 2 * p[7] + 2 * l_s * s * p[6] + s ** 2 * p[5]
         result[6] = l_s * p[7] + s * p[6]
         result[7] = p[7]
@@ -296,33 +297,20 @@ class Segment:
 
 
 class Generate_Trajectory(object):
-    def __init__(self, waypoints, velocity=1,plotting=0, force_zero_yaw = False, is_smoothen=True):
-        if not (is_smoothen):
-            wp = self.get_smooth_path(waypoints)
-        else:
-            wp = waypoints
+    def __init__(self, waypoints, velocity=1, force_zero_yaw = False):
+        wp = waypoints
         yaw = self.get_yaw(wp,force_zero_yaw)
         nodes = self.generate_nodes(wp, yaw)
         segments_time = self.get_segments_time(wp, velocity)
         segments = self.generate_segments(nodes, segments_time)
         self.poly_coef = self.get_polynom_coeff(segments)
-        if plotting == 1:
-            self.plot_trajectory(self.poly_coef, wp, waypoints, res = 2)
-            
-
+ 
     def cntl_pnt(self, current, next):
         dic_vec = next - current
         size = np.linalg.norm(dic_vec, ord=2)
         normilized_dir_vec = dic_vec / size
         size_cp = size / 8
-        return current + normilized_dir_vec * size_cp
-
-    def get_smooth_path(self, path):
-        # s = smoothness, m > k must hold, default k degree is  k=3, m is number of points
-        tck, _ = interpolate.splprep([path[:,0], path[:,1], path[:,2]], s=10)  
-        u_fine = np.linspace(0,1,int(min(len(path), 30))) # determine number of points in smooth path 
-        smooth_path = interpolate.splev(u_fine, tck)
-        return np.transpose(np.array(smooth_path))
+        return current + normilized_dir_vec * size_cp #determine the position of the first control point
 
     def get_segments_time(self, wp, velocity=1):
         segment_time = []
@@ -374,91 +362,17 @@ class Generate_Trajectory(object):
             segments.append(Segment(nodes[i], nodes[i+1], segments_time[i]))
         return segments
 
-
-    def get_polynom_coeff(self, segments): # paste poly_coef in high level commander
+    def get_polynom_coeff(self, segments): 
         poly_coef = []
         for s in segments:
             poly_coef.append(s.get_coef())
         return poly_coef
 
 
-    def plot_trajectory(self, poly_coef, wp ,wp_orig, res):
-        poly_coef = np.array(poly_coef)
-        x_tot = np.array([])
-        y_tot = np.array([])
-        z_tot = np.array([])
-        yaw_tot = np.array([])
-        for segment in range(len(poly_coef)):
-            row = poly_coef[segment]
-            durition = row[0]
-            x_c = row[1:9]
-            y_c = row[9:17]
-            z_c = row[17:25]
-            yaw_c = row[25:]
-            t_vec = np.linspace(0,durition, res)
-            x = 0
-            y = 0
-            z = 0
-            yaw = 0
-            for i in range(len(x_c)):
-                x += x_c[i]*t_vec**[i]
-                y += y_c[i]*t_vec**[i]
-                z += z_c[i]*t_vec**[i]
-                yaw += yaw_c[i]*t_vec**[i]
-            x_tot = np.append(x_tot, x, axis = None)
-            y_tot = np.append(y_tot, y, axis = None)
-            z_tot = np.append(z_tot, z, axis = None)
-            yaw_tot = np.append(yaw_tot, yaw,axis= None)
-        
-        # yaw decoder
-        r = 0.1
-        # yaw_rad = np.deg2rad(yaw_tot)
-        dy = r * np.sin(yaw_tot)
-        dx = r * np.cos(yaw_tot)
-        fig = plt.figure()
-        ax = Axes3D(fig)
-        for i in range(len(yaw_tot)):
-            ax.plot([x_tot[i], x_tot[i]+dx[i] ], [y_tot[i], y_tot[i]+ dy[i] ], [z_tot[i], z_tot[i]], c='c')
-        ax.scatter3D(x_tot, y_tot, z_tot)
-        ax.scatter3D(wp_orig[:,0],wp_orig[:,1],wp_orig[:,2],s=40,c='green')
-        ax.scatter3D(wp[:,0],wp[:,1],wp[:,2],s=40,c='red')
-        ax.set_xlabel('x')
-        ax.set_ylabel('y')
-        ax.set_zlabel('z')
-        ax.set_xlim(-1,1)
-        ax.set_ylim(-1,1)
-        ax.set_zlim(0,5)
-        plt.show()
-
-
-class Uploader:
-    def __init__(self):
-        self._is_done = False
-        self._success = True
-
-    def upload(self, trajectory_mem):
-        # print('Uploading data')
-        trajectory_mem.write_data(self._upload_done, write_failed_cb=self._upload_failed)
-        # start_time = time.time()
-        while not self._is_done:
-            time.sleep(0.1)
-        # print(f'trajecoty uploaded time {time.time() - start_time } seconds')
-        return self._success
-        
-    def _upload_done(self, mem, addr):
-        # print('Data uploaded')
-        self._is_done = True
-        self._success = True
-
-    def _upload_failed(self, mem, addr):
-        print('Data upload failed')
-        self._is_done = True
-        self._success = False
-
-
-def upload_trajectory(cf,trajectory_id ,trajectory):
+def upload_trajectory(cf, trajectory_id, trajectory):
     trajectory_mem = cf.mem.get_mems(MemoryElement.TYPE_TRAJ)[0]
     trajectory_mem.trajectory = []
+
     total_duration = 0
     for row in trajectory:
         duration = row[0]
@@ -469,11 +383,9 @@ def upload_trajectory(cf,trajectory_id ,trajectory):
         trajectory_mem.trajectory.append(Poly4D(duration, x, y, z, yaw))
         total_duration += duration
 
-    upload_result = Uploader().upload(trajectory_mem)
+    upload_result = trajectory_mem.write_data_sync()
     if not upload_result:
         print('Upload failed, aborting!')
         sys.exit(1)
     cf.high_level_commander.define_trajectory(trajectory_id, 0, len(trajectory_mem.trajectory))
     return total_duration
-
-

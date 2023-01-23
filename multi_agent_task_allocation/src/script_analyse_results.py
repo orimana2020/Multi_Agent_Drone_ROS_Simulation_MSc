@@ -7,19 +7,20 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 5
-threshold_factor = 0.8
-analysis = 1
+k_init = 7
+threshold_factor = 0.5
+# ------ what to show
+analysis = 0
 restore = 0
 restore_history = 0
 show_cost = 0
-show_path = 0
-compare_k_threshold=1
+show_path = 1
+compare_k_threshold=0
 
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp3/'
 url=''
 # data = np.load(url + 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'+"_data.npy", allow_pickle=True)
-data = np.load(url + "cf_exp_sim_data.npy", allow_pickle=True)
+data = np.load(url + "cf_exp_2_data_cp_0.8.npy", allow_pickle=True)
 
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
@@ -139,7 +140,7 @@ if restore_history:
         ax.set_ylim(limits[1])
         ax.set_zlim(limits[2])
         fig.canvas.flush_events()
-        plt.pause(0.1)
+        plt.pause(3)
             
 if show_cost:
     plt.ioff()

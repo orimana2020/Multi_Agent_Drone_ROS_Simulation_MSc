@@ -72,7 +72,7 @@ def main():
                 fc.sleep()
 
             while not (dm.drones[drone_idx].at_base):
-                if not (dm.drones[drone_idx].path_found) and (not (fc.open_threads[drone_idx].is_alive())):
+                if not (dm.drones[drone_idx].path_found) : #and (not (fc.open_threads[drone_idx].is_alive())):
                     dm.return_base(drone_idx, path_planner, fc, ta, override=True)
                 elif (dm.drones[drone_idx].is_reached_goal):
                     dm.drones[drone_idx].at_base = 1
@@ -98,12 +98,12 @@ def main():
                     else:
                         dm.drones[j].is_reached_goal = fc.reached_goal(drone_idx=j, goal=dm.drones[j].goal_coords, title=dm.drones[j].goal_title) 
                         # find path to unvisited target
-                        if (not (dm.drones[j].path_found)) and (dm.drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) and (not (fc.open_threads[j].is_alive())):
+                        if (not (dm.drones[j].path_found)) and (dm.drones[j].goal_title == 'target') and (ta.optim.unvisited[ta.optim.current_targets[j]] == True) : # and (not (fc.open_threads[j].is_alive())):
                             dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
                             if dm.drones[j].path_found:
                                 dm.drones[j].at_base = 0
                                 an.atBaseTarget(j)
-                                fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                                fc.execute_trajectory(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                                 logger.log(f'executing trajectory drone {j}')
                             else:
                                 if dm.drones[j].at_base:
@@ -122,10 +122,10 @@ def main():
                             an.add_visited(j, ta.optim.current_targets[j])
                             
                         # find path to base 
-                        elif (not (dm.drones[j].path_found)) and dm.drones[j].goal_title == 'base'  and (not (fc.open_threads[j].is_alive())) :
+                        elif (not (dm.drones[j].path_found)) and dm.drones[j].goal_title == 'base'  :#and (not (fc.open_threads[j].is_alive())) :
                             dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
                             if dm.drones[j].path_found:
-                                fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                                fc.execute_trajectory(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                                 an.atBaseTarget(j)
                      
                         # arrived to base 
@@ -161,11 +161,11 @@ def main():
         fig.ax.axes.clear()
         if allocation == 'allocate':
             for j in range(ta.drone_num):
-                if not (dm.drones[j].path_found) and (ta.optim.unvisited_num > 0) and (not (fc.open_threads[j].is_alive())):
+                if not (dm.drones[j].path_found) and (ta.optim.unvisited_num > 0) : # and (not (fc.open_threads[j].is_alive())):
                     dm.drones[j].path_found = path_planner.plan(dm.drones ,drone_idx=j, drone_num=ta.drone_num)
                     if dm.drones[j].path_found:
                         dm.drones[j].at_base = 0
-                        fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
+                        fc.execute_trajectory(drone_idx=j, waypoints=path_planner.smooth_path_m[j])
                         an.atBaseTarget(j)
                         logger.log(f'executing trajectory drone {j}')
                     else:
@@ -187,7 +187,10 @@ def main():
                             an.add_visited(j, ta.optim.current_targets[j])
                             dm.arrived_target(j, ta, fc)
                             logger.log(f'drone {j} arrived to target')
-        
+        if ((an.initial_targets_num - ta.optim.unvisited_num) / an.initial_targets_num ) > an.save_checkpoints[an.current_cp_idx]:
+            print(((an.initial_targets_num - ta.optim.unvisited_num) / an.initial_targets_num ))
+            an.save(an.save_checkpoints[an.current_cp_idx])
+            an.current_cp_idx += 1
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
     # -------------------------------- Return all drones to base ------------------------#
@@ -195,7 +198,7 @@ def main():
     logger.log('return all drones to base')
     while not all_at_base:
         for j in range(ta.drone_num):
-            if not (dm.drones[j].at_base) and not (dm.drones[j].path_found) and (not (fc.open_threads[j].is_alive())):
+            if not (dm.drones[j].at_base) and not (dm.drones[j].path_found) : # and (not (fc.open_threads[j].is_alive())):
                 dm.return_base(j, path_planner, fc, ta)
             elif (dm.drones[j].is_reached_goal):
                 dm.drones[j].at_base = 1
@@ -204,7 +207,7 @@ def main():
         fig.plot1(path_planner, dm, ta)
         fc.sleep()
     logger.log(f'Task Done Successfully, Total time:{round(time.time() - an.start_time, 2)} [sec], exclude take off and landing')
-    an.analyse()
+    an.save(1)
     fc.land('all', dm.drones)
     logger.log('landing all active drones')
     

@@ -99,7 +99,7 @@ class Drone_Manager(object):
         self.drones[j].goal_coords = self.drones[j].base
         self.drones[j].path_found = path_planner.plan(self.drones ,drone_idx=j, drone_num=ta.drone_num, override=override)
         if self.drones[j].path_found:
-            fc.execute_trajectory_mt(drone_idx=j, waypoints=path_planner.smooth_path_m[j])        
+            fc.execute_trajectory(drone_idx=j, waypoints=path_planner.smooth_path_m[j])        
     
     def is_all_at_base(self, drone_num):
         all_at_base = True
@@ -152,6 +152,10 @@ class Analysis(object):
         self.allocation_history['travel_dist'] = []
         self.allocation_history['path'] = []
         self.allocation_history['min_cost'] = []
+        self.initial_targets_num = len(params.targetpos)
+        self.save_checkpoints = [0.5, 0.8, 1.1]
+        self.current_cp_idx = 0
+        self.current_checkpoint = self.save_checkpoints[self.current_cp_idx]
 
     def start(self,dm):
         self.dm = dm
@@ -203,7 +207,7 @@ class Analysis(object):
         self.allocation_history['path'].append([drone_idx,start_title, goal_title, waypoints])
         
 
-    def analyse(self):
+    def save(self, cp):
         general_data = {}
         general_data['initial_drone_num'] = (len(self.dm.drones))
         general_data['total_task_time'] = time.time() - self.start_time
@@ -226,7 +230,8 @@ class Analysis(object):
             'visited_targets_num':self.dm.drones[j].visited_targets_num,
             'full_magazine':self.dm.drones[j].full_magazine }
         data = {'general_data':general_data, 'drone_data':drone_data}
-        np.save(params.file_name+'_data', np.array(data))
+
+        np.save(params.file_name+'_data_cp_'+str(cp), np.array(data))
 
 
 class get_figure(object):

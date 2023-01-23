@@ -74,7 +74,7 @@ class Flight_manager(object):
         dist = ((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2)**0.5 # m
         return dist / self.linear_velocity_limit # sec
 
-    def execute_trajectory_mt(self,drone_idx, waypoints):
+    def execute_trajectory(self,drone_idx, waypoints):
         self.traj.points = []
         self.header.stamp = rospy.Time()
         timer = 0
@@ -115,7 +115,7 @@ class Flight_manager(object):
         self.get_position(drone_idx)
         goal = [self.pos.x, self.pos.y, height]
         waypoints = [goal]
-        self.execute_trajectory_mt(drone_idx, waypoints)
+        self.execute_trajectory(drone_idx, waypoints)
     
     def take_off_swarm(self):
         for drone_idx in range(self.drone_num):
@@ -125,7 +125,7 @@ class Flight_manager(object):
     def _land(self, drone_idx):
         goal = [self.base[drone_idx][0], self.base[drone_idx][1], 0.2]
         waypoints = [goal]
-        self.execute_trajectory_mt(drone_idx, waypoints)
+        self.execute_trajectory(drone_idx, waypoints)
     
     def land(self, drone_idx, drones=None):
         if drone_idx == 'all':
