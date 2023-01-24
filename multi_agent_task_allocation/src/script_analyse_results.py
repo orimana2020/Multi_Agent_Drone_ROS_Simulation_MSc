@@ -7,20 +7,25 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 7
-threshold_factor = 0.5
+mode = 'sim'
+k_init = 4
+threshold_factor = 0.8
 # ------ what to show
 analysis = 0
 restore = 0
 restore_history = 0
 show_cost = 0
-show_path = 1
-compare_k_threshold=0
+show_path = 0
+compare_k_threshold=1
 
-# url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp3/'
-url=''
-# data = np.load(url + 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'+"_data.npy", allow_pickle=True)
-data = np.load(url + "cf_exp_2_data_cp_0.8.npy", allow_pickle=True)
+if mode == 'sim':
+    url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp3/'
+    data = np.load(url + 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'+"_data.npy", allow_pickle=True)
+if mode == 'cf':
+    url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_cf/cf_exp/'
+    data = np.load(url + "cf_exp_5_data_cp_1.npy", allow_pickle=True)
+
+# url=''
 
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
@@ -140,7 +145,7 @@ if restore_history:
         ax.set_ylim(limits[1])
         ax.set_zlim(limits[2])
         fig.canvas.flush_events()
-        plt.pause(3)
+        plt.pause(0.1)
             
 if show_cost:
     plt.ioff()
@@ -184,21 +189,23 @@ if compare_k_threshold:
             general_data, drone_data = data['general_data'],  data['drone_data']
             allocation_history = general_data['allocation_history']
             min_dist = allocation_history['min_dist']
-            median = np.median(min_dist)
+            median_mi_dist = np.median(min_dist)
             kmeans = allocation_history['is_kmeans']
+            cost = np.median(allocation_history['min_cost'])
             kmeans_sum = sum(kmeans)
-            exp_data[idx] = [k, thersh, median,kmeans_sum]
+            exp_data[idx] = [k, thersh, median_mi_dist ,kmeans_sum, cost]
             idx +=1
     exp_data = np.array(exp_data) 
     k = exp_data[:,0]
     threshold  = exp_data[:,1]
-    median  = exp_data[:,2]    
+    median_mi_dist  = exp_data[:,2]    
     kmeans_sum = exp_data[:,3]
+    median_cost = exp_data[:,4]
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter3D(k, threshold, median)
+    ax.scatter3D(k, threshold, median_cost)
     ax.set_xlabel('k')
     ax.set_ylabel('threshold')
-    ax.set_zlabel('median distance')
+    ax.set_zlabel('median_cost')
     plt.show()
             
