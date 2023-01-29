@@ -6,7 +6,6 @@
 # -------------------------------------------------------------
 
 
-
 from Allocation_algorithm import Allocation
 import matplotlib.pyplot as plt
 from Additionals import get_figure , Drone_Manager, Logger, Analysis
@@ -60,9 +59,9 @@ def main(i,k,threshold):
     
 
 if __name__ == '__main__':
-    k_lst = [2,3,4,5,6,7,8]
-    threshold_lst = [0.5,0.6,0.7,0.8,0.9]
+    k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+    threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     for k in k_lst:
         for thresh in threshold_lst:
-            for i in range(5):
+            for i in range(3):
                 main(i,k,thresh)

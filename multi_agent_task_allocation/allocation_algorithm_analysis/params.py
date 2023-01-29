@@ -37,7 +37,6 @@ if mode == 'cf':
     drone_size_m = 0.2 # [m]
     # base = [(0.6,-0.7,1), (0.6,0,1), (0.6,0.7,1)][:drone_num]# (x,y,z)   -> right to left order
     base = [(0.6,-1,1), (0.6,-0.3,1), (0.6,0.3,1), (0.6,1,1)][:drone_num]# (x,y,z)   -> right to left order
-
     segments_num = 8
 
 #-----------Drone Sim

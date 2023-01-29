@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 import numpy as np
-from itertools import permutations 
-import os
 from sklearn.cluster import KMeans
 from itertools import combinations
 import params
@@ -29,7 +27,6 @@ class Optim(object):
         self.threshold_dist_low = None
         self.threshold_dist_up = None
         self.downwash_distance = params.downwash_distance
-        self.uri_state_mat = params.uri_state_mat
         self.an = an
         self.a0 = -self.downwash_distance[2][0]/ self.downwash_distance[1][0] 
         self.b0 = self.downwash_distance[2][0] 
@@ -38,19 +35,6 @@ class Optim(object):
         for i in range(drone_num):
             self.history.append(np.empty((0,3)))
 
-
-    def get_state_matrix(self, drone_num, init_flag=False):
-        if init_flag:
-            return np.load(str(os.getcwd())+ self.uri_state_mat +'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
-        else:   
-            if self.k > 1:
-                self.k -= 1
-            self.logger.log(f'k updated : {self.k}')
-            print('k updated:' , self.k)
-            if self.k >= 2:
-                return np.load(str(os.getcwd())+ self.uri_state_mat +'/state_mat/state_mat_d'+str(drone_num)+'_k'+str(self.k)+'.npy')
-            elif self.k == 1:
-                return np.ones((1,drone_num,1), dtype=int)
 
     def get_knn(self, is_changed, drone_num):
         temp_distance_matrix = self.distance_mat.copy()
@@ -68,25 +52,27 @@ class Optim(object):
                 knn[:,i] = self.current_targets[i]      
         return knn
 
+
     def cost_function(self, next_diff, travel_dist, next_targets, min_dist_vec):
-        # cost = (1+next_diff)**2 + (1+travel_dist)
-        cost = (next_diff)*0.8 + (travel_dist) * 0.2
+        cost = next_diff * 0.9 + travel_dist * 0.1
+        in_blocking_volume = self.is_in_dw_volume(next_targets)
+        is_in_threshold = False
+        if self.threshold_dist_low < min_dist_vec < self.threshold_dist_up:
+            is_in_threshold = True
+        return cost, in_blocking_volume, is_in_threshold
 
-        if self.is_in_dw_volume(next_targets):
-            cost = cost * 1.5
-        return cost
-
-    def search_best_combination(self, drone_num, state_mat, knn): 
-        min_cost = np.inf
-        for i in range(self.k ** drone_num):
-            next_targets = np.sum(knn * state_mat[:,:,i], axis=0)
+    def search_best_combination(self, drone_num, knn): 
+        min_cost_optimal = np.inf #in threshold limits, outside blocking volume
+        min_cost_suboptimal = np.inf #in threshold limits, inside blocking volume
+        for i in range(self.k):
+            next_targets = knn[i,:]
             dist_vec = np.zeros(self.combs_size)
             min_dist_vec = np.inf
             for j in range(self.combs_size):
                 dist_vec[j] = self.distance_mat_nochange[next_targets[self.combs[j][0]], next_targets[self.combs[j][1]]]
                 if dist_vec[j] < min_dist_vec:
                     min_dist_vec = dist_vec[j]
-            # change in distancenes between initial distance and current distance    
+            # change in distancenes between initial distance and current distance  
             next_diff = np.linalg.norm(dist_vec - self.initial_dist_vec, ord=2) 
             # traveled distance between current targets and next targets
             travel_dist_vec = np.zeros(drone_num)
@@ -94,14 +80,29 @@ class Optim(object):
                 if self.current_targets[j] != next_targets[j]:
                     travel_dist_vec[j] = self.distance_mat_nochange[self.current_targets[j], next_targets[j]]
             travel_dist = np.linalg.norm(travel_dist_vec, ord=2)
-            current_cost = self.cost_function(next_diff, travel_dist, next_targets, min_dist_vec)
-            if current_cost < min_cost:
-                min_cost = current_cost
-                min_dist = min_dist_vec
-                best_comb = next_targets
-                min_travel_dist = travel_dist #for debug
-                min_next_diff = next_diff #for debug
-        return best_comb, min_dist , min_next_diff, min_travel_dist, min_cost
+            
+            current_cost, in_blocking_volume, is_in_treshold = self.cost_function(next_diff, travel_dist, next_targets, min_dist_vec)
+            if is_in_treshold:
+                if not(in_blocking_volume):
+                    if current_cost < min_cost_optimal:
+                        min_cost_optimal = current_cost
+                        min_dist_optimal = min_dist_vec
+                        best_comb_optimal = next_targets
+                        min_travel_dist_optimal = travel_dist #for debug
+                        min_next_diff_optimal = next_diff #for debug
+                else :
+                    if current_cost < min_cost_suboptimal:
+                        min_cost_suboptimal = current_cost 
+                        min_dist_suboptimal = min_dist_vec
+                        best_comb_suboptimal = next_targets
+                        min_travel_dist_suboptimal = travel_dist #for debug
+                        min_next_diff_suboptimal = next_diff #for debug
+        if min_cost_optimal != np.inf:
+            return best_comb_optimal, min_dist_optimal , min_next_diff_optimal, min_travel_dist_optimal, min_cost_optimal
+        elif min_cost_suboptimal != np.inf:
+            return best_comb_suboptimal, min_dist_suboptimal , min_next_diff_suboptimal, min_travel_dist_suboptimal, min_cost_suboptimal
+        else:
+            return 0,-1,0,0,0  #not in threshold limits
 
 
     def  update_kmeans(self, drone_num ,targetpos, targetpos_reallocate):
@@ -164,8 +165,7 @@ class Allocation:
         self.base = params.base
         self.an = an
         self.optim = Optim(self.targets_num, self.targetpos, self.logger, self.an, k, threshold)
-        if self.drone_num > 1:
-            self.state_mat = self.optim.get_state_matrix(self.drone_num, init_flag=True)
+       
            
     def optimal_drone2target(self, dm):
         drones_idx = [i for i in range(self.drone_num)]
@@ -207,10 +207,9 @@ class Allocation:
         elif (self.drone_num > 1):
             if ((self.optim.unvisited_num - self.drone_num < self.optim.k * self.drone_num) and (self.optim.k >= 2)) or (self.drone_num_changed):
                 self.drone_num_changed = False
-                self.state_mat = self.optim.get_state_matrix(self.drone_num)
                 
             knn = self.optim.get_knn(allocate_to, self.drone_num)
-            best_comb_candidate, min_dist, min_next_diff, min_travel_dist, min_cost = self.optim.search_best_combination( self.drone_num, self.state_mat, knn)
+            best_comb_candidate, min_dist, min_next_diff, min_travel_dist, min_cost = self.optim.search_best_combination( self.drone_num, knn)
             if  self.optim.threshold_dist_low < min_dist < self.optim.threshold_dist_up:
                 self.optim.current_targets = best_comb_candidate
                 self.an.an_allocation(min_dist, self.drone_num , self.optim.current_targets , self.optim.threshold_dist_low, self.optim.threshold_dist_up ,0)

@@ -11,6 +11,11 @@ mode = 'sim'
 k_init = 8
 threshold_factor = 0.8
 i=0
+
+k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+samples = 3
+# threshold_lst = [0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95]
 # ------ what to show
 analysis = 0
 restore = 0
@@ -18,14 +23,16 @@ restore_history = 0
 show_cost = 0
 show_path = 0
 compare_k_threshold=1
+cost_as_k = 0
+cost_as_threshold = 0
+
+
 
 if mode == 'sim':
-    url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/cost_func_0.8_0.2_mul_1.5/'
-    # url = ''
+    # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/cost_func_0.8_0.2_mul_1.5/'
+    url = ''
     data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
 
-
-# url=''
 
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
@@ -63,7 +70,7 @@ if analysis:
     plt.ioff()
     # Allocation
     fig1 = plt.figure()
-    fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, median: {round(np.median(min_dist),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
+    fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, median cost: {round(np.median(cost),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
     ax1 = fig1.add_subplot('111')
     ax1.scatter(idx, min_dist,c='blue', label='min_dist',s=2)
     ax1.scatter(idx, threshold_low, c='green', label='Threshold',s=2)
@@ -153,34 +160,84 @@ if show_path:
     plt.show()
 
 if compare_k_threshold:
-    k_lst = [2,3,4,5,6,7,8]
-    threshold_lst = [0.5,0.6,0.7,0.8,0.9]
-    exp_data = [[0] for _ in range(len(k_lst) * len(threshold_lst))]
+    exp_data = np.zeros([len(k_lst)*len(threshold_lst),3], dtype=float)
     idx = 0
     for k in k_lst:
         for thersh in threshold_lst:
             median_cost_lst = []
-            for i in range(5):
+            for i in range(3):
                 data = np.load(url + 'no_visual_experiment_data_k_'+str(k)+'_thresh_'+str(thersh)+'_'+str(i)+".npy", allow_pickle=True)
                 data = data.item()
                 general_data, drone_data = data['general_data'],  data['drone_data']
                 allocation_history = general_data['allocation_history']
-                min_dist = allocation_history['min_dist']
-                median_mi_dist = np.median(min_dist)
                 median_cost_lst.append(np.median(allocation_history['min_cost']))
-            median_cost = np.average(median_cost_lst)
-            exp_data[idx] = [k, thersh, median_mi_dist, median_cost]
-            idx +=1
-    exp_data = np.array(exp_data) 
+            average_cost = np.average(median_cost_lst)
+            exp_data[idx,:] = [k, thersh, average_cost ]
+            idx += 1
     k = exp_data[:,0]
     threshold  = exp_data[:,1]
-    median_mi_dist  = exp_data[:,2]    
-    median_cost = exp_data[:,3]
+    median_cost = exp_data[:,2]
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter3D(k, threshold, median_cost)
     ax.set_xlabel('k')
     ax.set_ylabel('threshold')
-    ax.set_zlabel('median_cost')
+    ax.set_zlabel('median_cost') 
     plt.show()
+
+
+
+
+
+
             
+if cost_as_k:
+    exp_data = np.zeros([len(k_lst),2], dtype=float)
+    idx = 0
+    for k in k_lst:
+        median_cost_lst = []
+        for thersh in threshold_lst:
+            for i in range(samples ):
+                data = np.load(url + 'no_visual_experiment_data_k_'+str(k)+'_thresh_'+str(thersh)+'_'+str(i)+".npy", allow_pickle=True)
+                data = data.item()
+                general_data, drone_data = data['general_data'],  data['drone_data']
+                allocation_history = general_data['allocation_history']
+                median_cost_lst.append(np.median(allocation_history['min_cost']))
+        average_cost = np.average(median_cost_lst)
+        exp_data[idx,:] = [k, average_cost]
+        idx +=1
+    # exp_data = np.array(exp_data) 
+    k = exp_data[:,0]
+    median_cost = exp_data[:,1]
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    ax.scatter(k,median_cost)
+    # ax.scatter3D(k, threshold, median_min_dist)
+    ax.set_xlabel('k')
+    ax.set_ylabel('median_cost')
+    plt.show()   
+
+
+if cost_as_threshold:
+    exp_data = np.zeros([len(threshold_lst),2], dtype=float)
+    idx = 0
+    for thersh in threshold_lst:
+        median_cost_lst = []
+        for k in k_lst:
+            for i in range(samples ):
+                data = np.load(url + 'no_visual_experiment_data_k_'+str(k)+'_thresh_'+str(thersh)+'_'+str(i)+".npy", allow_pickle=True)
+                data = data.item()
+                general_data, drone_data = data['general_data'],  data['drone_data']
+                allocation_history = general_data['allocation_history']
+                median_cost_lst.append(np.median(allocation_history['min_cost']))
+        average_cost = np.average(median_cost_lst)
+        exp_data[idx,:] = [thersh, average_cost]
+        idx +=1
+    thersh = exp_data[:,0]
+    median_cost = exp_data[:,1]
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    ax.scatter(thersh, median_cost)
+    ax.set_xlabel('thersh')
+    ax.set_ylabel('median_cost')
+    plt.show()   
