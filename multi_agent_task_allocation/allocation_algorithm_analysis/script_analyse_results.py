@@ -20,11 +20,11 @@ samples = 5
 analysis = 0
 restore = 0
 restore_history = 0
-show_cost = 0
+show_cost = 1
 show_path = 0
-compare_k_threshold=0
+compare_k_threshold=1
 cost_as_k = 0
-cost_as_threshold = 1
+cost_as_threshold = 0
 
 
 
@@ -131,9 +131,7 @@ if restore_history:
             
 if show_cost:
     plt.ioff()
-    # Allocation
     fig3 = plt.figure()
-    # fig3.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, average: {round(np.average(min_dist),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
     ax3= fig3.add_subplot('111')
     idx = np.array(range(0,len(next_diff)))
     ax3.scatter(idx, next_diff,c='blue', label='next_diff',s=10)
@@ -176,13 +174,14 @@ if compare_k_threshold:
             idx += 1
     k = exp_data[:,0]
     threshold  = exp_data[:,1]
-    median_cost = exp_data[:,2]
+    average_cost = exp_data[:,2]
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter3D(k, threshold, median_cost)
-    ax.set_xlabel('k')
-    ax.set_ylabel('threshold')
-    ax.set_zlabel('cost') 
+    ax.scatter3D(k, threshold, average_cost)
+    ax.set_xlabel('K')
+    ax.set_ylabel('Threshold')
+    ax.set_zlabel('Cost') 
+    ax.set_title('Cost as Function of Threshold and K')
     plt.show()
 
 
@@ -217,10 +216,11 @@ if cost_as_k:
     fig = plt.figure()
     ax = fig.add_subplot('111')
     ax.scatter(k,average_cost)
-    ax.errorbar(k,average_cost, average_std)
-    ax.set_title('cost as function of k')
-    ax.set_xlabel('k')
-    ax.set_ylabel('cost')
+    ax.errorbar(k,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
+    ax.set_title('Cost as Function of K')
+    ax.set_xlabel('K')
+    ax.set_ylabel('Cost')
+    ax.grid(axis='y')
     plt.show()   
 
 
@@ -250,8 +250,9 @@ if cost_as_threshold:
     fig = plt.figure()
     ax = fig.add_subplot('111')
     ax.scatter(thresh, average_cost)
-    ax.errorbar(thresh ,average_cost, average_std)
-    ax.set_xlabel('thersh')
-    ax.set_ylabel('cost')
-    ax.set_title('cost as function of threshold')
+    ax.errorbar(thresh ,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
+    ax.set_xlabel('Treshold')
+    ax.set_ylabel('Cost')
+    ax.set_title('Cost as Function of Threshold')
+    ax.grid(axis='y')
     plt.show()   
