@@ -83,7 +83,7 @@ elif mode == 'cf':
     dist_to_base = 0.1
 
 # -------------------- Targets
-data_source = 'random' 
+data_source = 'dataset' 
 
 if data_source == 'circle':
     targets_num_gen = 5; t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen); radius=0.6; depth=2.1;z_offset = radius + floor_safety_distance + 0.1;
