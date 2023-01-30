@@ -19,7 +19,7 @@ def get_span(targetpos, base, resolution):
 
 # ------------------------------------------------------------------------------ #
 
-mode  = 'cf' # 'cf' / 'sim'
+mode  = 'sim' # 'cf' / 'sim'
 
 # -------------------- CF -----------------------#
 uri1 = 'radio://0/80/2M/E7E7E7E7E1'
@@ -43,7 +43,7 @@ if mode == 'cf':
 #-----------Drone Sim
 if mode == 'sim':
     drone_num = 3
-    magazine = [3,3,3,3,3,3,3,3,3,3][:drone_num]
+    magazine = [10,10,10,10,10,10,10,3,3,3,3][:drone_num]
     linear_velocity = 1
     base = [(0.1,-0.7,1), (0.1,0,1), (0.1,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
@@ -86,7 +86,7 @@ elif mode == 'cf':
 # -------------------- Targets
 uri_targetpos_sim = '/src/rotors_simulator/multi_agent_task_allocation/datasets/experiment1/experiment1_targets.npy'
 
-data_source = 'cf_exp' 
+data_source = 'dataset' 
 
 if data_source == 'circle':
     targets_num_gen = 5; t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen); radius=0.6; depth=2.1;z_offset = radius + floor_safety_distance + 0.1;
@@ -133,7 +133,7 @@ LPS_anchor_pos = LPS_trible + trible_floor_offset
 # --------------- Analysis -------------
 # counter = np.load("counter_analysis.npy")
 # file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'
-file_name = 'cf_exp_5'
+file_name = 'ros_sim'
 print(file_name)
 # np.save("counter_analysis", np.array(counter+1))
 # print(f'Task num: {counter}')

@@ -63,5 +63,5 @@ if __name__ == '__main__':
     threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     for k in k_lst:
         for thresh in threshold_lst:
-            for i in range(3):
+            for i in range(5):
                 main(i,k,thresh)
