@@ -98,7 +98,9 @@ elif data_source == 'cf_exp':
     targetpos_raw = targetpos_raw + np.array([0 ,0 ,0.8]) # correct trimble z offset
 
 elif data_source == 'random':
-    targetpos_raw = np.random.rand(300,3) * np.array([0.1,2,2]) + np.array([3,-1,0.6])
+    # targetpos_raw = np.random.rand(300,3) * np.array([0.1,2,2]) + np.array([3,-1,0.6])
+    # np.save('300_targets_random', targetpos_raw)
+    targetpos_raw = np.load(str(os.getcwd())+'/src/rotors_simulator/multi_agent_task_allocation/datasets/random/300_targets_random.npy')
 
 targetpos_x_off = targetpos_raw - np.array([offset_x_dist_target, 0, 0]) 
 targetpos = np.array([target for target in targetpos_x_off if target[2] > floor_safety_distance + resolution * 2])

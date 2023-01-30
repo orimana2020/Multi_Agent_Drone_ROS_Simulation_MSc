@@ -7,32 +7,32 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-mode = 'sim'
-k_init = 10
+k_init = 4
 threshold_factor = 0.9
 i=0
 
-k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
-threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
-samples = 5
-# threshold_lst = [0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95]
 # ------ what to show
 analysis = 0
 restore = 0
 restore_history = 0
-show_cost = 1
+show_cost = 0
 show_path = 0
-compare_k_threshold=1
+#--------------------------------------------
+k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+samples = 5
+# threshold_lst = [0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95]
+#------------------------------------------
+compare_k_threshold=0
 cost_as_k = 0
-cost_as_threshold = 0
+cost_as_threshold = 1
 
 
 
-if mode == 'sim':
-    url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/300tar_random/'
-    # url = ''
-    # data = np.load('ros_sim_data_cp_1.npy', allow_pickle=True)
-    data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
+# url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/300tar_random/'
+url = ''
+# data = np.load('ros_sim_data_cp_1.npy', allow_pickle=True)
+data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
 
 
 data = data.item()
