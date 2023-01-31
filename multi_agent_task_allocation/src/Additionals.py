@@ -153,7 +153,7 @@ class Analysis(object):
         self.allocation_history['path'] = []
         self.allocation_history['min_cost'] = []
         self.initial_targets_num = len(params.targetpos)
-        self.save_checkpoints = [0.5, 0.8, 1.1]
+        self.save_checkpoints = [ 1.1]
         self.current_cp_idx = 0
         self.current_checkpoint = self.save_checkpoints[self.current_cp_idx]
 
@@ -231,7 +231,7 @@ class Analysis(object):
             'full_magazine':self.dm.drones[j].full_magazine }
         data = {'general_data':general_data, 'drone_data':drone_data}
 
-        np.save(params.file_name+'_data_cp_'+str(cp), np.array(data))
+        np.save(params.file_name+'_data_k_'+str(params.k_init)+'_thresh_'+str(params.threshold_factor), np.array(data))
 
 
 class get_figure(object):
@@ -257,6 +257,8 @@ class get_figure(object):
         self.constant_blocking_area = params.plot_constant_blocking_area
         self.plot_block_volume_floor_m = params.plot_block_volume_floor_m
         self.simulate_lps_error = params.SIMULATE_LPS_ERROR
+        self.save_plot = params.plot_save
+        self.fig_idx = 0
     
     def plot_all_targets(self):
         self.ax.scatter3D(self.targetpos[:,0], self.targetpos[:,1], self.targetpos[:,2], s= 10, c='k',alpha=1, depthshade=False)
@@ -310,6 +312,9 @@ class get_figure(object):
         self.plot_all_targets()
         self.plot_trajectory(path_planner, dm.drones ,ta.drone_num)
         self.plot_history(ta.optim.history)
+        if self.save_plot:
+            self.fig.savefig(str(self.fig_idx))
+            self.fig_idx += 1
         self.show()
 
 

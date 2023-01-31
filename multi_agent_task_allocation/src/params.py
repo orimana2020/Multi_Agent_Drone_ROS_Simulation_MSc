@@ -52,7 +52,7 @@ if mode == 'sim':
 
 
 # ------------------ Allocation --------------------#
-k_init = 7
+k_init = 5
 threshold_factor = 0.8
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/Ori_CF/multi_agent_task_allocation/src'
@@ -118,8 +118,9 @@ plot_path_scatter = 0
 plot_smooth_path_cont = 1
 plot_smooth_path_scatter = 0
 plot_block_volume = 1
-plot_constant_blocking_area = 1
+plot_constant_blocking_area = 0
 plot_block_volume_floor_m = 0
+plot_save = False
 elvazim = [37, 175]
 
 # LPS --------------

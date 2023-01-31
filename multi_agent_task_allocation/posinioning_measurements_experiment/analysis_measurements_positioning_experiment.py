@@ -67,8 +67,8 @@ def plot_sampled_data(error_arr, threshold, title, pos_vicon_arr, nodes):
     ax.set_zlabel('z(m)')
     ax.legend(loc='lower right')
     ax.set_title(title+' - Sampeled Data')
-    if save_fig:
-        fig.savefig(title+' - Sampeled Data')
+    # if save_fig:
+    #     fig.savefig(title+' - Sampeled Data')
 
 def interpolate_3d(limits, resolution, pos_vicon_arr, error_arr):
     grid_x, grid_y, grid_z = np.mgrid[limits[0][0]:limits[0][1]:resolution, limits[1][0]:limits[1][1]:resolution, limits[2][0]:limits[2][1]:resolution ]
@@ -106,8 +106,8 @@ def plot_interpolate(interpolated_error, threshold, grid_x, grid_y, grid_z, node
     ax.set_zlabel('z(m)')
     ax.legend(loc='lower right')
     ax.set_title(title + ' - Interpolated Data')
-    if save_fig:
-        fig.savefig(title + ' - Interpolated Data')
+    # if save_fig:
+    #     fig.savefig(title + ' - Interpolated Data')
     
 def plot_histogram(error_arr, title):
     fig = plt.figure()
@@ -195,14 +195,9 @@ extended_lps_dir = curr_dir +'/multi_agent_task_allocation/posinioning_measureme
 extended_vicon_dir =  curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/extended_config/vicon_extended/vicon_changed_config_'
 title_exp2 = 'Extended Configuration'
 
-
 # hovering
 hovering_dir = curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/hovering'
 #----------------------Analysis---------------------------------------------------
-
-
-
-
 
 # box config
 lps_1, vicon_1, error_1, sigma_1, nodes1 = load_results(lps_dir=optimal_lps_dir, vicon_dir=optimal_vicon_dir, fix_values=fix_values_exp1,samples_num=samples_num_exp1 ,is_2d=error_2d, threshold=threshold, nodes=nodes1)
@@ -219,11 +214,9 @@ plot_sampled_data(error_2, threshold, title_exp2, vicon_2, nodes2)
 grid_x, grid_y, grid_z, interpo_err_2, extep_arr_2, merged_2 = interpolate_3d(limits, resolution, vicon_2, error_2)
 plot_interpolate(merged_2, threshold, grid_x, grid_y, grid_z, nodes2, title_exp2)
 
-
 # diffence, of difference of at least differece threshold (in minus sign)
 plot_difference(merged_1, merged_2, grid_x, grid_y, grid_z ,nodes1, nodes2, difference_threshold=-0.05)
 plot_histogram(merged_1.flatten() - merged_2.flatten() , title='Difference')
-
 
 # hovering
 plot_hovering(hovering_dir, is_deck=True, exp_num=1, cutoff_start=0.3,cutoff_end=0.7)

@@ -5,8 +5,6 @@
 # terminal 2: $ rosrun multi_agent_task_allocation main_MATA_dw.py
 # -------------------------------------------------------------
 
-
-
 from planner_3D import Trajectory
 from Allocation_algorithm import Allocation
 import matplotlib.pyplot as plt
