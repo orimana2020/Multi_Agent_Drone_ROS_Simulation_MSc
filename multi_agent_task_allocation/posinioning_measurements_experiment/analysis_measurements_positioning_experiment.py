@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy import interpolate
 from scipy.interpolate import griddata, Rbf
 from  matplotlib.colors import LinearSegmentedColormap
+from scipy.interpolate import RegularGridInterpolator
 
 
 
@@ -62,80 +63,75 @@ def plot_sampled_data(error_arr, threshold, title, pos_vicon_arr, nodes):
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(pos_vicon_arr[:,0], pos_vicon_arr[:,1], pos_vicon_arr[:,2],c=colors)
     ax.scatter(nodes[:,0],nodes[:,1],nodes[:,2],c='blue', s=100)
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
+    ax.set_xlabel('x(m)')
+    ax.set_ylabel('y(m)')
+    ax.set_zlabel('z(m)')
     ax.set_title(title+' - Sampeled Data')
 
 def interpolate_3d(limits, resolution, pos_vicon_arr, error_arr):
     grid_x, grid_y, grid_z = np.mgrid[limits[0][0]:limits[0][1]:resolution, limits[1][0]:limits[1][1]:resolution, limits[2][0]:limits[2][1]:resolution ]
     interpolated_error = griddata(pos_vicon_arr, error_arr, (grid_x, grid_y, grid_z ), method='linear')
-    rbf4 = Rbf(pos_vicon_arr[:,0], pos_vicon_arr[:,1], pos_vicon_arr[:,2],error_arr, function='linear')#, smooth=5)
+    rbf4 = Rbf(pos_vicon_arr[:,0], pos_vicon_arr[:,1], pos_vicon_arr[:,2], error_arr, function='linear')#, smooth=5)
     exterpolated_error = rbf4(grid_x, grid_y, grid_z)
+    interpolated_error_nearest = griddata(pos_vicon_arr, error_arr, (grid_x, grid_y, grid_z ), method='nearest')
     # merge
     interp_f = interpolated_error.flatten()
     extep_f = exterpolated_error.flatten()
+    interp_nearest_f = interpolated_error_nearest.flatten()
     merged = np.zeros(interp_f.shape)
     for i in range(len(interp_f)):
-        merged[i] = interp_f[i] if not np.isnan(interp_f[i]) else extep_f[i]
+        if not(np.isnan(interp_f[i])):
+            merged[i] = interp_f[i] 
+        elif not(np.isnan(extep_f[i])):
+            merged[i] = extep_f[i]
+        else:
+            merged[i] = interp_nearest_f[i]
+                
+        
     merged = merged.reshape(interpolated_error.shape)
     return grid_x, grid_y, grid_z, interpolated_error ,exterpolated_error, merged  
 
 def plot_interpolate(interpolated_error, threshold, grid_x, grid_y, grid_z, nodes,title):
-    factor = interpolated_error  #/ threshold 
-    colors = []
-    for xi in range(factor.shape[0]):
-        for yi in range(factor.shape[1]):
-            for zi in range(factor.shape[2]):
-                fac = factor[xi,yi, zi]
-                colors.append(fac)
-    colors = np.array(colors)
+    colors = interpolated_error.flatten()  #/ threshold 
+    # colors = []
+    # for xi in range(factor.shape[0]):
+    #     for yi in range(factor.shape[1]):
+    #         for zi in range(factor.shape[2]):
+    #             fac = factor[xi,yi, zi]
+                # colors.append(fac)
+    # for fac
+    # colors = np.array(colors)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     cmap=LinearSegmentedColormap.from_list('rg',["lime","red"], N=256) 
     data=ax.scatter3D(grid_x, grid_y, grid_z,c=colors, cmap=cmap,vmin=0,vmax=threshold)
     cbar = fig.colorbar(data, ax = ax, shrink = 0.5, aspect = 5)
-    cbar.set_label('Error in [m]')
+    cbar.set_label('Error(m)')
     ax.scatter(nodes[:,0],nodes[:,1],nodes[:,2],c='blue', s=100)
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
+    ax.set_xlabel('x(m)')
+    ax.set_ylabel('y(m)')
+    ax.set_zlabel('z(m)')
     ax.set_title(title + ' - Interpolated Data')
     
 def plot_histogram(error_arr, title):
     fig = plt.figure()
     ax = fig.add_subplot('111')
     ax.hist(error_arr)
-    ax.set_xlabel('Error [meter]')
+    ax.set_xlabel('Error(m)')
+    ax.set_ylabel('Frequency')
     ax.set_title(title + ' Histogram')
 
-def plot_difference(error1, error2, grid_x, grid_y, grid_z,nodes1, nodes2 ,difference_threshold=None, difference_ratio=None):
+def plot_difference(error1, error2, grid_x, grid_y, grid_z, nodes1, nodes2 ,difference_threshold=None):
     diff = error2 - error1
-    factor = diff  / np.nanmax(np.abs(diff))
-    if difference_ratio:
-        factor = error2 / error1
+    diff_f = diff.flatten()
+   
     colors = []
-    for xi in range(factor.shape[0]):
-        for yi in range(factor.shape[1]):
-            for zi in range(factor.shape[2]):
-                fac = factor[xi,yi, zi]
-                if difference_threshold == None and difference_ratio==None:  
-                    if fac >= 0: # error2>error1 -> show red
-                        colors.append(np.array([fac, 0, 0,1]))
-                    elif fac < 0 : # error2<error1 -> show green
-                        colors.append( np.array([0,-fac, 0,1]))   
-                    else: #in case fac = np.nan
-                        colors.append(np.array([1,1, 1,0]))
-                elif difference_ratio and not difference_threshold:
-                    if fac <= 1 - difference_ratio:
-                        colors.append(np.array([0, 1, 0,1]))
-                    else:
-                        colors.append(np.array([1,1, 1,0]))
-                elif difference_threshold and not difference_ratio: 
-                    if diff[xi,yi, zi] < 0 and np.abs(diff[xi,yi, zi]) >= difference_threshold:
-                        colors.append( np.array([0,1, 0,1]))
-                    else:
-                        colors.append(np.array([1, 1, 1,0]))
+    for i in range(len(diff_f)):
+        if diff_f[i] <= difference_threshold:
+            colors.append(np.array([0, 1, 0,1]))
+        else:
+            colors.append(np.array([0, 0, 0,0]))
+           
 
     colors = np.array(colors)
     fig = plt.figure()
@@ -143,10 +139,10 @@ def plot_difference(error1, error2, grid_x, grid_y, grid_z,nodes1, nodes2 ,diffe
     ax.scatter(grid_x, grid_y, grid_z,c=colors)
     ax.scatter(nodes1[:,0],nodes1[:,1],nodes1[:,2],c='blue', s=100)
     ax.scatter(nodes2[:,0],nodes2[:,1],nodes2[:,2],c='yellow', s=100)
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
-    ax.set_title('difference')
+    ax.set_xlabel('x(m)')
+    ax.set_ylabel('y(m)')
+    ax.set_zlabel('z(m)')
+    ax.set_title('Difference')
 
 def plot_hovering(dir, is_deck, exp_num, cutoff_start, cutoff_end):
     if is_deck:
@@ -160,9 +156,9 @@ def plot_hovering(dir, is_deck, exp_num, cutoff_start, cutoff_end):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(data[:,0],data[:,1],data[:,2]) 
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
+    ax.set_xlabel('x(m)')
+    ax.set_ylabel('y(m)')
+    ax.set_zlabel('z(m)')
     if is_deck:
         ax.set_title('hovering with flowdeck')
     else:
@@ -175,7 +171,7 @@ def plot_hovering(dir, is_deck, exp_num, cutoff_start, cutoff_end):
 error_2d = True
 threshold = 0.15
 limits = [[-0.32, 3.5], [-1.5,1.5], [0.2,2]]
-resolution = 0.1
+resolution = 0.2
 
 # box config params:
 samples_num_exp1 = 81
@@ -214,9 +210,9 @@ grid_x, grid_y, grid_z, interpo_err_2, extep_arr_2, merged_2 = interpolate_3d(li
 plot_interpolate(merged_2, threshold, grid_x, grid_y, grid_z, nodes2, title_exp2)
 
 
-# diffence
-plot_difference(merged_1, merged_2, grid_x, grid_y, grid_z ,nodes1, nodes2, difference_threshold=None, difference_ratio = 0.5)
-plot_histogram(merged_2.flatten() - merged_1.flatten() , title='diff')
+# diffence, of difference of at least differece threshold (in minus sign)
+plot_difference(merged_1, merged_2, grid_x, grid_y, grid_z ,nodes1, nodes2, difference_threshold=-0.025)
+plot_histogram(merged_2.flatten() - merged_1.flatten() , title='Difference')
 
 
 # hovering
