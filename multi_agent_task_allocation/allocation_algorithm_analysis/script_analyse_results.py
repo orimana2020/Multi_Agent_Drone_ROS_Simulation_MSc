@@ -7,10 +7,10 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 4
-threshold_factor = 0.9
+k_init = 2
+threshold_factor = 0.5
 i=0
-
+fig_save = False
 # ------ what to show
 analysis = 0
 restore = 0
@@ -21,19 +21,16 @@ show_path = 0
 k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
 threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
 samples = 5
-# threshold_lst = [0.5,0.55,0.6,0.65,0.7,0.75,0.8,0.85,0.9,0.95]
 #------------------------------------------
 compare_k_threshold=1
 cost_as_k = 0
 cost_as_threshold = 0
 
-
-
-# url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/300tar_random/'
-url = ''
-# data = np.load('ros_sim_data_cp_1.npy', allow_pickle=True)
+# url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/300tar_random2/'
+# fig_title = '300 Randomly Placed Targets'
+url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/dataset_no_vis/'
+fig_title = '178 Dataset Targets'
 data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
-
 
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
@@ -68,20 +65,20 @@ kmeans_idx = [idx-0.5 for idx in range(len(kmeans)) if kmeans[idx]==1]
 # # ------------- analysis ------------------
 
 if analysis:
-    plt.ioff()
-    # Allocation
+    # plt.ioff()
     fig1 = plt.figure()
-    fig1.suptitle(f'k: {k_init}, threshold factor: {threshold_factor}, median cost: {round(np.median(cost),2)}, task_time: {round(general_data["total_task_time"], 2)} [sec]')
     ax1 = fig1.add_subplot('111')
-    ax1.scatter(idx, min_dist,c='blue', label='min_dist',s=2)
-    ax1.scatter(idx, threshold_low, c='green', label='Threshold',s=2)
-    ax1.scatter(idx, threshold_up, c='green', label='Threshold',s=2)
-    ax1.vlines(x=drone_change_idx, ymin=0, ymax=max(min_dist), colors='purple', ls='--', lw=1, label='Drone Num changed')
-    ax1.vlines(x=kmeans_idx, ymin=0, ymax=max(min_dist), colors='yellow', ls='--', lw=0.5, label='KMEANS')
+    ax1.scatter(idx[:-2], min_dist[:-2], c='blue', label='Minimum Distance',s=3)
+    ax1.scatter(idx[:-2], threshold_low[:-2], c='green', label='Threshold',s=2)
+    ax1.scatter(idx[:-2], threshold_up[:-2], c='green',s=2)
+    ax1.vlines(x=kmeans_idx, ymin=0, ymax=max(min_dist[:-2]), colors='fuchsia', ls='--', lw=0.5, label='Kmeans')
     ax1.set_xlabel("Iteration")
-    ax1.set_ylabel("Distance [m]")
-    ax1.set_title('Allocation Performance')
-    ax1.legend()
+    ax1.set_ylabel("Minimum Distance(m)")
+    ax1.set_title(f'{fig_title} \n k:{k_init}, Threshold Factor:{threshold_factor},\n Average Minimum Distance:{round(np.average(min_dist),2)} , Average Cost:{round(np.average(cost),2)}')
+    ax1.legend(loc='lower left')
+    ax1.grid(axis='y')
+    if fig_save:
+        fig1.savefig(fname='k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'.png')
     plt.show()
 
 
@@ -181,7 +178,7 @@ if compare_k_threshold:
     ax.set_xlabel('K')
     ax.set_ylabel('Threshold')
     ax.set_zlabel('Cost') 
-    ax.set_title('Cost as Function of Threshold and K')
+    ax.set_title(f'{fig_title} \n Cost as Function of Threshold and K')
     plt.show()
 
 
@@ -215,6 +212,7 @@ if cost_as_k:
     average_std = exp_data[:,2]
     fig = plt.figure()
     ax = fig.add_subplot('111')
+    fig.suptitle(fig_title)
     ax.scatter(k,average_cost)
     ax.errorbar(k,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
     ax.set_title('Cost as Function of K')
@@ -253,6 +251,6 @@ if cost_as_threshold:
     ax.errorbar(thresh ,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
     ax.set_xlabel('Treshold')
     ax.set_ylabel('Cost')
-    ax.set_title('Cost as Function of Threshold')
+    ax.set_title(f'{fig_title} \n Cost as Function of Threshold')
     ax.grid(axis='y')
     plt.show()   
