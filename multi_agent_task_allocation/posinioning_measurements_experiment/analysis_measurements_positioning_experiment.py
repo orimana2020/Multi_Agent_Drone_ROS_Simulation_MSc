@@ -54,19 +54,21 @@ def load_results(lps_dir, vicon_dir, fix_values,samples_num ,is_2d, threshold, n
 
 
 def plot_sampled_data(error_arr, threshold, title, pos_vicon_arr, nodes):
-    factor = error_arr  / threshold #smaller- green
-    colors = []
-    for fac in factor:
-        colors.append([fac, 1-fac,0])
-    colors = np.array(colors)
+    colors = error_arr.flatten()
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(pos_vicon_arr[:,0], pos_vicon_arr[:,1], pos_vicon_arr[:,2],c=colors)
-    ax.scatter(nodes[:,0],nodes[:,1],nodes[:,2],c='blue', s=100)
+    ax.scatter(nodes[:,0],nodes[:,1],nodes[:,2],c='blue', s=100,label='Anchors')
+    cmap=LinearSegmentedColormap.from_list('rg',["lime","red"], N=256) 
+    data=ax.scatter3D(pos_vicon_arr[:,0], pos_vicon_arr[:,1], pos_vicon_arr[:,2],c=colors, cmap=cmap,vmin=0,vmax=threshold)
+    cbar = fig.colorbar(data, ax = ax, shrink = 0.4, aspect = 8)
+    cbar.set_label('Error(m)')
     ax.set_xlabel('x(m)')
     ax.set_ylabel('y(m)')
     ax.set_zlabel('z(m)')
+    ax.legend(loc='lower right')
     ax.set_title(title+' - Sampeled Data')
+    if save_fig:
+        fig.savefig(title+' - Sampeled Data')
 
 def interpolate_3d(limits, resolution, pos_vicon_arr, error_arr):
     grid_x, grid_y, grid_z = np.mgrid[limits[0][0]:limits[0][1]:resolution, limits[1][0]:limits[1][1]:resolution, limits[2][0]:limits[2][1]:resolution ]
@@ -86,32 +88,26 @@ def interpolate_3d(limits, resolution, pos_vicon_arr, error_arr):
             merged[i] = extep_f[i]
         else:
             merged[i] = interp_nearest_f[i]
-                
-        
     merged = merged.reshape(interpolated_error.shape)
     return grid_x, grid_y, grid_z, interpolated_error ,exterpolated_error, merged  
 
+
 def plot_interpolate(interpolated_error, threshold, grid_x, grid_y, grid_z, nodes,title):
-    colors = interpolated_error.flatten()  #/ threshold 
-    # colors = []
-    # for xi in range(factor.shape[0]):
-    #     for yi in range(factor.shape[1]):
-    #         for zi in range(factor.shape[2]):
-    #             fac = factor[xi,yi, zi]
-                # colors.append(fac)
-    # for fac
-    # colors = np.array(colors)
+    colors = interpolated_error.flatten() 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     cmap=LinearSegmentedColormap.from_list('rg',["lime","red"], N=256) 
     data=ax.scatter3D(grid_x, grid_y, grid_z,c=colors, cmap=cmap,vmin=0,vmax=threshold)
-    cbar = fig.colorbar(data, ax = ax, shrink = 0.5, aspect = 5)
+    cbar = fig.colorbar(data, ax = ax, shrink = 0.4, aspect = 8)
     cbar.set_label('Error(m)')
-    ax.scatter(nodes[:,0],nodes[:,1],nodes[:,2],c='blue', s=100)
+    ax.scatter(nodes[:,0],nodes[:,1],nodes[:,2],c='blue', s=100,label='Anchors')
     ax.set_xlabel('x(m)')
     ax.set_ylabel('y(m)')
     ax.set_zlabel('z(m)')
+    ax.legend(loc='lower right')
     ax.set_title(title + ' - Interpolated Data')
+    if save_fig:
+        fig.savefig(title + ' - Interpolated Data')
     
 def plot_histogram(error_arr, title):
     fig = plt.figure()
@@ -120,29 +116,37 @@ def plot_histogram(error_arr, title):
     ax.set_xlabel('Error(m)')
     ax.set_ylabel('Frequency')
     ax.set_title(title + ' Histogram')
+    if save_fig:
+        fig.savefig(title + ' Histogram')
+    
 
 def plot_difference(error1, error2, grid_x, grid_y, grid_z, nodes1, nodes2 ,difference_threshold=None):
-    diff = error2 - error1
-    diff_f = diff.flatten()
-   
-    colors = []
-    for i in range(len(diff_f)):
-        if diff_f[i] <= difference_threshold:
-            colors.append(np.array([0, 1, 0,1]))
-        else:
-            colors.append(np.array([0, 0, 0,0]))
-           
-
-    colors = np.array(colors)
+    diff = error1 - error2
+    colors = diff.flatten()
+    # colors = []
+    # for i in range(len(diff_f)):
+    #     if diff_f[i] <= difference_threshold:
+    #         colors.append(np.array([0, 1, 0,1]))
+    #     else:
+    #         colors.append(np.array([0, 0, 0,0]))     
+    # colors = np.array(colors)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(grid_x, grid_y, grid_z,c=colors)
-    ax.scatter(nodes1[:,0],nodes1[:,1],nodes1[:,2],c='blue', s=100)
-    ax.scatter(nodes2[:,0],nodes2[:,1],nodes2[:,2],c='yellow', s=100)
+    cmap=LinearSegmentedColormap.from_list('rg',["red","lime"], N=256) 
+    data=ax.scatter3D(grid_x, grid_y, grid_z,c=colors, cmap=cmap,vmin=min(colors),vmax=max(colors))
+    cbar = fig.colorbar(data, ax = ax, shrink = 0.4, aspect = 8)
+    cbar.set_label('Difference Error(m)')
+
+    # ax.scatter(grid_x, grid_y, grid_z,c=colors)
+    ax.scatter(nodes1[:,0],nodes1[:,1],nodes1[:,2],c='blue', s=100,label='Anchors- Box Configuration')
+    ax.scatter(nodes2[:,0],nodes2[:,1],nodes2[:,2],c='yellow', s=100,label='Anchors -Extended Configuration')
     ax.set_xlabel('x(m)')
     ax.set_ylabel('y(m)')
     ax.set_zlabel('z(m)')
-    ax.set_title('Difference')
+    ax.legend(loc='best',bbox_to_anchor=(0.5, 0., 0.3, 0.5))
+    ax.set_title('Difference Error')
+    # ax.set_title('Difference -'+'Improvement of At Least '+str(abs(difference_threshold)) + '(m)')
+
 
 def plot_hovering(dir, is_deck, exp_num, cutoff_start, cutoff_end):
     if is_deck:
@@ -167,15 +171,17 @@ def plot_hovering(dir, is_deck, exp_num, cutoff_start, cutoff_end):
 
 
 # --------------------------params ----------------------------------------------------
+save_fig = True
+
 #general params
 error_2d = True
-threshold = 0.15
+threshold = 0.2
 limits = [[-0.32, 3.5], [-1.5,1.5], [0.2,2]]
 resolution = 0.2
 
 # box config params:
 samples_num_exp1 = 81
-fix_values_exp1 = np.array([0.062,0.051,0.035]) * 0.5
+fix_values_exp1 = np.array([0.062,0.051,0.035]) * 0.75
 nodes1 = np.array([[1.00	,1.30	,0.23],[1.12	,1.40,	2.23],[1.06	,-1.14	,0.18],[1.13	,-1.32	,2.17],[-0.98	,-1.15	,0.16],[-0.84,	-1.28,	2.17],[-0.94	,1.36,	0.21],[-0.78	,1.44	,2.23]])
 optimal_lps_dir = curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/optimal_config/LPS_optimal/lps_static_pos_optimal_config_'
 optimal_vicon_dir = curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/optimal_config/vicon_optimal/vicon_optimal_config_'
@@ -183,7 +189,7 @@ title_exp1 = 'Box Configuration'
 
 # extended params
 samples_num_exp2 = 87
-fix_values_exp2 = np.array([0.062,0.051,0.035]) * 0.75
+fix_values_exp2 = np.array([0.062,0.051,0.035]) * 1
 nodes2 =  np.array([[1.00	,1.30	,0.23],[1.12	,1.40,	2.23],[1.06	,-1.14	,0.18],[1.13	,-1.32	,2.17],[-1,	-1.14	,0.12],[-2.31	,-1.30	,2.17],[-0.96,	1.38	,0.18],[-2.33	,1.45	,2.22]])
 extended_lps_dir = curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/extended_config/LPS_extended/lps_static_pos_changed_config_'
 extended_vicon_dir =  curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/extended_config/vicon_extended/vicon_changed_config_'
@@ -193,6 +199,10 @@ title_exp2 = 'Extended Configuration'
 # hovering
 hovering_dir = curr_dir +'/multi_agent_task_allocation/posinioning_measurements_experiment/results/hovering'
 #----------------------Analysis---------------------------------------------------
+
+
+
+
 
 # box config
 lps_1, vicon_1, error_1, sigma_1, nodes1 = load_results(lps_dir=optimal_lps_dir, vicon_dir=optimal_vicon_dir, fix_values=fix_values_exp1,samples_num=samples_num_exp1 ,is_2d=error_2d, threshold=threshold, nodes=nodes1)
@@ -211,8 +221,8 @@ plot_interpolate(merged_2, threshold, grid_x, grid_y, grid_z, nodes2, title_exp2
 
 
 # diffence, of difference of at least differece threshold (in minus sign)
-plot_difference(merged_1, merged_2, grid_x, grid_y, grid_z ,nodes1, nodes2, difference_threshold=-0.025)
-plot_histogram(merged_2.flatten() - merged_1.flatten() , title='Difference')
+plot_difference(merged_1, merged_2, grid_x, grid_y, grid_z ,nodes1, nodes2, difference_threshold=-0.05)
+plot_histogram(merged_1.flatten() - merged_2.flatten() , title='Difference')
 
 
 # hovering
@@ -220,11 +230,11 @@ plot_hovering(hovering_dir, is_deck=True, exp_num=1, cutoff_start=0.3,cutoff_end
 
 
 # save error array to load to simulation
+
 save = False
 plotting = True
 
-# print(np.int8(np.ceil(merged_1/0.05)))
-# print(np.max(np.int8(np.ceil(merged_1/0.05))))
+
 if save:
     if resolution != 0.05:
           raise Exception("resolution should fit the simulation!")
