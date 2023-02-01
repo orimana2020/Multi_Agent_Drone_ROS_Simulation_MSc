@@ -8,7 +8,7 @@ colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','gre
 
 # ------------- experiment_parmas -----------------
 k_init = 2
-threshold_factor = 0.5
+threshold_factor = 0.1
 i=0
 fig_save = False
 # ------ what to show
@@ -18,19 +18,36 @@ restore_history = 0
 show_cost = 0
 show_path = 0
 #--------------------------------------------
-k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
-threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
-samples = 5
+
 #------------------------------------------
 compare_k_threshold=1
 cost_as_k = 0
 cost_as_threshold = 0
 
+""" 300 random"""
 # url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/300tar_random2/'
 # fig_title = '300 Randomly Placed Targets'
-url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/dataset_no_vis/'
+# k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+# threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+# samples = 5
+
+"""178 dataset allocation algorithm test"""
+# url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/dataset_no_vis/'
+# fig_title = '178 Dataset Targets'
+# data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
+# k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+# threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+# samples = 5
+
+"""178 dataset ros sim"""
+url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/exp4/'
 fig_title = '178 Dataset Targets'
-data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
+data = np.load(url + 'ros_sim_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+".npy", allow_pickle=True)
+k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+samples = 0
+
+
 
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
