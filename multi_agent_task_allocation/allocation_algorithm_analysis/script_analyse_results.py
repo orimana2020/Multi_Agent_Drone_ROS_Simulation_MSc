@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 2
+k_init = 13
 threshold_factor = 0.1
 i=0
 fig_save = False
@@ -18,8 +18,8 @@ restore_history = 0
 show_cost = 0
 show_path = 0
 compare_k_threshold=0
-cost_as_k = 0
-cost_as_threshold = 1
+cost_as_k = 1
+cost_as_threshold = 0
 
 # choose results type:
 random300 = False
