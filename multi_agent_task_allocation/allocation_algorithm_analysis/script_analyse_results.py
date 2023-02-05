@@ -7,8 +7,8 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 5
-threshold_factor = 0.9
+k_init = 9
+threshold_factor = 0.7
 i=0
 fig_save = False
 # ------ what to show
@@ -22,14 +22,14 @@ cost_as_k = 0
 cost_as_threshold = 0
 
 #  dataset:
-random300 = 1
+random300 = 0
 dataset178_allocation = 0
-rossim178 = 0
+rossim178 = 1
 
 # show in z axis
 show_average_cost = 0
-show_median_cost = 0
-show_median_min_dist = 1
+show_median_cost = 1
+show_median_min_dist = 0
 show_average_min_dist = 0
 show_variance_min_dist=0
 show_variance_cost =0
@@ -59,8 +59,8 @@ if rossim178:
     url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp4/'
     fig_title = '178 Dataset Targets - ROS Simulation'
     data = np.load(url + 'ros_sim_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+".npy", allow_pickle=True)
-    k_lst = [2,5,9,13]
-    threshold_lst = [0.1,0.4,0.7,0.9]
+    k_lst = [2,3,4,5,7,9,10,13]
+    threshold_lst = [0.1,0.3,0.4,0.5,0.7,0.8,0.9]
     samples = 0
 
 
@@ -343,7 +343,23 @@ if samples == 0:
                 data = data.item()
                 general_data, drone_data = data['general_data'],  data['drone_data']
                 allocation_history = general_data['allocation_history']
-                average_cost = np.median(allocation_history['min_cost'])
+                if show_median_cost:
+                    average_cost = (np.median(allocation_history['min_cost']))
+                elif show_average_cost:
+                    average_cost = (np.average(allocation_history['min_cost']))
+                elif show_median_min_dist:
+                    average_cost = (np.median(allocation_history['min_dist']))
+                elif show_average_min_dist:
+                    average_cost = (np.average(allocation_history['min_dist']))
+                elif show_variance_min_dist:
+                    average_cost = (np.var(allocation_history['min_dist']))
+                elif show_variance_cost:
+                    average_cost = (np.var(allocation_history['min_cost']))
+                elif show_average_min_dist_to_variance:
+                    average_cost = (np.average(allocation_history['min_dist'])  /  np.var(allocation_history['min_dist']))
+                elif show_average_min_cost_to_variance:
+                    average_cost = (np.average(allocation_history['min_cost'])  *  np.var(allocation_history['min_cost']))
+
                 exp_data[idx,:] = [k, thersh, average_cost ]
                 idx += 1
         k = exp_data[:,0]
