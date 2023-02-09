@@ -9,7 +9,7 @@ colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','gre
 
 # ------------- experiment_parmas -----------------
 k_init = 13
-threshold_factor = 0.8
+threshold_factor = 0.6
 i=0
 fig_save = False
 
@@ -69,8 +69,8 @@ if rossim178:
     url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp4/'
     fig_title = '178 Dataset Targets - ROS Simulation'
     data = np.load(url + 'ros_sim_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+".npy", allow_pickle=True)
-    k_lst = [2,3,4,5,7,8,9,10,11,12,13]
-    threshold_lst = [0.1,0.3,0.4,0.5,0.7,0.8,0.9]
+    k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+    threshold_lst = [0.1,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     samples = 0
 
 
