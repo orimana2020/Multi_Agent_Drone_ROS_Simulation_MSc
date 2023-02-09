@@ -7,7 +7,7 @@ from mpl_toolkits.mplot3d import Axes3D
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 9
+k_init = 10
 threshold_factor = 0.7
 i=0
 fig_save = False
@@ -17,7 +17,7 @@ restore = 0
 restore_history = 0
 show_cost = 0
 show_path = 0
-compare_k_threshold=1
+compare_k_threshold=0
 cost_as_k = 0
 cost_as_threshold = 0
 
@@ -25,6 +25,7 @@ cost_as_threshold = 0
 random300 = 0
 dataset178_allocation = 0
 rossim178 = 1
+relative_distance = 1
 
 # show in z axis
 show_average_cost = 0
@@ -181,6 +182,11 @@ if show_path:
         drone_idx, start_title, goal_title, waypoints = path
         if start_title == 'base' and goal_title == 'target':
             ax.plot(waypoints[:,0], waypoints[:,1], waypoints[:,2], c=colors[drone_idx],alpha=1)
+        if start_title == 'target' and goal_title == 'base':
+            ax.plot(waypoints[:,0], waypoints[:,1], waypoints[:,2], c=colors[drone_idx],alpha=1)
+        # if start_title == 'target' and goal_title == 'target':
+        #     ax.plot(waypoints[:,0], waypoints[:,1], waypoints[:,2], c=colors[drone_idx],alpha=1) 
+    ax.set_title('Trajectories')       
     ax.set_xlabel('x')
     ax.set_ylabel('y')
     ax.set_zlabel('z')
@@ -429,3 +435,35 @@ if samples == 0:
         ax.grid(axis='y')
         plt.show()   
 
+
+
+if relative_distance:
+    dot_size = 20
+    dot_color = 'b'
+    line_color = 'g'
+
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    x = [0.5, 1, 1.5,0.5]
+    y = [0.5, 1, 0.5,0.5]
+    ax.scatter(x,y,s=dot_size,c=dot_color)
+    ax.plot(x,y,'--',c=line_color)
+
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot('111')
+    x = [0.5,0.7,1.2,1.3,0.5]
+    y= [0.5,1.5,1.2,0.6,0.5]
+    ax1.plot(x,y,'--',c=line_color)
+    ax1.scatter(x,y,s=dot_size,c=dot_color)
+    x = [0.5,1.2]
+    y= [0.5,1.2]
+    ax1.plot(x,y,'--',c=line_color)
+    ax1.scatter(x,y,s=dot_size,c=dot_color)
+    x = [0.7,1.3]
+    y= [1.5,0.6]
+    ax1.plot(x,y,'--',c=line_color)
+    ax1.scatter(x,y,s=dot_size,c=dot_color)
+    ax1.set_title('Relative Distance - 4 Targets')
+    ax1.set_xlabel('X(m)')
+    ax1.set_ylabel('Y(m)')
+    plt.show()
