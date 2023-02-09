@@ -2,15 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from mpl_toolkits.mplot3d import Axes3D
+from sklearn.cluster import KMeans
 
 
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 10
-threshold_factor = 0.7
+k_init = 13
+threshold_factor = 0.8
 i=0
 fig_save = False
+
+#  dataset:
+random300 = 1
+dataset178_allocation = 0
+rossim178 = 0
+
+
 # ------ what to show
 analysis = 0
 restore = 0
@@ -20,12 +28,14 @@ show_path = 0
 compare_k_threshold=0
 cost_as_k = 0
 cost_as_threshold = 0
+show_target_distibution = 0
+show_target_allocation_2d=0
 
-#  dataset:
-random300 = 0
-dataset178_allocation = 0
-rossim178 = 1
-relative_distance = 1
+# external for thesis explanations
+show_circle = 0
+relative_distance = 0
+
+
 
 # show in z axis
 show_average_cost = 0
@@ -328,11 +338,29 @@ if samples > 0:
 
 
 
+    if show_target_distibution:
+        fig = plt.figure()
+        ax = fig.add_subplot('111')
+        ax.invert_xaxis()
+        ax.scatter(targetpos[:,1],targetpos[:,2],c='k',s=7)
+        # ax.set_title('Target Distribution \n Dataset - 178 Targets ')
+        ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
+        ax.set_xlabel('X(m)')
+        ax.set_ylabel('Y(m)')
+        plt.show()
 
-
-
-
-
+    if show_target_allocation_2d:
+        fig = plt.figure()
+        ax = fig.add_subplot('111')
+        ax.invert_xaxis()
+        for comb in combination:
+            for j in range(len(comb)):
+                ax.scatter(targetpos[comb[j],1],targetpos[comb[j],2],  s=20, c=colors[j])
+        # ax.set_title('Target Allocation Distribution - 3 Drones \n Dataset - 178 Targets')
+        ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
+        ax.set_xlabel('X(m)')
+        ax.set_ylabel('Y(m)')
+        plt.show()
 
 
 
@@ -437,17 +465,178 @@ if samples == 0:
 
 
 
+
+
+
+
+    #-------------------------------------------
+if show_circle:
+    # stage 1
+    targets_num_gen = 3*10; t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen); radius=0.6; depth=2.1;z_offset = radius + 0.1;
+    targetpos = np.stack([ radius * np.cos(t), radius * np.sin(t) + z_offset] , axis=-1)
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    ax.invert_xaxis()
+    ax.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    ax.set_title('Target Allocation, Circle Example - 3 Agents \n Stage 1 - Given Targets')
+    ax.set_xlabel('X(m)')
+    ax.set_ylabel('Y(m)')
+
+    #stage2 - show clusters
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot('111')
+    ax1.invert_xaxis()
+    ax1.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    ax1.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 2 - Find Clusters')
+    ax1.set_xlabel('X(m)')
+    ax1.set_ylabel('Y(m)')
+    c2 = list(range(0,3+5)) + [29,28]
+    c3 = list(range(3+5,13+5))
+    c1 = list(range(13+5,23+5))
+    ax1.scatter(targetpos[c1,0],targetpos[c1,1], c=colors[0])
+    ax1.scatter(targetpos[c2,0],targetpos[c2,1], c=colors[1])
+    ax1.scatter(targetpos[c3,0],targetpos[c3,1], c=colors[2])
+
+
+
+
+    #stage 3
+    # kmean = KMeans(n_clusters=3).fit(targetpos)
+    # centers = kmean.cluster_centers_
+    centers = np.load(os.getcwd() +'/src/rotors_simulator/multi_agent_task_allocation/allocation_algorithm_analysis/centers.npy')
+    # np.save('centers', centers)
+    fig2= plt.figure()
+    ax2 = fig2.add_subplot('111')
+    ax2.invert_xaxis()
+    ax2.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    ax2.set_title("Target Allocation, Circle Example - 3 Agents  \n Stage 3 - Find Clusters' Centers")
+    ax2.set_xlabel('X(m)')
+    ax2.set_ylabel('Y(m)')
+    ax2.scatter(targetpos[c1,0],targetpos[c1,1], c=colors[0])
+    ax2.scatter(targetpos[c2,0],targetpos[c2,1], c=colors[1])
+    ax2.scatter(targetpos[c3,0],targetpos[c3,1], c=colors[2])
+    ax2.scatter(centers[:,0],centers[:,1],s=200,c=colors[3])
+
+    #stage 4
+    fig3= plt.figure()
+    ax3 = fig3.add_subplot('111')
+    ax3.invert_xaxis()
+    ax3.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    ax3.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 4 - Closest Targets')
+    ax3.set_xlabel('X(m)')
+    ax3.set_ylabel('Y(m)')
+    ax3.scatter(centers[:,0],centers[:,1],s=200,c=colors[3])  
+    target_idx1 = 23
+    ax3.plot([centers[0,0],targetpos[target_idx1,0]],[centers[0,1],targetpos[target_idx1,1]],'--',c='g')
+    target_idx2 = 3
+    ax3.plot([centers[1,0],targetpos[target_idx2,0]],[centers[1,1],targetpos[target_idx2,1]],'--',c='g')
+    target_idx3 = 13
+    ax3.plot([centers[2,0],targetpos[target_idx3,0]],[centers[2,1],targetpos[target_idx3,1]],'--',c='g')
+
+    #stage 5 - calc relative distance
+    fig4= plt.figure()
+    ax4 = fig4.add_subplot('111')
+    ax4.invert_xaxis()
+    ax4.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    ax4.plot([targetpos[target_idx1,0], targetpos[target_idx2,0] ], [targetpos[target_idx1,1], targetpos[target_idx2,1] ] ,'--',c='g')
+    ax4.plot([targetpos[target_idx1,0], targetpos[target_idx3,0] ], [targetpos[target_idx1,1], targetpos[target_idx3,1] ] ,'--',c='g')
+    ax4.plot([targetpos[target_idx2,0], targetpos[target_idx3,0] ], [targetpos[target_idx2,1], targetpos[target_idx3,1] ] ,'--',c='g')
+    idx_lst = [target_idx1, target_idx2, target_idx3]
+    for idx, tar in enumerate(idx_lst):
+        ax4.scatter(targetpos[tar,0] , targetpos[tar,1], s=150, c=colors[idx] )
+    ax4.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 5 - Set Initial Relative Distance')
+    ax4.set_xlabel('X(m)')
+    ax4.set_ylabel('Y(m)')
+
+    #stage 6 - find k neigbors
+    fig5= plt.figure()
+    ax5 = fig5.add_subplot('111')
+    ax5.invert_xaxis()
+    ax5.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    for idx, tar in enumerate(idx_lst):
+        ax5.scatter(targetpos[tar,0] , targetpos[tar,1], s=300, c=colors[idx] )
+    neibors = [11,12,14,15]
+    for tar in neibors:
+        ax5.scatter(targetpos[tar,0] , targetpos[tar,1], s=70, c=colors[2] )
+    ax5.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 6 - Find K=4 Neighbors')
+    ax5.set_xlabel('X(m)')
+    ax5.set_ylabel('Y(m)')
+
+    # stage 7 
+    fig6= plt.figure()
+    ax6 = fig6.add_subplot('111')
+    ax6.invert_xaxis()
+    ax6.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    for idx, tar in enumerate(idx_lst):
+        ax6.scatter(targetpos[tar,0] , targetpos[tar,1], s=300, c=colors[idx] )
+    neibors = [11,12,14,15]
+    for tar in neibors:
+        ax6.scatter(targetpos[tar,0] , targetpos[tar,1], s=70, c=colors[2] )
+    ax6.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 2 - Check Difference')
+    ax6.set_xlabel('X(m)')
+    ax6.set_ylabel('Y(m)')   
+    example_idx = neibors[0]   
+    ax6.plot([targetpos[target_idx1,0], targetpos[target_idx2,0] ], [targetpos[target_idx1,1], targetpos[target_idx2,1] ] ,'--',c='g')
+    ax6.plot([targetpos[target_idx1,0], targetpos[example_idx,0] ], [targetpos[target_idx1,1], targetpos[example_idx,1] ] ,'--',c='g')
+    ax6.plot([targetpos[target_idx2,0], targetpos[example_idx,0] ], [targetpos[target_idx2,1], targetpos[example_idx,1] ] ,'--',c='g')
+    # traveked dist
+    ax6.plot([targetpos[target_idx3,0], targetpos[example_idx,0] ], [targetpos[target_idx3,1], targetpos[example_idx,1] ] ,'--',c='m')
+
+
+    # stage 7.2 
+    fig62= plt.figure()
+    ax62 = fig62.add_subplot('111')
+    ax62.invert_xaxis()
+    ax62.scatter(targetpos[:,0],targetpos[:,1],c='k')
+    for idx, tar in enumerate(idx_lst):
+        ax62.scatter(targetpos[tar,0] , targetpos[tar,1], s=300, c=colors[idx] )
+    neibors = [11,12,14,15]
+    for tar in neibors:
+        ax6.scatter(targetpos[tar,0] , targetpos[tar,1], s=70, c=colors[2] )
+    ax62.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 2 - Check Difference')
+    ax62.set_xlabel('X(m)')
+    ax62.set_ylabel('Y(m)')   
+    example_idx = neibors[1]   
+    ax62.plot([targetpos[target_idx1,0], targetpos[target_idx2,0] ], [targetpos[target_idx1,1], targetpos[target_idx2,1] ] ,'--',c='g')
+    ax62.plot([targetpos[target_idx1,0], targetpos[example_idx,0] ], [targetpos[target_idx1,1], targetpos[example_idx,1] ] ,'--',c='g')
+    ax62.plot([targetpos[target_idx2,0], targetpos[example_idx,0] ], [targetpos[target_idx2,1], targetpos[example_idx,1] ] ,'--',c='g')
+    # traveked dist
+    ax62.plot([targetpos[target_idx3,0], targetpos[example_idx,0] ], [targetpos[target_idx3,1], targetpos[example_idx,1] ] ,'--',c='m')
+
+
+
+
+    #stage 8 -final 
+    fig7= plt.figure()
+    ax7 = fig7.add_subplot('111')
+    ax7.invert_xaxis()
+    cc1 = list(range(23,30)) +[0,1,2]
+    cc2 = list(range(3,13))
+    cc3 = list(range(13,23))
+    cc_lst = [cc1,cc2,cc3]
+    for idx,cc in enumerate(cc_lst):
+        for idx_tar, tar in enumerate(cc):
+            ax7.scatter(targetpos[tar,0], targetpos[tar,1], s=10*(idx_tar+1), c=colors[idx])
+    ax7.set_title('Target Allocation, Circle Example - 3 Agents  \n Stage 2 - Full Allocation Task')
+    ax7.set_xlabel('X(m)')
+    ax7.set_ylabel('Y(m)')  
+    plt.show()       
+
+# ----------------------
 if relative_distance:
-    dot_size = 20
+    dot_size = 50
     dot_color = 'b'
     line_color = 'g'
-
     fig = plt.figure()
     ax = fig.add_subplot('111')
     x = [0.5, 1, 1.5,0.5]
     y = [0.5, 1, 0.5,0.5]
-    ax.scatter(x,y,s=dot_size,c=dot_color)
-    ax.plot(x,y,'--',c=line_color)
+    ax.scatter(x,y,s=dot_size,c=dot_color,label='Target')
+    ax.plot(x,y,'--',c=line_color, label = 'Relative Distance')
+    ax.set_title('Relative Distance - 3 Targets')
+    ax.set_xlabel('X(m)')
+    ax.set_ylabel('Y(m)')
+    ax.legend() 
 
     fig1 = plt.figure()
     ax1 = fig1.add_subplot('111')
@@ -461,9 +650,10 @@ if relative_distance:
     ax1.scatter(x,y,s=dot_size,c=dot_color)
     x = [0.7,1.3]
     y= [1.5,0.6]
-    ax1.plot(x,y,'--',c=line_color)
-    ax1.scatter(x,y,s=dot_size,c=dot_color)
+    ax1.plot(x,y,'--',c=line_color, label='Relative Distance')
+    ax1.scatter(x,y,s=dot_size,c=dot_color, label='Target')
     ax1.set_title('Relative Distance - 4 Targets')
     ax1.set_xlabel('X(m)')
     ax1.set_ylabel('Y(m)')
+    ax1.legend()
     plt.show()
