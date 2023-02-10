@@ -15,8 +15,8 @@ fig_save = False
 cuttoff_factor = 0.75
 
 #  dataset:
-random300 = 1
-dataset178_allocation = 0
+random300 = 0
+dataset178_allocation = 1
 rossim178 = 0
 
 
@@ -256,8 +256,12 @@ if samples > 0:
         ax.scatter3D(k, threshold, average_cost)
         ax.set_xlabel('K')
         ax.set_ylabel('Threshold')
-        ax.set_zlabel('Cost') 
-        ax.set_title(f'{fig_title} \n Cost as Function of Threshold and K')
+        if show_average_cost:
+            ax.set_zlabel('Average Cost') 
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+        elif show_std_min_dist:
+            ax.set_zlabel('Minimum Distance Std') 
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
         plt.show()
 
                 
@@ -290,12 +294,15 @@ if samples > 0:
         average_std = exp_data[:,2]
         fig = plt.figure()
         ax = fig.add_subplot('111')
-        fig.suptitle(fig_title)
         ax.scatter(k,average_cost)
         ax.errorbar(k,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
-        ax.set_title('Cost as Function of K')
         ax.set_xlabel('K')
-        ax.set_ylabel('Cost')
+        if show_average_cost:
+            ax.set_ylabel('Average Cost') 
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+        elif show_std_min_dist:
+            ax.set_ylabel('Minimum Distance Std') 
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -332,8 +339,12 @@ if samples > 0:
         ax.scatter(thresh, average_cost)
         ax.errorbar(thresh ,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
         ax.set_xlabel('Treshold')
-        ax.set_ylabel('Cost')
-        ax.set_title(f'{fig_title} \n Cost as Function of Threshold')
+        if show_average_cost:
+            ax.set_ylabel('Average Cost') 
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+        elif show_std_min_dist:
+            ax.set_ylabel('Minimum Distance Std') 
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -389,8 +400,12 @@ if samples == 0:
         ax.scatter3D(k, threshold, average_cost)
         ax.set_xlabel('K')
         ax.set_ylabel('Threshold')
-        ax.set_zlabel('Cost') 
-        ax.set_title(f'{fig_title} \n Cost as Function of Threshold and K')
+        if show_average_cost:
+            ax.set_zlabel('Average Cost') 
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+        elif show_std_min_dist:
+            ax.set_zlabel('Minimum Distance Std') 
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
         plt.show()
 
                 
@@ -418,11 +433,14 @@ if samples == 0:
         average_cost = exp_data[:,1]
         fig = plt.figure()
         ax = fig.add_subplot('111')
-        fig.suptitle(fig_title)
         ax.scatter(k,average_cost)
-        ax.set_title('Cost as Function of K')
         ax.set_xlabel('K')
-        ax.set_ylabel('Cost')
+        if show_average_cost:
+            ax.set_ylabel('Average Cost') 
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+        elif show_std_min_dist:
+            ax.set_ylabel('Minimum Distance Std') 
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -453,8 +471,12 @@ if samples == 0:
         ax = fig.add_subplot('111')
         ax.scatter(thresh, average_cost)
         ax.set_xlabel('Treshold')
-        ax.set_ylabel('Cost')
-        ax.set_title(f'{fig_title} \n Cost as Function of Threshold')
+        if show_average_cost:
+            ax.set_ylabel('Average Cost') 
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+        elif show_std_min_dist:
+            ax.set_ylabel('Minimum Distance Std') 
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
         ax.grid(axis='y')
         plt.show()   
 
