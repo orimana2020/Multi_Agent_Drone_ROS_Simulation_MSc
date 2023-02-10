@@ -9,13 +9,14 @@ colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','gre
 
 # ------------- experiment_parmas -----------------
 k_init = 8
-threshold_factor = 0.9
+threshold_factor = 0.5
 i=0
 fig_save = False
+cuttoff_factor = 0.75
 
 #  dataset:
-random300 = 0
-dataset178_allocation = 1
+random300 = 1
+dataset178_allocation = 0
 rossim178 = 0
 
 
@@ -29,14 +30,14 @@ target_distibution = 0
 target_allocation_2d=0
 
 #-----------------------------
-analysis = 0
+analysis = 1
 z_k_threshold=1
 z_as_k = 1
 z_threshold = 1
 
 #  z axis
 show_average_cost = 0
-show_std_min_dist = 0
+show_std_min_dist = 1
 #------------------------------
 
 # external for thesis explanations
@@ -203,6 +204,31 @@ if show_path:
     ax.set_zlabel('z')
     plt.show()
 
+    if target_distibution:
+        fig = plt.figure()
+        ax = fig.add_subplot('111')
+        ax.invert_xaxis()
+        ax.scatter(targetpos[:,1],targetpos[:,2],c='k',s=7)
+        # ax.set_title('Target Distribution \n Dataset - 178 Targets ')
+        ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
+        ax.set_xlabel('X(m)')
+        ax.set_ylabel('Y(m)')
+        plt.show()
+
+    if target_allocation_2d:
+        fig = plt.figure()
+        ax = fig.add_subplot('111')
+        ax.invert_xaxis()
+        for comb in combination:
+            for j in range(len(comb)):
+                ax.scatter(targetpos[comb[j],1],targetpos[comb[j],2],  s=20, c=colors[j])
+        # ax.set_title('Target Allocation Distribution - 3 Drones \n Dataset - 178 Targets')
+        ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
+        ax.set_xlabel('X(m)')
+        ax.set_ylabel('Y(m)')
+        plt.show()
+
+
 if samples > 0:
     if z_k_threshold:
         exp_data = np.zeros([len(k_lst)*len(threshold_lst),3], dtype=float)
@@ -216,9 +242,9 @@ if samples > 0:
                     general_data, drone_data = data['general_data'],  data['drone_data']
                     allocation_history = general_data['allocation_history']
                     if show_average_cost:
-                        median_cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*0.8)]]))
+                        median_cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
                     elif show_std_min_dist:
-                        median_cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*0.8)]]))
+                        median_cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
                 average_cost = np.average(median_cost_lst)
                 exp_data[idx,:] = [k, thersh, average_cost ]
                 idx += 1
@@ -249,11 +275,11 @@ if samples > 0:
                     general_data, drone_data = data['general_data'],  data['drone_data']
                     allocation_history = general_data['allocation_history']
                     if show_average_cost:
-                        cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*0.8)]]))
-                        cost_sub_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*0.8)]]))
+                        cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                        cost_sub_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
                     elif show_std_min_dist:
-                        cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*0.8)]]))
-                        cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*0.8)]]))           
+                        cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                        cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))           
                 std_lst.append(np.std(cost_sub_lst))
             average_std = np.average(std_lst)
             average_cost = np.average(cost_lst)
@@ -288,11 +314,11 @@ if samples > 0:
                     general_data, drone_data = data['general_data'],  data['drone_data']
                     allocation_history = general_data['allocation_history']
                     if show_average_cost:
-                        cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*0.8)]]))
-                        cost_sub_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*0.8)]]))
+                        cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                        cost_sub_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
                     elif show_std_min_dist:
-                        cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*0.8)]]))
-                        cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*0.8)]]))
+                        cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                        cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
                 std_lst.append(np.std(cost_sub_lst))
             average_std = np.average(std_lst)
             average_cost = np.average(cost_lst)
@@ -314,29 +340,6 @@ if samples > 0:
 
 
 
-    if target_distibution:
-        fig = plt.figure()
-        ax = fig.add_subplot('111')
-        ax.invert_xaxis()
-        ax.scatter(targetpos[:,1],targetpos[:,2],c='k',s=7)
-        # ax.set_title('Target Distribution \n Dataset - 178 Targets ')
-        ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
-        ax.set_xlabel('X(m)')
-        ax.set_ylabel('Y(m)')
-        plt.show()
-
-    if target_allocation_2d:
-        fig = plt.figure()
-        ax = fig.add_subplot('111')
-        ax.invert_xaxis()
-        for comb in combination:
-            for j in range(len(comb)):
-                ax.scatter(targetpos[comb[j],1],targetpos[comb[j],2],  s=20, c=colors[j])
-        # ax.set_title('Target Allocation Distribution - 3 Drones \n Dataset - 178 Targets')
-        ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
-        ax.set_xlabel('X(m)')
-        ax.set_ylabel('Y(m)')
-        plt.show()
 
 
 
@@ -360,87 +363,100 @@ if samples > 0:
 
 ROS SIMULATIONS
 """
-# if samples == 0:
-#     if compare_k_threshold:
-#         exp_data = np.zeros([len(k_lst)*len(threshold_lst),3], dtype=float)
-#         idx = 0
-#         for k in k_lst:
-#             for thersh in threshold_lst:
-#                 data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
-#                 data = data.item()
-#                 general_data, drone_data = data['general_data'],  data['drone_data']
-#                 allocation_history = general_data['allocation_history']
-#                 if show_median_cost:
-#                     average_cost = (np.median(allocation_history['min_cost']))
-#                 exp_data[idx,:] = [k, thersh, average_cost ]
-#                 idx += 1
-#         k = exp_data[:,0]
-#         threshold  = exp_data[:,1]
-#         average_cost = exp_data[:,2]
-#         fig = plt.figure()
-#         ax = fig.add_subplot(111, projection='3d')
-#         ax.scatter3D(k, threshold, average_cost)
-#         ax.set_xlabel('K')
-#         ax.set_ylabel('Threshold')
-#         ax.set_zlabel('Cost') 
-#         ax.set_title(f'{fig_title} \n Cost as Function of Threshold and K')
-#         plt.show()
+if samples == 0:
+    if z_k_threshold:
+        exp_data = np.zeros([len(k_lst)*len(threshold_lst),3], dtype=float)
+        idx = 0
+        for k in k_lst:
+            for thersh in threshold_lst:
+                median_cost_lst = []
+                data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
+                data = data.item()
+                general_data, drone_data = data['general_data'],  data['drone_data']
+                allocation_history = general_data['allocation_history']
+                if show_average_cost:
+                    median_cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                elif show_std_min_dist:
+                    median_cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                average_cost = np.average(median_cost_lst)
+                exp_data[idx,:] = [k, thersh, average_cost ]
+                idx += 1
+        k = exp_data[:,0]
+        threshold  = exp_data[:,1]
+        average_cost = exp_data[:,2]
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.scatter3D(k, threshold, average_cost)
+        ax.set_xlabel('K')
+        ax.set_ylabel('Threshold')
+        ax.set_zlabel('Cost') 
+        ax.set_title(f'{fig_title} \n Cost as Function of Threshold and K')
+        plt.show()
 
                 
-#     if cost_as_k:
-#         exp_data = np.zeros([len(k_lst),2], dtype=float)
-#         idx = 0
-#         for k in k_lst:
-#             cost_lst = []
-#             for thersh in threshold_lst:
-#                 std_lst = []
-#                 data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
-#                 data = data.item()
-#                 general_data, drone_data = data['general_data'],  data['drone_data']
-#                 allocation_history = general_data['allocation_history']
-#                 cost_lst.append(np.median(allocation_history['min_cost']))
-#             average_cost = np.average(cost_lst)
-#             exp_data[idx,:] = [k, average_cost]
-#             idx +=1
-#         k = exp_data[:,0]
-#         average_cost = exp_data[:,1]
-#         fig = plt.figure()
-#         ax = fig.add_subplot('111')
-#         # fig.suptitle(fig_title)
-#         ax.scatter(k,average_cost)
-#         # ax.errorbar(k,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
-#         ax.set_title(f'{fig_title} \n Cost as Function of K')
-#         ax.set_xlabel('K')
-#         ax.set_ylabel('Cost')
-#         ax.grid(axis='y')
-#         plt.show()   
+    if z_as_k:
+        exp_data = np.zeros([len(k_lst),2], dtype=float)
+        idx = 0
+        for k in k_lst:
+            cost_lst = []
+            for thersh in threshold_lst:
+                cost_sub_lst = []
+                data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
+                data = data.item()
+                general_data, drone_data = data['general_data'],  data['drone_data']
+                allocation_history = general_data['allocation_history']
+                if show_average_cost:
+                    cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                    cost_sub_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                elif show_std_min_dist:
+                    cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))           
+            average_cost = np.average(cost_lst)
+            exp_data[idx,:] = [k, average_cost]
+            idx +=1
+        k = exp_data[:,0]
+        average_cost = exp_data[:,1]
+        fig = plt.figure()
+        ax = fig.add_subplot('111')
+        fig.suptitle(fig_title)
+        ax.scatter(k,average_cost)
+        ax.set_title('Cost as Function of K')
+        ax.set_xlabel('K')
+        ax.set_ylabel('Cost')
+        ax.grid(axis='y')
+        plt.show()   
 
 
-#     if cost_as_threshold:
-#         exp_data = np.zeros([len(threshold_lst),2], dtype=float)
-#         idx = 0
-#         for thersh in threshold_lst:
-#             average_cost_lst = []
-#             for k in k_lst:
-#                 data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
-#                 data = data.item()
-#                 general_data, drone_data = data['general_data'],  data['drone_data']
-#                 allocation_history = general_data['allocation_history']
-#                 average_cost_lst.append(np.median(allocation_history['min_cost']))
-#             average_cost = np.average(average_cost_lst)
-#             exp_data[idx,:] = [thersh, average_cost]
-#             idx +=1
-#         thresh = exp_data[:,0]
-#         average_cost = exp_data[:,1]
-#         fig = plt.figure()
-#         ax = fig.add_subplot('111')
-#         ax.scatter(thresh, average_cost)
-#         ax.set_xlabel('Treshold')
-#         ax.set_ylabel('Cost')
-#         ax.set_title(f'{fig_title} \n Cost as Function of Threshold')
-#         ax.grid(axis='y')
-#         plt.show()   
-
+    if z_threshold:
+        exp_data = np.zeros([len(threshold_lst),2], dtype=float)
+        idx = 0
+        for thersh in threshold_lst:
+            cost_lst = []
+            for k in k_lst:
+                cost_sub_lst = []
+                data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
+                data = data.item()
+                general_data, drone_data = data['general_data'],  data['drone_data']
+                allocation_history = general_data['allocation_history']
+                if show_average_cost:
+                    cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                    cost_sub_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
+                elif show_std_min_dist:
+                    cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+            average_cost = np.average(cost_lst)
+            exp_data[idx,:] = [thersh, average_cost]
+            idx +=1
+        thresh = exp_data[:,0]
+        average_cost = exp_data[:,1]
+        fig = plt.figure()
+        ax = fig.add_subplot('111')
+        ax.scatter(thresh, average_cost)
+        ax.set_xlabel('Treshold')
+        ax.set_ylabel('Cost')
+        ax.set_title(f'{fig_title} \n Cost as Function of Threshold')
+        ax.grid(axis='y')
+        plt.show()   
 
 
 
