@@ -53,8 +53,8 @@ class Optim(object):
         return knn
 
 
-    def cost_function(self, next_diff, travel_dist, next_targets, min_dist_vec):
-        cost = next_diff * 0.9 + travel_dist * 0.1
+    def cost_function(self, next_diff, travel_dist, next_targets, min_dist_vec,dist2center):
+        cost = next_diff * 0.9 + travel_dist * 0.1# + dist2center*0.15
         in_blocking_volume = self.is_in_dw_volume(next_targets)
         is_in_threshold = False
         if self.threshold_dist_low < min_dist_vec < self.threshold_dist_up:
@@ -78,10 +78,16 @@ class Optim(object):
             travel_dist_vec = np.zeros(drone_num)
             for j in range(drone_num):
                 if self.current_targets[j] != next_targets[j]:
-                    travel_dist_vec[j] = self.distance_mat_nochange[self.current_targets[j], next_targets[j]]
-            travel_dist = np.linalg.norm(travel_dist_vec, ord=2)
+                    travel_dist_vec[j] = self.distance_mat_nochange[self.initial_kmeans_targets[j], next_targets[j]]
+            dist2center = np.linalg.norm(travel_dist_vec, ord=2)
+            # tarvel dist 2
+            travel_dist_vec2 = np.zeros(drone_num)
+            for j in range(drone_num):
+                if self.current_targets[j] != next_targets[j]:
+                    travel_dist_vec2[j] = self.distance_mat_nochange[self.current_targets[j], next_targets[j]]
+            travel_dist = np.linalg.norm(travel_dist_vec2, ord=2)
             
-            current_cost, in_blocking_volume, is_in_treshold = self.cost_function(next_diff, travel_dist, next_targets, min_dist_vec)
+            current_cost, in_blocking_volume, is_in_treshold = self.cost_function(next_diff, travel_dist, next_targets, min_dist_vec,dist2center)
             if is_in_treshold:
                 if not(in_blocking_volume):
                     if current_cost < min_cost_optimal:
@@ -184,6 +190,7 @@ class Allocation:
         drones_idx[:] = [drones_idx[i] for i in indeces_drone_idx]
         targets_idx[:] = [targets_idx[i] for i in indeces_drone_idx]
         self.optim.current_targets = np.array(targets_idx)
+        self.optim.initial_kmeans_targets = self.optim.current_targets.copy()
 
 
     def update_kmeans(self, dm):

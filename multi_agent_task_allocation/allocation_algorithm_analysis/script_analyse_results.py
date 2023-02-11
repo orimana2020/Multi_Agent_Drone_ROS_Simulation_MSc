@@ -9,15 +9,15 @@ colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','gre
 
 # ------------- experiment_parmas -----------------
 k_init = 8
-threshold_factor = 0.5
-i=0
+threshold_factor = 0.8
+i=1
 fig_save = False
-cuttoff_factor = 0.75
+cuttoff_factor = 0.8
 
 #  dataset:
 random300 = 0
-dataset178_allocation = 1
-rossim178 = 0
+dataset178_allocation = 0
+rossim178 = 1
 
 
 # ------ what to show
@@ -114,9 +114,9 @@ if analysis:
     fig1 = plt.figure()
     ax1 = fig1.add_subplot('111')
     ax1.scatter(idx[:-2], min_dist[:-2], c='blue', label='Minimum Distance',s=3)
-    ax1.scatter(idx[:-2], threshold_low[:-2], c='green', label='Threshold',s=2)
-    ax1.scatter(idx[:-2], threshold_up[:-2], c='green',s=2)
-    ax1.vlines(x=kmeans_idx, ymin=0, ymax=max(min_dist[:-2]), colors='fuchsia', ls='--', lw=0.5, label='Kmeans')
+    ax1.scatter(idx[:-2], threshold_low[:-2], c='red', label='Threshold',marker='_')
+    ax1.scatter(idx[:-2], threshold_up[:-2], c='red',marker='_')
+    ax1.vlines(x=kmeans_idx, ymin=0, ymax=max(min_dist[:-2]), colors='fuchsia', ls='--', lw=0.5, label='Kmeans Instance')
     ax1.set_xlabel("Iteration")
     ax1.set_ylabel("Minimum Distance(m)")
     ax1.set_title(f'{fig_title} \n k:{k_init}, Threshold Factor:{threshold_factor},\n Minimum Distance Std:{round(np.std(min_dist),3)} , Average Cost:{round(np.average(cost),2)}')
@@ -204,29 +204,29 @@ if show_path:
     ax.set_zlabel('z')
     plt.show()
 
-    if target_distibution:
-        fig = plt.figure()
-        ax = fig.add_subplot('111')
-        ax.invert_xaxis()
-        ax.scatter(targetpos[:,1],targetpos[:,2],c='k',s=7)
-        # ax.set_title('Target Distribution \n Dataset - 178 Targets ')
-        ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
-        ax.set_xlabel('X(m)')
-        ax.set_ylabel('Y(m)')
-        plt.show()
+if target_distibution:
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    ax.invert_xaxis()
+    ax.scatter(targetpos[:,1],targetpos[:,2],c='k',s=7)
+    # ax.set_title('Target Distribution \n Dataset - 178 Targets ')
+    ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
+    ax.set_xlabel('X(m)')
+    ax.set_ylabel('Y(m)')
+    plt.show()
 
-    if target_allocation_2d:
-        fig = plt.figure()
-        ax = fig.add_subplot('111')
-        ax.invert_xaxis()
-        for comb in combination:
-            for j in range(len(comb)):
-                ax.scatter(targetpos[comb[j],1],targetpos[comb[j],2],  s=20, c=colors[j])
-        # ax.set_title('Target Allocation Distribution - 3 Drones \n Dataset - 178 Targets')
-        ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
-        ax.set_xlabel('X(m)')
-        ax.set_ylabel('Y(m)')
-        plt.show()
+if target_allocation_2d:
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    ax.invert_xaxis()
+    for comb in combination:
+        for j in range(len(comb)):
+            ax.scatter(targetpos[comb[j],1],targetpos[comb[j],2],  s=20, c=colors[j])
+    # ax.set_title('Target Allocation Distribution - 3 Drones \n Dataset - 178 Targets')
+    ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
+    ax.set_xlabel('X(m)')
+    ax.set_ylabel('Y(m)')
+    plt.show()
 
 
 if samples > 0:
@@ -255,13 +255,13 @@ if samples > 0:
         ax = fig.add_subplot(111, projection='3d')
         ax.scatter3D(k, threshold, average_cost)
         ax.set_xlabel('K')
-        ax.set_ylabel('Threshold')
+        ax.set_ylabel('Threshold Factor')
         if show_average_cost:
             ax.set_zlabel('Average Cost') 
-            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold Factor and K')
         elif show_std_min_dist:
             ax.set_zlabel('Minimum Distance Std') 
-            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor and K')
         plt.show()
 
                 
@@ -299,10 +299,10 @@ if samples > 0:
         ax.set_xlabel('K')
         if show_average_cost:
             ax.set_ylabel('Average Cost') 
-            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Average Cost as Function of K')
         elif show_std_min_dist:
             ax.set_ylabel('Minimum Distance Std') 
-            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -338,13 +338,13 @@ if samples > 0:
         ax = fig.add_subplot('111')
         ax.scatter(thresh, average_cost)
         ax.errorbar(thresh ,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
-        ax.set_xlabel('Treshold')
+        ax.set_xlabel('Treshold Factor')
         if show_average_cost:
             ax.set_ylabel('Average Cost') 
-            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold Factor')
         elif show_std_min_dist:
             ax.set_ylabel('Minimum Distance Std') 
-            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor')
         ax.grid(axis='y')
         plt.show()   
 
@@ -399,13 +399,13 @@ if samples == 0:
         ax = fig.add_subplot(111, projection='3d')
         ax.scatter3D(k, threshold, average_cost)
         ax.set_xlabel('K')
-        ax.set_ylabel('Threshold')
+        ax.set_ylabel('Threshold Factor')
         if show_average_cost:
             ax.set_zlabel('Average Cost') 
-            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold Factor and K')
         elif show_std_min_dist:
             ax.set_zlabel('Minimum Distance Std') 
-            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor and K')
         plt.show()
 
                 
@@ -434,13 +434,14 @@ if samples == 0:
         fig = plt.figure()
         ax = fig.add_subplot('111')
         ax.scatter(k,average_cost)
+        ax.plot(k,average_cost)
         ax.set_xlabel('K')
         if show_average_cost:
             ax.set_ylabel('Average Cost') 
-            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Average Cost as Function of K')
         elif show_std_min_dist:
             ax.set_ylabel('Minimum Distance Std') 
-            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -470,13 +471,14 @@ if samples == 0:
         fig = plt.figure()
         ax = fig.add_subplot('111')
         ax.scatter(thresh, average_cost)
-        ax.set_xlabel('Treshold')
+        ax.plot(thresh, average_cost)
+        ax.set_xlabel('Treshold Factor')
         if show_average_cost:
             ax.set_ylabel('Average Cost') 
-            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Average Cost as Function of Threshold Factor')
         elif show_std_min_dist:
             ax.set_ylabel('Minimum Distance Std') 
-            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold and K')
+            ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor')
         ax.grid(axis='y')
         plt.show()   
 
