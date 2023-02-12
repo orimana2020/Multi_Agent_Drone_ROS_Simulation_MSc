@@ -8,16 +8,16 @@ from sklearn.cluster import KMeans
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 8
+k_init = 2
 threshold_factor = 0.8
 i=1
 fig_save = False
 cuttoff_factor = 0.8
 
 #  dataset:
-random300 = 0
+random300 = 1
 dataset178_allocation = 0
-rossim178 = 1
+rossim178 = 0
 
 
 # ------ what to show
@@ -27,13 +27,13 @@ restore_history = 0
 show_cost = 0
 show_path = 0
 target_distibution = 0
-target_allocation_2d=0
+target_allocation_2d=1
 
 #-----------------------------
-analysis = 1
-z_k_threshold=1
-z_as_k = 1
-z_threshold = 1
+analysis = 0
+z_k_threshold=0
+z_as_k = 0
+z_threshold = 0
 
 #  z axis
 show_average_cost = 0

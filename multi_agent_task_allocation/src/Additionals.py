@@ -203,7 +203,7 @@ class Analysis(object):
         self.allocation_history['travel_dist'].append(travel_dist)
         self.allocation_history['min_cost'].append(min_cost)
     
-    def path(self, drone_idx, waypoints, start_title ,goal_title):
+    def path(self, drone_idx, waypoints, start_title ,goal_title,bv):
         self.allocation_history['path'].append([drone_idx,start_title, goal_title, waypoints])
         
 
@@ -231,8 +231,8 @@ class Analysis(object):
             'full_magazine':self.dm.drones[j].full_magazine }
         data = {'general_data':general_data, 'drone_data':drone_data}
 
-        np.save(params.file_name+'_data_k_'+str(params.k_init)+'_thresh_'+str(params.threshold_factor), np.array(data))
-
+        # np.save(params.file_name+'_data_k_'+str(params.k_init)+'_thresh_'+str(params.threshold_factor), np.array(data))
+        np.save(params.file_name+'_'+str(params.drone_size_m), np.array(data))
 
 class get_figure(object):
     def __init__(self):

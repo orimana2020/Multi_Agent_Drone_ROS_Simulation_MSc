@@ -47,13 +47,14 @@ if mode == 'sim':
     linear_velocity = 1
     base = [(0.1,-0.7,1), (0.1,0,1), (0.1,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
-    drone_size_m = 0.25 # [m]
+    delta = 0
+    drone_size_m = 0.25+delta # [m]
     segments_num = 15
 
 
 # ------------------ Allocation --------------------#
-k_init = 13
-threshold_factor = 0.6
+k_init = 10
+threshold_factor = 0.8
 uri_state_mat_sim = '/src/rotors_simulator/multi_agent_task_allocation/src'
 uri_targetpos_cf = '/Ori_CF/multi_agent_task_allocation/src'
 if mode == 'sim':
@@ -67,6 +68,7 @@ floor_safety_distance = 0.3
 min_battery_voltage = 3.2 
 
 # ------------------- Trajectory
+
 resolution = 0.05 #[m]
 retreat_range = 0.7 #[m]
 take_off_height = base[0][2]
@@ -107,7 +109,7 @@ mean_x_targets_position = np.sum(targetpos[:,0]) / targets_num
 span, limits, limits_idx = get_span(targetpos, base, resolution)
 
 # --------------------- Safety 2
-downwash_distance = np.array([[min(targetpos[:,0]), max(targetpos[:,0])], [0.35,0.35], [1.5,1.5]]) # [m] , also distance to avoid flowdeck disturbance
+downwash_distance = np.array([[min(targetpos[:,0]), max(targetpos[:,0])], [0.35+delta,0.35+delta], [1.5+delta,1.5+delta]]) # [m] , also distance to avoid flowdeck disturbance
 
 # --------------------- General
 sleep_time = 0.1
@@ -134,7 +136,7 @@ LPS_anchor_pos = LPS_trible + trible_floor_offset
 # --------------- Analysis -------------
 # counter = np.load("counter_analysis.npy")
 # file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'
-file_name = 'ros_sim'
+file_name = 'ros_sim_funnel'
 print(file_name)
 # np.save("counter_analysis", np.array(counter+1))
 # print(f'Task num: {counter}')

@@ -381,7 +381,7 @@ class Trajectory(object):
                     self.path_gt[drone_idx] = self.smooth_path_m[drone_idx]
                     self.smooth_path_m[drone_idx] = self.get_path_LPS_error(self.smooth_path_m[drone_idx], drones, drone_idx)
                 self.logger.log(f'path found drone {drone_idx}')
-                self.an.path(drone_idx=drone_idx, waypoints=self.smooth_path_m[drone_idx],start_title=drones[drone_idx].start_title ,goal_title=drones[drone_idx].goal_title)
+                self.an.path(drone_idx=drone_idx, waypoints=self.smooth_path_m[drone_idx],start_title=drones[drone_idx].start_title ,goal_title=drones[drone_idx].goal_title,bv=self.block_volumes_m[drone_idx])
                 return 1
             except:
                 self.logger.log(f'No Path Found! drone {drone_idx} from {start_title} to {goal_title} , start: {np.round((np.array(start_m)),2)} , goal: {np.round((np.array(goal_m)),2)}')
@@ -410,7 +410,7 @@ class Trajectory(object):
                     self.path_gt[drone_idx] = self.smooth_path_m[drone_idx]
                     self.smooth_path_m[drone_idx] = self.get_path_LPS_error(self.smooth_path_m[drone_idx], drones, drone_idx)
                 self.logger.log(f'path found drone {drone_idx}')
-                self.an.path(drone_idx=drone_idx, waypoints=self.smooth_path_m[drone_idx],start_title=drones[drone_idx].start_title ,goal_title=drones[drone_idx].goal_title)
+                self.an.path(drone_idx=drone_idx, waypoints=self.smooth_path_m[drone_idx],start_title=drones[drone_idx].start_title ,goal_title=drones[drone_idx].goal_title,bv=self.block_volumes_m[drone_idx])
                 return 1
             except:
                 self.logger.log(f'No Path Found! drone {drone_idx} from {start_title} to {goal_title} , start: {np.round((np.array(start_m)),2)} , goal: {np.round((np.array(goal_m)),2)}')
