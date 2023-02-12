@@ -15,9 +15,10 @@ fig_save = False
 cuttoff_factor = 0.8
 
 #  dataset:
-random300 = 1
+random300 = 0
 dataset178_allocation = 0
-rossim178 = 0
+rossim178 = 1
+funnels = 1
 
 
 # ------ what to show
@@ -43,10 +44,6 @@ show_std_min_dist = 1
 # external for thesis explanations
 show_circle = 0
 relative_distance = 0
-
-
-
-
 
 
 if random300:
@@ -501,6 +498,20 @@ external
     #-------------------------------------------
 
 """
+
+
+if funnels:
+    funnels_size = [0.25,0.35,0.45,0.55,0.6]
+    fig = plt.figure()
+    ax = fig.add_subplot('111')
+    for funnel in funnels_size:
+        data = np.load('ros_sim_funnel_'+str(funnel)+".npy", allow_pickle=True)
+        data = data.item()
+        general_data, drone_data = data['general_data'],  data['drone_data']
+        # Allocatio
+        total_task_time = general_data['total_task_time']
+        ax.scatter(funnel, total_task_time)
+    plt.show()
 
 
 
