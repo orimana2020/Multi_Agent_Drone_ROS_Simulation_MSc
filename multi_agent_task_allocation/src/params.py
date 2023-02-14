@@ -47,7 +47,7 @@ if mode == 'sim':
     linear_velocity = 1
     base = [(0.1,-0.7,1), (0.1,0,1), (0.1,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
-    delta = 0
+    delta = 0.3
     drone_size_m = 0.25+delta # [m]
     segments_num = 15
 
@@ -136,7 +136,7 @@ LPS_anchor_pos = LPS_trible + trible_floor_offset
 # --------------- Analysis -------------
 # counter = np.load("counter_analysis.npy")
 # file_name = 'task_k_'+str(k_init)+'_threshold_'+str(threshold_factor)+'_3'
-file_name = 'ros_sim_funnel'
+file_name = 'ros_sim_funnel2'
 print(file_name)
 # np.save("counter_analysis", np.array(counter+1))
 # print(f'Task num: {counter}')

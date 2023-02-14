@@ -8,17 +8,19 @@ from sklearn.cluster import KMeans
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 2
+k_init = 7
 threshold_factor = 0.8
-i=1
+i=0
 fig_save = False
 cuttoff_factor = 0.8
 
 #  dataset:
 random300 = 0
 dataset178_allocation = 0
-rossim178 = 1
-funnels = 1
+rossim178 = 0
+exp_cf = 1
+funnels = 0
+visualize_funnel = 0
 
 
 # ------ what to show
@@ -28,17 +30,17 @@ restore_history = 0
 show_cost = 0
 show_path = 0
 target_distibution = 0
-target_allocation_2d=1
+target_allocation_2d=0
 
 #-----------------------------
-analysis = 0
+analysis = 1
 z_k_threshold=0
 z_as_k = 0
 z_threshold = 0
 
 #  z axis
 show_average_cost = 0
-show_std_min_dist = 1
+show_std_min_dist = 0
 #------------------------------
 
 # external for thesis explanations
@@ -73,6 +75,12 @@ if rossim178:
     threshold_lst = [0.1,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     samples = 0
 
+if exp_cf:
+    url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_cf/cf_exp/'
+    fig_title = 'Laboratory Experiment'
+    data = np.load(url + 'cf_exp_5_data_cp_1'+".npy", allow_pickle=True)
+    samples = 0
+
 
 
 data = data.item()
@@ -103,7 +111,8 @@ for i, drone in enumerate(drone_num):
 drone_change_idx = [x-0.5 for x in drone_change_idx]
 # check kmeans
 kmeans_idx = [idx-0.5 for idx in range(len(kmeans)) if kmeans[idx]==1] 
-
+print( f"k={general_data['k_init']} TF= {general_data['threshold_factor']}" )
+        
 
 # # ------------- analysis ------------------
 
@@ -196,9 +205,9 @@ if show_path:
         # if start_title == 'target' and goal_title == 'target':
         #     ax.plot(waypoints[:,0], waypoints[:,1], waypoints[:,2], c=colors[drone_idx],alpha=1) 
     ax.set_title('Trajectories')       
-    ax.set_xlabel('x')
-    ax.set_ylabel('y')
-    ax.set_zlabel('z')
+    ax.set_xlabel('x(m)')
+    ax.set_ylabel('y(m)')
+    ax.set_zlabel('z(m)')
     plt.show()
 
 if target_distibution:
@@ -206,8 +215,10 @@ if target_distibution:
     ax = fig.add_subplot('111')
     ax.invert_xaxis()
     ax.scatter(targetpos[:,1],targetpos[:,2],c='k',s=7)
+    print(len(targetpos))
     # ax.set_title('Target Distribution \n Dataset - 178 Targets ')
-    ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
+    # ax.set_title('Target Distribution \n Dataset - 300 Randomly Placed Targets ')
+    ax.set_title('Laboratory Experiment \n  52 Randomly Placed Targets ')
     ax.set_xlabel('X(m)')
     ax.set_ylabel('Y(m)')
     plt.show()
@@ -220,7 +231,8 @@ if target_allocation_2d:
         for j in range(len(comb)):
             ax.scatter(targetpos[comb[j],1],targetpos[comb[j],2],  s=20, c=colors[j])
     # ax.set_title('Target Allocation Distribution - 3 Drones \n Dataset - 178 Targets')
-    ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
+    # ax.set_title('Target Allocation Distribution - 3 Drones \n 300 Randomly Placed Targets')
+    ax.set_title('Laboratory Experiment \n  52 Randomly Placed Targets ')
     ax.set_xlabel('X(m)')
     ax.set_ylabel('Y(m)')
     plt.show()
@@ -501,19 +513,58 @@ external
 
 
 if funnels:
-    funnels_size = [0.25,0.35,0.45,0.55,0.6]
+    funnels_size = [0.25,0.3,0.35,0.4,0.45,0.5,0.55,0.6]
+    task_time = [272,273,273,278,285,293,313,340]
+    base = 0.25
+    
     fig = plt.figure()
     ax = fig.add_subplot('111')
-    for funnel in funnels_size:
-        data = np.load('ros_sim_funnel_'+str(funnel)+".npy", allow_pickle=True)
-        data = data.item()
-        general_data, drone_data = data['general_data'],  data['drone_data']
+    exp_data = np.zeros([len(funnels_size),2], dtype=float)
+    for idx,funnel in enumerate(funnels_size):
+        # data = np.load('ros_sim_funnel_'+str(funnel)+".npy", allow_pickle=True)
+        # data = data.item()
+        # general_data, drone_data = data['general_data'],  data['drone_data']
         # Allocatio
-        total_task_time = general_data['total_task_time']
-        ax.scatter(funnel, total_task_time)
+        # total_task_time = general_data['total_task_time']
+        # exp_data[idx,:] = funnel-base, total_task_time
+        exp_data[idx,:] = funnel-base ,task_time[idx]
+    
+    uncertainty, task_time = exp_data[:,0], exp_data[:,1]
+    ax.scatter(uncertainty, task_time, c='b')
+    ax.plot(uncertainty, task_time, c='b')
+    ax.set_xlabel('Position Uncertainty(m)')
+    ax.set_ylabel('Task Time(sec)') 
+    ax.set_title(f'Task Time as Function of Position Uncertainty')
+    ax.grid(axis='y')
+    # plt.show()
+
+
+if visualize_funnel:
+    uncertainty=0.55
+    base = 0.15
+    data = np.load('ros_sim_funnel_'+str(uncertainty)+".npy", allow_pickle=True)
+    data = data.item()
+    general_data, drone_data = data['general_data'],  data['drone_data']
+    allocation_history = general_data['allocation_history']
+    path = allocation_history['path']
+    idx = 0
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter3D(targetpos[:,0],targetpos[:,1],targetpos[:,2],  s= 10, c='k',alpha=1, depthshade=False)
+    for idx in range(3):
+        drone_idx, start_title, goal_title, waypoints,bv = path[idx] 
+        ax.plot(waypoints[:,0],waypoints[:,1],waypoints[:,2], c='b', linewidth=4)        
+        ax.scatter3D(bv[:,0],bv[:,1], bv[:,2], s= 10, c='g',alpha=0.04,depthshade=False)
+    ax.set_title(f'{round(uncertainty-base,2)}(m) Positioning  Uncertainty')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+    ax.set_xlim([0,2.4])
+    ax.set_ylim([-1.5,1.5])
+    ax.set_zlim([0,3])
+
+
     plt.show()
-
-
 
     #-------------------------------------------
 if show_circle:
