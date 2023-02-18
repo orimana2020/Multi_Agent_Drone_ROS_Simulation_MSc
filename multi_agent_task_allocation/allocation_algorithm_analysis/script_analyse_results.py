@@ -8,19 +8,18 @@ from sklearn.cluster import KMeans
 colors = ['r', 'g', 'b', 'peru', 'yellow', 'lime', 'navy', 'purple', 'pink','grey']
 
 # ------------- experiment_parmas -----------------
-k_init = 7
-threshold_factor = 0.8
+k_init = 3
+threshold_factor = 0.1
 i=0
 fig_save = False
-cuttoff_factor = 0.8
+cuttoff_factor = 1
 
 #  dataset:
 random300 = 0
-dataset178_allocation = 0
+dataset178_allocation = 1
 rossim178 = 0
-exp_cf = 1
-funnels = 0
-visualize_funnel = 0
+exp_cf = 0
+
 
 
 # ------ what to show
@@ -33,27 +32,34 @@ target_distibution = 0
 target_allocation_2d=0
 
 #-----------------------------
-analysis = 1
-z_k_threshold=0
+analysis = 0
+z_k_threshold=1
 z_as_k = 0
 z_threshold = 0
 
 #  z axis
 show_average_cost = 0
 show_std_min_dist = 0
+show_avg_min_dist=0
+
+threshold_dist = 0.8
+show_cost_func = 1
+
 #------------------------------
 
 # external for thesis explanations
 show_circle = 0
 relative_distance = 0
-
+funnels = 0
+visualize_funnel = 0
 
 if random300:
     """ 300 random"""
     url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/300tar_random2/'
     fig_title = '300 Randomly Placed Targets'
     data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
-    k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+    k_lst = [2,3,4,5,6,7,8,9,10]
+    # k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
     threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     samples = 5
 
@@ -62,7 +68,8 @@ if dataset178_allocation:
     url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/dataset_no_vis/'
     fig_title = '178 Dataset Targets'
     data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
-    k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+    k_lst = [3,4,5,6,7,8,9,10]
+    # k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
     threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     samples = 5
 
@@ -239,6 +246,8 @@ if target_allocation_2d:
 
 
 if samples > 0:
+    # initial_dist_lst = []
+
     if z_k_threshold:
         exp_data = np.zeros([len(k_lst)*len(threshold_lst),3], dtype=float)
         idx = 0
@@ -254,6 +263,15 @@ if samples > 0:
                         median_cost_lst.append(np.average([allocation_history['min_cost'][:int(len(allocation_history['min_cost'])*cuttoff_factor)]]))
                     elif show_std_min_dist:
                         median_cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    elif show_avg_min_dist:
+                        median_cost_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    elif show_cost_func:
+                        counter = 0
+                        for c in allocation_history['min_dist']:
+                            if c < threshold_dist:
+                                counter += 1
+                        kmeans_ins = sum(allocation_history['is_kmeans'])
+                        median_cost_lst.append(10*counter + 5*kmeans_ins )
                 average_cost = np.average(median_cost_lst)
                 exp_data[idx,:] = [k, thersh, average_cost ]
                 idx += 1
@@ -271,6 +289,7 @@ if samples > 0:
         elif show_std_min_dist:
             ax.set_zlabel('Minimum Distance Std') 
             ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor and K')
+        # print(np.average(initial_dist_lst))
         plt.show()
 
                 
@@ -293,6 +312,10 @@ if samples > 0:
                     elif show_std_min_dist:
                         cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
                         cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))           
+                    elif show_avg_min_dist:
+                        cost_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                        cost_sub_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                
                 std_lst.append(np.std(cost_sub_lst))
             average_std = np.average(std_lst)
             average_cost = np.average(cost_lst)
@@ -335,6 +358,10 @@ if samples > 0:
                     elif show_std_min_dist:
                         cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
                         cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    elif show_avg_min_dist:
+                        cost_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                        cost_sub_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                
                 std_lst.append(np.std(cost_sub_lst))
             average_std = np.average(std_lst)
             average_cost = np.average(cost_lst)
@@ -354,6 +381,7 @@ if samples > 0:
         elif show_std_min_dist:
             ax.set_ylabel('Minimum Distance Std') 
             ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor')
+  
         ax.grid(axis='y')
         plt.show()   
 
@@ -415,6 +443,7 @@ if samples == 0:
         elif show_std_min_dist:
             ax.set_zlabel('Minimum Distance Std') 
             ax.set_title(f'{fig_title} \n Minimum Distance Std as Function of Threshold Factor and K')
+    
         plt.show()
 
                 
@@ -435,6 +464,10 @@ if samples == 0:
                 elif show_std_min_dist:
                     cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
                     cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))           
+                elif show_avg_min_dist:
+                    cost_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    cost_sub_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                
             average_cost = np.average(cost_lst)
             exp_data[idx,:] = [k, average_cost]
             idx +=1
@@ -472,6 +505,10 @@ if samples == 0:
                 elif show_std_min_dist:
                     cost_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
                     cost_sub_lst.append(np.std([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                elif show_avg_min_dist:
+                    cost_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                    cost_sub_lst.append(np.average([allocation_history['min_dist'][:int(len(allocation_history['min_dist'])*cuttoff_factor)]]))
+                
             average_cost = np.average(cost_lst)
             exp_data[idx,:] = [thersh, average_cost]
             idx +=1
