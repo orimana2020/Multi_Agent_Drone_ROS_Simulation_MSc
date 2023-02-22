@@ -2,6 +2,8 @@
 
 # ------------------------ how to run  simulation-----------------------
 # terminal 1 : $ roslaunch rotors_gazebo experiment1.launch 
+# terminal 1 : $ roslaunch rotors_gazebo cf_exp.launch 
+
 # terminal 2: $ rosrun multi_agent_task_allocation main_MATA_dw.py
 # -------------------------------------------------------------
 

@@ -15,15 +15,15 @@ fig_save = False
 cuttoff_factor = 1
 
 #  dataset:
-random300 = 0
-dataset178_allocation = 1
+random300 = 1
+dataset178_allocation = 0
 rossim178 = 0
 exp_cf = 0
 
 # ------ what to show
 
 restore = 0
-restore_history = 0
+restore_history = 0 
 show_cost = 0
 show_path = 0
 target_distibution = 0
@@ -31,17 +31,27 @@ target_allocation_2d=0
 
 #-----------------------------
 analysis = 0
-z_k_threshold=0
+z_k_threshold=1
 z_as_k = 0
-z_threshold = 1
+z_threshold = 0
 
 #  z axis
 show_kmeans_compuataions = 0
 show_acc_distance = 0
 
 threshold_dist = 0.7
-show_under_08 = 1
+show_under_08 = 0
 
+show_conbined = 1
+#-----------------
+if show_kmeans_compuataions:
+    y_title = 'Kmeans Frequncy'
+elif show_under_08:
+    y_title = 'Allocations Under 0.7(m) Frequncy'
+elif show_acc_distance:
+    y_title = 'Accumulated Distance'
+elif show_conbined:
+    y_title = 'Cost'
 #------------------------------
 
 # external for thesis explanations
@@ -65,7 +75,7 @@ if dataset178_allocation:
     url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiments_no_vision/dataset_no_vis/'
     fig_title = '178 Dataset Targets'
     data = np.load(url + 'no_visual_experiment_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+'_'+str(i)+".npy", allow_pickle=True)
-    k_lst = [3,4,5,6,7,8,9,10]
+    k_lst = [2,3,4,5,6,7,8,9,10]
     # k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
     threshold_lst = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     samples = 5
@@ -75,7 +85,7 @@ if rossim178:
     url = str(os.getcwd()) +'/src/rotors_simulator/multi_agent_task_allocation/experiment_sim/experiment_1/exp4/'
     fig_title = '178 Dataset Targets - Simulation'
     data = np.load(url + 'ros_sim_data_k_'+str(k_init)+'_thresh_'+str(threshold_factor)+".npy", allow_pickle=True)
-    k_lst = [2,3,4,5,6,7,8,9,10,11,12,13]
+    k_lst = [2,3,4,5,6,7,8,9,10]
     threshold_lst = [0.1,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
     samples = 0
 
@@ -85,7 +95,31 @@ if exp_cf:
     data = np.load(url + 'cf_exp_5_data_cp_1'+".npy", allow_pickle=True)
     samples = 0
 
+# ---------general functions--------------------------------
+def get_acc_distance(allocation_history, general_data):
+    combinations = allocation_history['combination']
+    targetpos = general_data['targets_position']
+    y = targetpos[:,1]
+    z = targetpos[:,2]
+    total_distance = 0
+    for agent in range(general_data['initial_drone_num']):
+        for combi_idx in range(1,len(combinations)-5):
+            prev = combinations[combi_idx-1][agent]
+            current = combinations[combi_idx][agent]
+            total_distance += ((y[current] - y[prev])**2 + (z[current] - z[prev])**2) ** 0.5
+    return total_distance
 
+def get_under_08(allocation_history):
+    counter = 0
+    for c in allocation_history['min_dist']:
+        if c < threshold_dist:
+            counter += 1
+    return counter
+
+def get_kmeans_compuataions(allocation_history):
+    return sum(allocation_history['is_kmeans'])
+
+# -----------------------------------------------------------
 
 data = data.item()
 general_data, drone_data = data['general_data'],  data['drone_data']
@@ -148,7 +182,6 @@ if restore:
         ax.scatter3D(targetpos[:,0],targetpos[:,1],targetpos[:,2],  s= 10, c='k',alpha=1, depthshade=False)
         for j in range(len(comb)):
             ax.scatter3D(targetpos[comb[j],0],targetpos[comb[j],1],targetpos[comb[j],2],  s= 70, c=colors[j],alpha=1, depthshade=False)
-        
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.set_zlabel('z')
@@ -241,29 +274,27 @@ if target_allocation_2d:
     ax.set_ylabel('Y(m)')
     plt.show()
 
-# ---------general functions--------------------------------
-def get_acc_distance(allocation_history, general_data):
-    combinations = allocation_history['combination']
-    targetpos = general_data['targets_position']
-    y = targetpos[:,1]
-    z = targetpos[:,2]
-    total_distance = 0
-    for agent in range(general_data['initial_drone_num']):
-        for combi_idx in range(1,len(combinations)-5):
-            prev = combinations[combi_idx-1][agent]
-            current = combinations[combi_idx][agent]
-            total_distance += ((y[current] - y[prev])**2 + (z[current] - z[prev])**2) ** 0.5
-    return total_distance
 
-def get_under_08(allocation_history):
-    counter = 0
-    for c in allocation_history['min_dist']:
-        if c < threshold_dist:
-            counter += 1
-    return counter
 
-def get_kmeans_compuataions(allocation_history):
-    return sum(allocation_history['is_kmeans'])
+
+if show_conbined:
+    if samples > 0:
+        max_under_safety_distance = 0 
+        max_acc_distance = 0
+        for k in k_lst:
+            for thersh in threshold_lst:
+                for i in range(samples):
+                    data = np.load(url + 'no_visual_experiment_data_k_'+str(k)+'_thresh_'+str(thersh)+'_'+str(i)+".npy", allow_pickle=True)
+                    data = data.item()
+                    general_data, drone_data = data['general_data'],  data['drone_data']
+                    allocation_history = general_data['allocation_history']
+                    under08 = get_under_08(allocation_history)
+                    if max_under_safety_distance < under08:
+                        max_under_safety_distance = under08
+                    acc_distance = get_acc_distance(allocation_history, general_data)
+                    if max_acc_distance < acc_distance:
+                        max_acc_distance = acc_distance
+        
 
 
 
@@ -286,6 +317,11 @@ if samples > 0:
                         res = get_under_08(allocation_history)
                     elif show_kmeans_compuataions:
                         res = get_kmeans_compuataions(allocation_history)
+                    elif show_conbined:
+                        res1 = get_acc_distance(allocation_history, general_data) / max_acc_distance
+                        res2 = get_under_08(allocation_history) / max_under_safety_distance
+                        res = 0.7*res1 + 0.3*res2
+
                     res_lst.append(res)
                 average_cost = np.average(res_lst)
                 exp_data[idx,:] = [k, thersh, average_cost ]
@@ -298,6 +334,8 @@ if samples > 0:
         ax.scatter3D(k, threshold, average_cost)
         ax.set_xlabel('K')
         ax.set_ylabel('Threshold Factor')
+        ax.set_zlabel(f'{y_title}')
+        ax.set_title(f'{fig_title} \n {y_title} as Function of K and Threshold Factor')
         plt.show()
 
                 
@@ -333,8 +371,8 @@ if samples > 0:
         ax.scatter(k,average_cost)
         ax.errorbar(k,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
         ax.set_xlabel('K')
-        ax.set_ylabel('Average Cost') 
-        ax.set_title(f'{fig_title} \n Average Cost as Function of K')
+        ax.set_ylabel(f'{y_title}') 
+        ax.set_title(f'{fig_title} \n {y_title} as Function of K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -371,6 +409,8 @@ if samples > 0:
         ax.scatter(thresh, average_cost)
         ax.errorbar(thresh ,average_cost, average_std,capsize = 3, fmt="" ,ecolor='k')
         ax.set_xlabel('Treshold Factor')
+        ax.set_ylabel(f'{y_title}')
+        ax.set_title(f'{fig_title} \n {y_title} as Function of Threshold Factor')
         ax.grid(axis='y')
         plt.show()   
 
@@ -421,13 +461,17 @@ if samples == 0:
         idx = 0
         for k in k_lst:
             for thersh in threshold_lst:
-                median_cost_lst = []
                 data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
                 data = data.item()
                 general_data, drone_data = data['general_data'],  data['drone_data']
                 allocation_history = general_data['allocation_history']
-                average_cost = np.average(median_cost_lst)
-                exp_data[idx,:] = [k, thersh, average_cost ]
+                if show_acc_distance:
+                    res = get_acc_distance(allocation_history,general_data)
+                elif show_under_08:
+                    res = get_under_08(allocation_history)
+                elif show_kmeans_compuataions:
+                    res = get_kmeans_compuataions(allocation_history)
+                exp_data[idx,:] = [k, thersh, res ]
                 idx += 1
         k = exp_data[:,0]
         threshold  = exp_data[:,1]
@@ -437,6 +481,8 @@ if samples == 0:
         ax.scatter3D(k, threshold, average_cost)
         ax.set_xlabel('K')
         ax.set_ylabel('Threshold Factor')
+        ax.set_zlabel(f'{y_title}')
+        ax.set_title(f'{fig_title} \n {y_title} as Function of K and Threshold Factor')
         plt.show()
 
                 
@@ -446,12 +492,17 @@ if samples == 0:
         for k in k_lst:
             cost_lst = []
             for thersh in threshold_lst:
-                cost_sub_lst = []
                 data = np.load(url + 'ros_sim_data_k_'+str(k)+'_thresh_'+str(thersh)+".npy", allow_pickle=True)
                 data = data.item()
                 general_data, drone_data = data['general_data'],  data['drone_data']
                 allocation_history = general_data['allocation_history']
-  
+                if show_acc_distance:
+                    res = get_acc_distance(allocation_history,general_data)
+                elif show_under_08:
+                    res = get_under_08(allocation_history)
+                elif show_kmeans_compuataions:
+                    res = get_kmeans_compuataions(allocation_history)
+                cost_lst.append(res)
              
             average_cost = np.average(cost_lst)
             exp_data[idx,:] = [k, average_cost]
@@ -463,6 +514,8 @@ if samples == 0:
         ax.scatter(k,average_cost)
         ax.plot(k,average_cost)
         ax.set_xlabel('K')
+        ax.set_ylabel(f'{y_title}')
+        ax.set_title(f'{fig_title} \n {y_title} as Function of K')
         ax.grid(axis='y')
         plt.show()   
 
@@ -478,7 +531,13 @@ if samples == 0:
                 data = data.item()
                 general_data, drone_data = data['general_data'],  data['drone_data']
                 allocation_history = general_data['allocation_history']
-                
+                if show_acc_distance:
+                    res = get_acc_distance(allocation_history,general_data)
+                elif show_under_08:
+                    res = get_under_08(allocation_history)
+                elif show_kmeans_compuataions:
+                    res = get_kmeans_compuataions(allocation_history)
+                cost_lst.append(res)
             average_cost = np.average(cost_lst)
             exp_data[idx,:] = [thersh, average_cost]
             idx +=1
@@ -489,6 +548,8 @@ if samples == 0:
         ax.scatter(thresh, average_cost)
         ax.plot(thresh, average_cost)
         ax.set_xlabel('Treshold Factor')
+        ax.set_ylabel(f'{y_title}')
+        ax.set_title(f'{fig_title} \n {y_title} as Function of Threshold Factor')
         ax.grid(axis='y')
         plt.show()   
 

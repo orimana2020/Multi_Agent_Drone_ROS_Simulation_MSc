@@ -43,11 +43,11 @@ if mode == 'cf':
 #-----------Drone Sim
 if mode == 'sim':
     drone_num = 3
-    magazine = [10,10,10,10,10,10,10,3,3,3,3][:drone_num]
+    magazine = [3,3,3,3,10,10,10,3,3,3,3][:drone_num]
     linear_velocity = 1
     base = [(0.1,-0.7,1), (0.1,0,1), (0.1,0.7,1),(0.3,0.9,1)][:drone_num] # (x,y,z)   -> right to left order
     uri_list = [[0]] * drone_num
-    delta = 0.3
+    delta = 0
     drone_size_m = 0.25+delta # [m]
     segments_num = 15
 
@@ -88,7 +88,7 @@ elif mode == 'cf':
 # -------------------- Targets
 uri_targetpos_sim = '/src/rotors_simulator/multi_agent_task_allocation/datasets/experiment1/experiment1_targets.npy'
 
-data_source = 'dataset' 
+data_source = 'cf_exp' 
 
 if data_source == 'circle':
     targets_num_gen = 5; t = np.linspace(0, 2*np.pi-2*np.pi/targets_num_gen, targets_num_gen); radius=0.6; depth=2.1;z_offset = radius + floor_safety_distance + 0.1;

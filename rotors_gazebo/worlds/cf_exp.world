@@ -1,0 +1,325 @@
+<?xml version="1.0" ?>
+<sdf version="1.4">
+  <world name="pollination_world">
+    <include>
+      <!-- <uri>model://ground_plane</uri> -->
+      <uri>model://grass_plane</uri>
+    </include>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+
+
+    <!-- //__________________________start add targets_________________________// -->
+
+        <!-- //__________________________Tree1_________________________// -->
+<include>
+  <uri>model://flower2</uri>
+  <name>target0</name>
+  <pose>2.024 -0.885 2.1180000000000003 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target1</name>
+  <pose>2.11 -0.871 1.803 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target2</name>
+  <pose>2.071 -0.6 2.0460000000000003 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target3</name>
+  <pose>2.102 -0.681 1.879 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target4</name>
+  <pose>2.147 -0.734 1.734 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target5</name>
+  <pose>2.109 -0.484 1.844 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target6</name>
+  <pose>2.138 -0.58 1.756 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target7</name>
+  <pose>2.045 -0.208 2.052 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target8</name>
+  <pose>2.1 -0.301 1.859 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target9</name>
+  <pose>2.132 -0.295 1.767 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target10</name>
+  <pose>2.163 -0.386 1.669 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target11</name>
+  <pose>2.236 -0.457 1.377 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target12</name>
+  <pose>2.241 -0.641 1.384 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target13</name>
+  <pose>2.295 -0.435 1.235 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target14</name>
+  <pose>2.34 -0.997 1.158 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target15</name>
+  <pose>2.319 -0.363 1.127 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target16</name>
+  <pose>2.354 -0.44 1.041 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target17</name>
+  <pose>2.377 -0.647 0.9690000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target18</name>
+  <pose>2.162 -0.23 1.638 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target19</name>
+  <pose>2.217 -0.252 1.447 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target20</name>
+  <pose>2.413 -0.34 0.757 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target21</name>
+  <pose>1.982 0.141 2.178 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target22</name>
+  <pose>2.054 -0.037 1.943 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target23</name>
+  <pose>2.065 0.085 1.917 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target24</name>
+  <pose>2.082 0.083 1.807 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target25</name>
+  <pose>2.144 0.079 1.565 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target26</name>
+  <pose>2.224 0.03 1.275 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target27</name>
+  <pose>2.284 -0.121 1.15 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target28</name>
+  <pose>2.334 -0.115 0.9710000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target29</name>
+  <pose>2.087 0.354 1.8960000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target30</name>
+  <pose>2.15 0.209 1.694 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target31</name>
+  <pose>2.212 0.413 1.48 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target32</name>
+  <pose>2.218 0.235 1.375 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target33</name>
+  <pose>2.247 0.176 1.237 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target34</name>
+  <pose>2.266 0.23 1.169 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target35</name>
+  <pose>2.363 0.147 0.8420000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target36</name>
+  <pose>2.058 0.687 2.039 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target37</name>
+  <pose>2.086 0.493 1.929 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target38</name>
+  <pose>2.127 0.643 1.7890000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target39</name>
+  <pose>2.165 0.68 1.619 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target40</name>
+  <pose>2.193 0.485 1.49 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target41</name>
+  <pose>2.234 0.606 1.346 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target42</name>
+  <pose>2.295 0.616 1.129 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target43</name>
+  <pose>2.319 0.405 1.0790000000000002 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target44</name>
+  <pose>2.385 0.579 0.8620000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target45</name>
+  <pose>2.103 0.914 1.8820000000000001 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target46</name>
+  <pose>2.127 0.992 1.75 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target47</name>
+  <pose>2.188 0.871 1.574 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target48</name>
+  <pose>2.202 1.008 1.534 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target49</name>
+  <pose>2.27 1.087 1.231 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target50</name>
+  <pose>2.287 0.812 1.123 0 -1.57 0</pose>
+</include>
+<include>
+  <uri>model://flower2</uri>
+  <name>target51</name>
+  <pose>2.384 0.882 0.8250000000000001 0 -1.57 0</pose>
+</include>
+  <!-- //_________________________finish add target_______________________________// -->
+
+    <scene>
+      <ambient>0.7 0.7 0.7 1</ambient>
+      <background>0.25 0.25 0.25 1</background>
+      <shadows>false</shadows>
+      <sky>
+        <!-- <material>Gazebo/CloudySky</material> -->
+        <material>Gazebo/SkyBlue</material>
+      </sky>
+    </scene>
+    <light type="directional" name="some_light">
+      <diffuse>1 1 1 0</diffuse>
+      <specular>0.5 0.5 0.5 0</specular>
+      <direction>1 1 1</direction>
+    </light>
+  
+    <!-- Only one ROS interface plugin is required per world, as any other plugin can connect a Gazebo
+         topic to a ROS topic (or vise versa). -->
+    <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so"/>
+
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>47.3667</latitude_deg>
+      <longitude_deg>8.5500</longitude_deg>
+      <elevation>500.0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <physics type='ode'>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>700</iters>
+          <sor>1.3</sor>
+        </solver>
+        <constraints>
+          <cfm>0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
+          <contact_surface_layer>0.001</contact_surface_layer>
+        </constraints>
+      </ode>
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>100</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
+    </physics>
+  </world>
+</sdf>
