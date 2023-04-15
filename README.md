@@ -53,6 +53,6 @@ Running the simulation
  ```
  
  UGV with Three Drones
- < img src="./images/sim.png" width=300 height=300>
+ < img src="./images/sim.png" width="300" height="300">
 <!-- ![sim](/images/sim.png {width=50% height=50%})
  -->
