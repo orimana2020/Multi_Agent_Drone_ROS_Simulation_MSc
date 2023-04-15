@@ -53,4 +53,4 @@ Running the simulation
  ```
  
  UGV with Three Drones
-![sim](/images/sim.png width=50% height=50%)
+![sim](/images/sim.png {width=50% height=50%})
