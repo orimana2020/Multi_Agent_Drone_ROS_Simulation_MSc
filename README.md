@@ -58,22 +58,27 @@ Running the simulation
  <img src="images/sim.png" alt="alt text" width="600" height="400">
  
  Three Drones in Simulation
+ ---------------------------------------------------------
  
  <img src="images/simup.png" alt="alt text" width="600" height="400">
  
  Trajectory Generation Algorithm
+ ---------------------------------------------------------
  
  <img src="images/traj.png" alt="alt text" width="600" height="400">
  
  Target Allocation Algorithm Performance
+ ---------------------------------------------------------
  
  <img src="images/allocation.png" alt="alt text" width="600" height="400">
  
- Experiment
+ Proof-of-Concept Experiment
+ ---------------------------------------------------------
  
  <img src="images/ugv.jpg" alt="alt text" width="600" height="600">
  
- CF Drone
+ CF Micro-Drone
+ ---------------------------------------------------------
  
  <img src="images/cf.png" alt="alt text" width="600" height="400">
 
