@@ -51,8 +51,8 @@ Running the simulation
  $ rosrun drone_pollination main_ros_sim.py
  
  ```
- 
+
  UGV with Three Drones
- < img src="./images/sim.png" width="300" height="300">
+ < img src="images/sim.png" alt="alt text" width="600" height="300">
 <!-- ![sim](/images/sim.png {width=50% height=50%})
  -->
