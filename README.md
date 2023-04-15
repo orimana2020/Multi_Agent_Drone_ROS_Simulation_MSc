@@ -52,19 +52,19 @@ Running the simulation
  
  ```
 
- UGV with Three Drones
+ UGV with Three Drones in Simulation
  
  <img src="images/sim.png" alt="alt text" width="600" height="400">
  
- Three Drones
+ Three Drones in Simulation
  
  <img src="images/simup.png" alt="alt text" width="600" height="400">
  
- Trajectory
+ Trajectory Generation Algorithm
  
  <img src="images/traj.png" alt="alt text" width="600" height="400">
  
- Target Allocation
+ Target Allocation Algorithm Performance
  
  <img src="images/allocation.png" alt="alt text" width="600" height="400">
  
