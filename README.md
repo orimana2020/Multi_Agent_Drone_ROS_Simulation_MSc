@@ -70,7 +70,7 @@ Running the simulation
  
  Experiment
  
- <img src="images/ugv.jpg" alt="alt text" width="600" height="400">
+ <img src="images/ugv.jpg" alt="alt text" width="600" height="600">
  
  CF Drone
  
