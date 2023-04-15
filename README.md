@@ -51,3 +51,5 @@ Running the simulation
  $ rosrun drone_pollination main_ros_sim.py
  
  ```
+ UGV with Three Drones
+![sim](/images/sim.png)
