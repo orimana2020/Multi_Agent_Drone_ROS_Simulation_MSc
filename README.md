@@ -52,5 +52,5 @@ Running the simulation
  
  ```
 
- UGV with Three Drones
+<!--  UGV with Three Drones -->
  < img src="/images/sim.png" alt="alt text" width="600" height="300">
